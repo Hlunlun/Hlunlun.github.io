@@ -1,17 +1,15 @@
 @import 'https://fonts.googleapis.com/css?family=Raleway';
 
-html, body
-{
+html, body{
     margin: 0px;
 }
 
-header, footer
-{
+header, footer{
     font-family: Raleway;
     margin: 0 auto;
-	padding: 5em 3em;
+	padding: 5em 3em;    
 	text-align: center;
-    background: #555;
+    background: #555;    
 }
 
 header h1
@@ -89,7 +87,7 @@ div.topBotomBordersOut a:hover:before, div.topBotomBordersOut a:hover:after
 }
 
 .fa-github {    
-    background-color: black;
+    
 }
 
 .fa {
@@ -99,3 +97,4 @@ div.topBotomBordersOut a:hover:before, div.topBotomBordersOut a:hover:after
 .fa:hover {
     opacity: 0.7;
 }
+
