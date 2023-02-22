@@ -1,7 +1,8 @@
 @import 'https://fonts.googleapis.com/css?family=Raleway';
 
 html, body{
-    margin: 0px;
+    margin: 0px;    
+    font-family: Raleway;
 }
 
 header, footer{
@@ -13,7 +14,7 @@ header, footer{
 }
 
 header h1
-{
+{    
     color: #AAA;
     font-size: 40px;
     font-weight: lighter;
