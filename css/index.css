@@ -86,3 +86,10 @@ div.topBotomBordersOut a:hover:before, div.topBotomBordersOut a:hover:after{
     opacity: 0.7;
 }
 
+.contact_form{
+    display: block;
+    width: 20em;
+    border-radius: 5px;
+    border-color: gray;
+}
+
