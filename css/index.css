@@ -89,17 +89,11 @@ div.topBotomBordersOut a:hover:before, div.topBotomBordersOut a:hover:after
 }
 
 .fa-github {    
-    font-size: 48px;
     background-color: black;
 }
 
 .fa {
-    padding: 20px;
-    font-size: 30px;
-    width: 50px;
-    text-align: center;
-    text-decoration: none;
-    margin: 5px 2px;
+    font-size: 48px;
 }
 
 .fa:hover {
