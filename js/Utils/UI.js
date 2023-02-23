@@ -2,7 +2,7 @@
 class UI{
 
     static onScrollingWindow(){
-        
+        document.body.scrollbarTrackColor = "black";
     }
 }
 
