@@ -104,6 +104,12 @@ div.topBotomBordersOut a:hover:before, div.topBotomBordersOut a:hover:after{
     transform: translateY(0px);
 }
 
+.item{
+  text-align: center;
+  padding: 5%;
+  margin: 3%;
+}
+
 .fa-github{
   text-decoration:none;
 }
@@ -123,10 +129,12 @@ div.topBotomBordersOut a:hover:before, div.topBotomBordersOut a:hover:after{
   margin: 50px;
   border-radius: 5px;
   border-color: gray;
+  font-size: 20px;
 }
 
 #contact_message{
   height: 15em;
+  
 }
 
 input[type=text], select {
