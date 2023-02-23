@@ -119,10 +119,20 @@ div.topBotomBordersOut a:hover:before, div.topBotomBordersOut a:hover:after{
 }
 .contact_form{
   display: block;
-  width: 100%;
+  width: 80%;
   margin: 50px;
   border-radius: 5px;
   border-color: gray;
+}
+
+#contact_message{
+  height: 30em;
+}
+
+input[type=text], select {
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  box-sizing: border-box;
 }
 
 textarea {
