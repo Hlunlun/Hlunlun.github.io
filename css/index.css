@@ -82,6 +82,7 @@ footer span
 
 .header_links{
   position: fixed;
+  top: 0;
 }
 
 /* Top and Bottom borders go out */
