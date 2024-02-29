@@ -3,7 +3,7 @@ languageCode: en-us
 theme: hugo-theme-stack
 paginate: 3
 title: Lun's
-copyright: Example Person
+# copyright: Example Person
 
 # Theme i18n support
 # Available values: ar, bn, ca, de, el, en, es, fr, hu, id, it, ja, ko, nl, pt-br, th, uk, zh-cn, zh-hk, zh-tw
@@ -19,20 +19,14 @@ languages:
         title: Three Liters
         weight: 1
         params:
-            description: Example description
+            description: Blogs
     zh-tw:
         languageName: 中文
         title: 三公升
         weight: 2
         params:
             description: 演示說明
-    ar:
-        languageName: عربي
-        languagedirection: rtl
-        title: موقع تجريبي
-        weight: 3
-        params:
-            description: وصف تجريبي
+
 
 services:
     # Change it to your Disqus shortname before using
@@ -54,8 +48,8 @@ params:
     favicon: img/lun.png # e.g.: favicon placed in `static/favicon.ico` of your site folder, then set this field to `/favicon.ico` (`/` is necessary)
 
     footer:
-        since: 2020
-        customText:
+        since: 2024
+        customText: 
 
     dateFormat:
         published: Jan 02, 2006
@@ -63,7 +57,7 @@ params:
 
     sidebar:
         emoji: 3️⃣
-        subtitle: Lorem ipsum dolor sit amet, consectetur adipiscing elit.
+        subtitle: in progress
         avatar:
             enabled: true
             local: true
