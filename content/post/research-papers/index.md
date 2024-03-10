@@ -11,8 +11,8 @@ image: cover_paper.jpg
 ## Document Retrieval
 Organization | Digital Library	| Link| Remark
 ---|---|---|---
-Association for Computing Machinery ACM	|ACM Digital Library	|[dl.acm.org](dl.acm.org)| ⭐:star:
-IEEE Computer Society|	IEEE Xplore DL	|[ieeexplore.ieee.org](ieeexplore.ieee.org) | ⭐ncku support 
+Association for Computing Machinery ACM	|ACM Digital Library	|https://dl.acm.org/| ⭐ ncku support
+IEEE Computer Society|	IEEE Xplore DL	|https://ieeexplore.ieee.org/Xplore/home.jsp | ⭐ncku support 
 Elsevier ScienceDirect	|-	|www.sciencedirect.com |
 Springer|	Springer Link	|www.springer.com|
 Wiley	|Wiley Online Lib	|[onlinelibrary.wiley.com](onlinelibrary.wiley.com)|

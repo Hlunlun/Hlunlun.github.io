@@ -47,13 +47,15 @@
 &lt;tr&gt;
 &lt;td&gt;Association for Computing Machinery ACM&lt;/td&gt;
 &lt;td&gt;ACM Digital Library&lt;/td&gt;
-&lt;td&gt;&lt;a class=&#34;link&#34; href=&#34;dl.acm.org&#34; &gt;dl.acm.org&lt;/a&gt;&lt;/td&gt;
-&lt;td&gt;⭐:star:&lt;/td&gt;
+&lt;td&gt;&lt;a class=&#34;link&#34; href=&#34;https://dl.acm.org/&#34;  target=&#34;_blank&#34; rel=&#34;noopener&#34;
+    &gt;https://dl.acm.org/&lt;/a&gt;&lt;/td&gt;
+&lt;td&gt;⭐ ncku support&lt;/td&gt;
 &lt;/tr&gt;
 &lt;tr&gt;
 &lt;td&gt;IEEE Computer Society&lt;/td&gt;
 &lt;td&gt;IEEE Xplore DL&lt;/td&gt;
-&lt;td&gt;&lt;a class=&#34;link&#34; href=&#34;ieeexplore.ieee.org&#34; &gt;ieeexplore.ieee.org&lt;/a&gt;&lt;/td&gt;
+&lt;td&gt;&lt;a class=&#34;link&#34; href=&#34;https://ieeexplore.ieee.org/Xplore/home.jsp&#34;  target=&#34;_blank&#34; rel=&#34;noopener&#34;
+    &gt;https://ieeexplore.ieee.org/Xplore/home.jsp&lt;/a&gt;&lt;/td&gt;
 &lt;td&gt;⭐ncku support&lt;/td&gt;
 &lt;/tr&gt;
 &lt;tr&gt;
@@ -95,12 +97,12 @@
 </description>
         </item>
         <item>
-        <title>Self-Attention Generative Adversarial Networks</title>
-        <link>http://localhost:1313/p/self-attention-generative-adversarial-networks/</link>
+        <title>Report - Self-Attention Generative Adversarial Networks</title>
+        <link>http://localhost:1313/p/report-self-attention-generative-adversarial-networks/</link>
         <pubDate>Sun, 10 Mar 2024 00:00:00 +0000</pubDate>
         
-        <guid>http://localhost:1313/p/self-attention-generative-adversarial-networks/</guid>
-        <description>&lt;h2 id=&#34;introduction&#34;&gt;Introduction&lt;/h2&gt;
+        <guid>http://localhost:1313/p/report-self-attention-generative-adversarial-networks/</guid>
+        <description>&lt;h2 id=&#34;heading&#34;&gt;&lt;/h2&gt;
 </description>
         </item>
         <item>
