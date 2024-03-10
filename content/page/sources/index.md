@@ -1,5 +1,6 @@
 ---
-title: Links
+title: Sources
+description: paper, courses
 links:
   - title: ACM
     description: the world's largest educational and scientific computing society, delivers resources that advance computing as a science and a profession.
@@ -13,6 +14,13 @@ links:
     description: arXiv is a free distribution service and an open-access archive for nearly 2.4 million scholarly articles in the fields of physics, mathematics, computer science, quantitative biology, quantitative finance, statistics, electrical engineering and systems science, and economics.
     website: https://arxiv.org/
     image: https://info.arxiv.org/brand/images/brand-logo-primary.jpg
+  - title: Introduction to Generative AI 2024 Spring - NTU
+    description: Hung-yi Lee
+    website: https://speech.ee.ntu.edu.tw/~hylee/genai/2024-spring.php
+    image: https://speech.ee.ntu.edu.tw/~hylee/images/genai_course.png
+  - title: Hung-yi Lee
+    description: open courses for AI
+    website: https://speech.ee.ntu.edu.tw/~hylee/index.php
 menu:
     main: 
         weight: -50
