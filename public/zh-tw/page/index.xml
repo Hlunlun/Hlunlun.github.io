@@ -23,14 +23,6 @@
         <description>&lt;p&gt;出生於台灣，成長於台灣&lt;/p&gt;
 </description>
         </item>
-        <item>
-        <title>搜尋</title>
-        <link>http://localhost:1313/zh-tw/search/</link>
-        <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
-        
-        <guid>http://localhost:1313/zh-tw/search/</guid>
-        <description></description>
-        </item>
         
     </channel>
 </rss>

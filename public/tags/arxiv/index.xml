@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+    <channel>
+        <title>ArXiv on Three Liters</title>
+        <link>http://localhost:1313/tags/arxiv/</link>
+        <description>Recent content in ArXiv on Three Liters</description>
+        <generator>Hugo -- gohugo.io</generator>
+        <language>en</language>
+        <lastBuildDate>Sun, 10 Mar 2024 00:00:00 +0000</lastBuildDate><atom:link href="http://localhost:1313/tags/arxiv/index.xml" rel="self" type="application/rss+xml" /><item>
+        <title>arXiv snaity</title>
+        <link>http://localhost:1313/p/arxiv-snaity/</link>
+        <pubDate>Sun, 10 Mar 2024 00:00:00 +0000</pubDate>
+        
+        <guid>http://localhost:1313/p/arxiv-snaity/</guid>
+        <description>&lt;h2 id=&#34;preview&#34;&gt;Preview&lt;/h2&gt;
+&lt;h2 id=&#34;references&#34;&gt;References&lt;/h2&gt;
+&lt;p&gt;&lt;a class=&#34;link&#34; href=&#34;https://blog.csdn.net/weixin_36670529/article/details/99710512&#34;  target=&#34;_blank&#34; rel=&#34;noopener&#34;
+    &gt;ways to search for paper in computer vision field&lt;/a&gt;&lt;/p&gt;
+</description>
+        </item>
+        
+    </channel>
+</rss>

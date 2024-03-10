@@ -110,17 +110,5 @@
                 hreflang="zh-tw"
                 href="http://localhost:1313/zh-tw/tags/"
                 />
-  </url><url>
-    <loc>http://localhost:1313/zh-tw/search/</loc>
-    <xhtml:link
-                rel="alternate"
-                hreflang="en"
-                href="http://localhost:1313/search/"
-                />
-    <xhtml:link
-                rel="alternate"
-                hreflang="zh-tw"
-                href="http://localhost:1313/zh-tw/search/"
-                />
   </url>
 </urlset>

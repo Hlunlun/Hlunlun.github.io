@@ -1,7 +1,7 @@
 baseurl: https://example.com
 languageCode: en-us
 theme: hugo-theme-stack
-paginate: 3
+paginate: 5
 title: Lun's
 # copyright: Example Person
 
@@ -28,13 +28,13 @@ languages:
             description: 演示說明
 
 
-services:
-    # Change it to your Disqus shortname before using
-    disqus:
-        shortname: "hugo-theme-stack"
-    # GA Tracking ID
-    googleAnalytics:
-        id:
+# services:
+#     # Change it to your Disqus shortname before using
+#     disqus:
+#         shortname: "hugo-theme-stack"
+#     # GA Tracking ID
+#     googleAnalytics:
+#         id:
 
 permalinks:
     post: /p/:slug/
@@ -68,7 +68,7 @@ params:
         toc: true
         readingTime: true
         license:
-            enabled: true
+            enabled: false
             default: Licensed under CC BY-NC-SA 4.0
 
     comments:
