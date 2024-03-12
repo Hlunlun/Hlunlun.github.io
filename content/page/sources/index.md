@@ -21,6 +21,9 @@ links:
   - title: Hung-yi Lee
     description: open courses for AI
     website: https://speech.ee.ntu.edu.tw/~hylee/index.php
+  - title: 10 Cutting Edge Research Papers In Computer Vision & Image Generation
+    description: CV field
+    website: https://www.topbots.com/most-important-ai-computer-vision-research/
 menu:
     main: 
         weight: -50

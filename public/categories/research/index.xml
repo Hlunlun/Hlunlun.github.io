@@ -6,7 +6,105 @@
         <description>Recent content in Research on Three Liters</description>
         <generator>Hugo -- gohugo.io</generator>
         <language>en</language>
-        <lastBuildDate>Sun, 10 Mar 2024 00:00:00 +0000</lastBuildDate><atom:link href="http://localhost:1313/categories/research/index.xml" rel="self" type="application/rss+xml" /><item>
+        <lastBuildDate>Tue, 12 Mar 2024 00:00:00 +0000</lastBuildDate><atom:link href="http://localhost:1313/categories/research/index.xml" rel="self" type="application/rss+xml" /><item>
+        <title>Papers to read</title>
+        <link>http://localhost:1313/p/papers-to-read/</link>
+        <pubDate>Tue, 12 Mar 2024 00:00:00 +0000</pubDate>
+        
+        <guid>http://localhost:1313/p/papers-to-read/</guid>
+        <description>&lt;img src="http://localhost:1313/p/papers-to-read/research.png" alt="Featured image of post Papers to read" /&gt;&lt;p&gt;&lt;strong&gt;CV&lt;/strong&gt;&lt;/p&gt;
+&lt;table&gt;
+&lt;thead&gt;
+&lt;tr&gt;
+&lt;th&gt;Key word&lt;/th&gt;
+&lt;th&gt;Title&lt;/th&gt;
+&lt;th&gt;Link&lt;/th&gt;
+&lt;th&gt;Progress&lt;/th&gt;
+&lt;/tr&gt;
+&lt;/thead&gt;
+&lt;tbody&gt;
+&lt;tr&gt;
+&lt;td&gt;SAGAN&lt;/td&gt;
+&lt;td&gt;Self-Attention Generative Adversarial Networks&lt;/td&gt;
+&lt;td&gt;&lt;a class=&#34;link&#34; href=&#34;https://arxiv.org/abs/1805.08318&#34;  target=&#34;_blank&#34; rel=&#34;noopener&#34;
+    &gt;arXiv&lt;/a&gt;&lt;/td&gt;
+&lt;td&gt;&lt;code&gt;doing&lt;/code&gt;&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;SNGAN&lt;/td&gt;
+&lt;td&gt;Spectral Normalization for Generative Adversarial Networks&lt;/td&gt;
+&lt;td&gt;&lt;a class=&#34;link&#34; href=&#34;https://arxiv.org/abs/1802.05957&#34;  target=&#34;_blank&#34; rel=&#34;noopener&#34;
+    &gt;arXiv&lt;/a&gt;&lt;/td&gt;
+&lt;td&gt;todo&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;Attention&lt;/td&gt;
+&lt;td&gt;Attention Is All You Need&lt;/td&gt;
+&lt;td&gt;&lt;a class=&#34;link&#34; href=&#34;https://arxiv.org/abs/1706.03762&#34;  target=&#34;_blank&#34; rel=&#34;noopener&#34;
+    &gt;arXiv&lt;/a&gt;&lt;/td&gt;
+&lt;td&gt;todo&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;BigGAN&lt;/td&gt;
+&lt;td&gt;Large Scale GAN Training for High Fidelity Natural Image Synthesis&lt;/td&gt;
+&lt;td&gt;&lt;a class=&#34;link&#34; href=&#34;https://arxiv.org/abs/1809.11096&#34;  target=&#34;_blank&#34; rel=&#34;noopener&#34;
+    &gt;arXiv&lt;/a&gt;&lt;/td&gt;
+&lt;td&gt;todo&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;CV&lt;/td&gt;
+&lt;td&gt;Non-local Neural Networks&lt;/td&gt;
+&lt;td&gt;&lt;a class=&#34;link&#34; href=&#34;https://arxiv.org/abs/1711.07971v3&#34;  target=&#34;_blank&#34; rel=&#34;noopener&#34;
+    &gt;arXiv&lt;/a&gt;&lt;/td&gt;
+&lt;td&gt;todo&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;motion transfer&lt;/td&gt;
+&lt;td&gt;Everybody Dance Now&lt;/td&gt;
+&lt;td&gt;&lt;a class=&#34;link&#34; href=&#34;https://arxiv.org/abs/1808.07371&#34;  target=&#34;_blank&#34; rel=&#34;noopener&#34;
+    &gt;arXiv&lt;/a&gt;&lt;/td&gt;
+&lt;td&gt;todo&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;GANimation&lt;/td&gt;
+&lt;td&gt;GANimation: Anatomically-aware Facial Animation from a Single Image&lt;/td&gt;
+&lt;td&gt;&lt;a class=&#34;link&#34; href=&#34;https://arxiv.org/abs/1807.09251&#34;  target=&#34;_blank&#34; rel=&#34;noopener&#34;
+    &gt;arXiv&lt;/a&gt;&lt;/td&gt;
+&lt;td&gt;todo&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;GN&lt;/td&gt;
+&lt;td&gt;Group Normalization&lt;/td&gt;
+&lt;td&gt;&lt;a class=&#34;link&#34; href=&#34;https://arxiv.org/abs/1803.08494&#34;  target=&#34;_blank&#34; rel=&#34;noopener&#34;
+    &gt;arXiv&lt;/a&gt;&lt;/td&gt;
+&lt;td&gt;todo&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;CV&lt;/td&gt;
+&lt;td&gt;A Closed-form Solution to Photorealistic Image Stylization&lt;/td&gt;
+&lt;td&gt;&lt;a class=&#34;link&#34; href=&#34;https://arxiv.org/abs/1802.06474&#34;  target=&#34;_blank&#34; rel=&#34;noopener&#34;
+    &gt;arXiv&lt;/a&gt;&lt;/td&gt;
+&lt;td&gt;todo&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;CV&lt;/td&gt;
+&lt;td&gt;Adversarial Examples that Fool both Computer Vision and Time-Limited Humans&lt;/td&gt;
+&lt;td&gt;&lt;a class=&#34;link&#34; href=&#34;https://arxiv.org/abs/1802.08195&#34;  target=&#34;_blank&#34; rel=&#34;noopener&#34;
+    &gt;arXiv&lt;/a&gt;&lt;/td&gt;
+&lt;td&gt;todo&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;CNN&lt;/td&gt;
+&lt;td&gt;Spherical CNNs&lt;/td&gt;
+&lt;td&gt;&lt;a class=&#34;link&#34; href=&#34;https://arxiv.org/abs/1801.10130&#34;  target=&#34;_blank&#34; rel=&#34;noopener&#34;
+    &gt;arXiv&lt;/a&gt;&lt;/td&gt;
+&lt;td&gt;todo&lt;/td&gt;
+&lt;/tr&gt;
+&lt;/tbody&gt;
+&lt;/table&gt;
+</description>
+        </item>
+        <item>
         <title>arXiv snaity</title>
         <link>http://localhost:1313/p/arxiv-snaity/</link>
         <pubDate>Sun, 10 Mar 2024 00:00:00 +0000</pubDate>
@@ -82,9 +180,7 @@
 &lt;p&gt;&lt;a class=&#34;link&#34; href=&#34;https://www.cnblogs.com/rsmx/p/14210269.html&#34;  target=&#34;_blank&#34; rel=&#34;noopener&#34;
     &gt;如何收集和整理论文（面向CS专业）&lt;/a&gt;&lt;br&gt;
 &lt;a class=&#34;link&#34; href=&#34;https://www.csie.ntu.edu.tw/~kmchao/students/advice/myadvice.htm&#34;  target=&#34;_blank&#34; rel=&#34;noopener&#34;
-    &gt;演算法與計算生物學實驗室&lt;/a&gt;&lt;br&gt;
-&lt;a class=&#34;link&#34; href=&#34;https://www.topbots.com/most-important-ai-computer-vision-research/&#34;  target=&#34;_blank&#34; rel=&#34;noopener&#34;
-    &gt;10 Cutting Edge Research Papers In Computer Vision &amp;amp; Image Generation&lt;/a&gt;\&lt;/p&gt;
+    &gt;演算法與計算生物學實驗室&lt;/a&gt;\&lt;/p&gt;
 </description>
         </item>
         <item>
@@ -94,6 +190,9 @@
         
         <guid>http://localhost:1313/p/report-self-attention-generative-adversarial-networks/</guid>
         <description>&lt;h2 id=&#34;heading&#34;&gt;&lt;/h2&gt;
+&lt;h2 id=&#34;reference&#34;&gt;Reference&lt;/h2&gt;
+&lt;p&gt;&lt;a class=&#34;link&#34; href=&#34;https://www.topbots.com/most-important-ai-computer-vision-research/&#34;  target=&#34;_blank&#34; rel=&#34;noopener&#34;
+    &gt;10 Cutting Edge Research Papers In Computer Vision &amp;amp; Image Generation&lt;/a&gt;&lt;/p&gt;
 </description>
         </item>
         

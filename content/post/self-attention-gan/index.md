@@ -10,3 +10,6 @@ math: true
 
 ## 
 
+
+## Reference
+[10 Cutting Edge Research Papers In Computer Vision & Image Generation](https://www.topbots.com/most-important-ai-computer-vision-research/)

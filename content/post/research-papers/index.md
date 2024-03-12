@@ -26,6 +26,6 @@ Wiley	|Wiley Online Lib	|[onlinelibrary.wiley.com](onlinelibrary.wiley.com)|
 ##  References
 [如何收集和整理论文（面向CS专业）](https://www.cnblogs.com/rsmx/p/14210269.html)\
 [演算法與計算生物學實驗室](https://www.csie.ntu.edu.tw/~kmchao/students/advice/myadvice.htm)\
-[10 Cutting Edge Research Papers In Computer Vision & Image Generation](https://www.topbots.com/most-important-ai-computer-vision-research/)\
+
 
 
