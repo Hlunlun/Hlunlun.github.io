@@ -20,6 +20,7 @@
 &lt;th&gt;Title&lt;/th&gt;
 &lt;th&gt;Link&lt;/th&gt;
 &lt;th&gt;Progress&lt;/th&gt;
+&lt;th&gt;date&lt;/th&gt;
 &lt;/tr&gt;
 &lt;/thead&gt;
 &lt;tbody&gt;
@@ -29,6 +30,7 @@
 &lt;td&gt;&lt;a class=&#34;link&#34; href=&#34;https://arxiv.org/abs/1805.08318&#34;  target=&#34;_blank&#34; rel=&#34;noopener&#34;
     &gt;arXiv&lt;/a&gt;&lt;/td&gt;
 &lt;td&gt;&lt;code&gt;doing&lt;/code&gt;&lt;/td&gt;
+&lt;td&gt;&lt;/td&gt;
 &lt;/tr&gt;
 &lt;tr&gt;
 &lt;td&gt;SNGAN&lt;/td&gt;
@@ -36,6 +38,7 @@
 &lt;td&gt;&lt;a class=&#34;link&#34; href=&#34;https://arxiv.org/abs/1802.05957&#34;  target=&#34;_blank&#34; rel=&#34;noopener&#34;
     &gt;arXiv&lt;/a&gt;&lt;/td&gt;
 &lt;td&gt;todo&lt;/td&gt;
+&lt;td&gt;&lt;/td&gt;
 &lt;/tr&gt;
 &lt;tr&gt;
 &lt;td&gt;Attention&lt;/td&gt;
@@ -43,6 +46,7 @@
 &lt;td&gt;&lt;a class=&#34;link&#34; href=&#34;https://arxiv.org/abs/1706.03762&#34;  target=&#34;_blank&#34; rel=&#34;noopener&#34;
     &gt;arXiv&lt;/a&gt;&lt;/td&gt;
 &lt;td&gt;todo&lt;/td&gt;
+&lt;td&gt;&lt;/td&gt;
 &lt;/tr&gt;
 &lt;tr&gt;
 &lt;td&gt;BigGAN&lt;/td&gt;
@@ -50,6 +54,7 @@
 &lt;td&gt;&lt;a class=&#34;link&#34; href=&#34;https://arxiv.org/abs/1809.11096&#34;  target=&#34;_blank&#34; rel=&#34;noopener&#34;
     &gt;arXiv&lt;/a&gt;&lt;/td&gt;
 &lt;td&gt;todo&lt;/td&gt;
+&lt;td&gt;&lt;/td&gt;
 &lt;/tr&gt;
 &lt;tr&gt;
 &lt;td&gt;CV&lt;/td&gt;
@@ -57,6 +62,7 @@
 &lt;td&gt;&lt;a class=&#34;link&#34; href=&#34;https://arxiv.org/abs/1711.07971v3&#34;  target=&#34;_blank&#34; rel=&#34;noopener&#34;
     &gt;arXiv&lt;/a&gt;&lt;/td&gt;
 &lt;td&gt;todo&lt;/td&gt;
+&lt;td&gt;&lt;/td&gt;
 &lt;/tr&gt;
 &lt;tr&gt;
 &lt;td&gt;motion transfer&lt;/td&gt;
@@ -64,6 +70,7 @@
 &lt;td&gt;&lt;a class=&#34;link&#34; href=&#34;https://arxiv.org/abs/1808.07371&#34;  target=&#34;_blank&#34; rel=&#34;noopener&#34;
     &gt;arXiv&lt;/a&gt;&lt;/td&gt;
 &lt;td&gt;todo&lt;/td&gt;
+&lt;td&gt;&lt;/td&gt;
 &lt;/tr&gt;
 &lt;tr&gt;
 &lt;td&gt;GANimation&lt;/td&gt;
@@ -71,6 +78,7 @@
 &lt;td&gt;&lt;a class=&#34;link&#34; href=&#34;https://arxiv.org/abs/1807.09251&#34;  target=&#34;_blank&#34; rel=&#34;noopener&#34;
     &gt;arXiv&lt;/a&gt;&lt;/td&gt;
 &lt;td&gt;todo&lt;/td&gt;
+&lt;td&gt;&lt;/td&gt;
 &lt;/tr&gt;
 &lt;tr&gt;
 &lt;td&gt;GN&lt;/td&gt;
@@ -78,6 +86,7 @@
 &lt;td&gt;&lt;a class=&#34;link&#34; href=&#34;https://arxiv.org/abs/1803.08494&#34;  target=&#34;_blank&#34; rel=&#34;noopener&#34;
     &gt;arXiv&lt;/a&gt;&lt;/td&gt;
 &lt;td&gt;todo&lt;/td&gt;
+&lt;td&gt;&lt;/td&gt;
 &lt;/tr&gt;
 &lt;tr&gt;
 &lt;td&gt;CV&lt;/td&gt;
@@ -85,6 +94,7 @@
 &lt;td&gt;&lt;a class=&#34;link&#34; href=&#34;https://arxiv.org/abs/1802.06474&#34;  target=&#34;_blank&#34; rel=&#34;noopener&#34;
     &gt;arXiv&lt;/a&gt;&lt;/td&gt;
 &lt;td&gt;todo&lt;/td&gt;
+&lt;td&gt;&lt;/td&gt;
 &lt;/tr&gt;
 &lt;tr&gt;
 &lt;td&gt;CV&lt;/td&gt;
@@ -92,6 +102,7 @@
 &lt;td&gt;&lt;a class=&#34;link&#34; href=&#34;https://arxiv.org/abs/1802.08195&#34;  target=&#34;_blank&#34; rel=&#34;noopener&#34;
     &gt;arXiv&lt;/a&gt;&lt;/td&gt;
 &lt;td&gt;todo&lt;/td&gt;
+&lt;td&gt;&lt;/td&gt;
 &lt;/tr&gt;
 &lt;tr&gt;
 &lt;td&gt;CNN&lt;/td&gt;
@@ -99,9 +110,27 @@
 &lt;td&gt;&lt;a class=&#34;link&#34; href=&#34;https://arxiv.org/abs/1801.10130&#34;  target=&#34;_blank&#34; rel=&#34;noopener&#34;
     &gt;arXiv&lt;/a&gt;&lt;/td&gt;
 &lt;td&gt;todo&lt;/td&gt;
+&lt;td&gt;&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;SRGAN&lt;/td&gt;
+&lt;td&gt;Photo-Realistic Single Image Super-Resolution Using a Generative Adversarial Network&lt;/td&gt;
+&lt;td&gt;&lt;a class=&#34;link&#34; href=&#34;https://arxiv.org/abs/1609.04802&#34;  target=&#34;_blank&#34; rel=&#34;noopener&#34;
+    &gt;arXiv&lt;/a&gt;&lt;/td&gt;
+&lt;td&gt;todo&lt;/td&gt;
+&lt;td&gt;&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;GAN&lt;/td&gt;
+&lt;td&gt;Generative Adversarial Networks&lt;/td&gt;
+&lt;td&gt;&lt;a class=&#34;link&#34; href=&#34;https://arxiv.org/abs/1406.2661&#34;  target=&#34;_blank&#34; rel=&#34;noopener&#34;
+    &gt;arXiv&lt;/a&gt;&lt;/td&gt;
+&lt;td&gt;todo&lt;/td&gt;
+&lt;td&gt;&lt;/td&gt;
 &lt;/tr&gt;
 &lt;/tbody&gt;
 &lt;/table&gt;
+&lt;p&gt;&lt;strong&gt;NLP&lt;/strong&gt;&lt;/p&gt;
 </description>
         </item>
         <item>
@@ -189,10 +218,21 @@
         <pubDate>Sun, 10 Mar 2024 00:00:00 +0000</pubDate>
         
         <guid>http://localhost:1313/p/report-self-attention-generative-adversarial-networks/</guid>
-        <description>&lt;h2 id=&#34;heading&#34;&gt;&lt;/h2&gt;
+        <description>&lt;img src="http://localhost:1313/p/report-self-attention-generative-adversarial-networks/Self-AttentionGAN.png" alt="Featured image of post Report - Self-Attention Generative Adversarial Networks" /&gt;&lt;h2 id=&#34;three-steps-to-create-self-attention-feature-map&#34;&gt;Three steps to create self-attention feature map&lt;/h2&gt;
+&lt;p&gt;&lt;img src=&#34;self-attention-feature-map.png&#34; alt=&#34;png&#34;&gt;&lt;/img&gt;&lt;/p&gt;
 &lt;h2 id=&#34;reference&#34;&gt;Reference&lt;/h2&gt;
 &lt;p&gt;&lt;a class=&#34;link&#34; href=&#34;https://www.topbots.com/most-important-ai-computer-vision-research/&#34;  target=&#34;_blank&#34; rel=&#34;noopener&#34;
-    &gt;10 Cutting Edge Research Papers In Computer Vision &amp;amp; Image Generation&lt;/a&gt;&lt;/p&gt;
+    &gt;10 Cutting Edge Research Papers In Computer Vision &amp;amp; Image Generation&lt;/a&gt;&lt;br&gt;
+&lt;a class=&#34;link&#34; href=&#34;https://www.cnblogs.com/wonderlust/p/15767225.html&#34;  target=&#34;_blank&#34; rel=&#34;noopener&#34;
+    &gt;Spectral Normalization 谱归一化-原理及实现&lt;/a&gt;&lt;br&gt;
+&lt;a class=&#34;link&#34; href=&#34;https://arxiv.org/pdf/1711.07971v3.pdf&#34;  target=&#34;_blank&#34; rel=&#34;noopener&#34;
+    &gt;Non-local Neural Networks&lt;/a&gt;&lt;br&gt;
+&lt;a class=&#34;link&#34; href=&#34;https://zhuanlan.zhihu.com/p/77307258&#34;  target=&#34;_blank&#34; rel=&#34;noopener&#34;
+    &gt;遍地开花的 Attention，你真的懂吗？&lt;/a&gt;&lt;br&gt;
+&lt;a class=&#34;link&#34; href=&#34;https://blog.csdn.net/tg229dvt5i93mxaq5a6u/article/details/78422216&#34;  target=&#34;_blank&#34; rel=&#34;noopener&#34;
+    &gt;深度学习中的注意力机制&lt;/a&gt;&lt;br&gt;
+&lt;a class=&#34;link&#34; href=&#34;https://easyai.tech/ai-definition/attention/&#34;  target=&#34;_blank&#34; rel=&#34;noopener&#34;
+    &gt;Attention 机制&lt;/a&gt;&lt;/p&gt;
 </description>
         </item>
         <item>

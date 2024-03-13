@@ -24,6 +24,12 @@ links:
   - title: 10 Cutting Edge Research Papers In Computer Vision & Image Generation
     description: CV field
     website: https://www.topbots.com/most-important-ai-computer-vision-research/
+  - title: AdversarialNetsPapers List
+    description: list of paper with source code
+    website: https://github.com/zhangqianhui/AdversarialNetsPapers
+  - title: 還有甚麼GAN可以用？
+    description: GAN related paper and implementation
+    website: https://ithelp.ithome.com.tw/m/articles/10329022
 menu:
     main: 
         weight: -50

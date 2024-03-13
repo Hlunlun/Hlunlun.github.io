@@ -5,7 +5,7 @@ date: 2024-03-10
 description: top conference, magzine, academic scholar database
 tags: [CS, paper]
 categories: [Research]
-image: cover_paper.jpg
+image: 
 ---
 
 ## Document Retrieval
