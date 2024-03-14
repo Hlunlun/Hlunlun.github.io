@@ -15,4 +15,4 @@ menu:
             icon: user
 ---
 
-Born in Taiwan, Grown up in Taiwan
+Born in Taiwan, Grew up in Taiwan
