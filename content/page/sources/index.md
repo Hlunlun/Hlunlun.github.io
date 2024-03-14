@@ -30,6 +30,10 @@ links:
   - title: 還有甚麼GAN可以用？
     description: GAN related paper and implementation
     website: https://ithelp.ithome.com.tw/m/articles/10329022
+  - title: KATEX
+    description: equation syntax 
+    website: https://katex.org/docs/supported.html
+
 menu:
     main: 
         weight: -50

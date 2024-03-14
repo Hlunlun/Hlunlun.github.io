@@ -1,0 +1,1250 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+    <head><script src="/livereload.js?mindelay=10&amp;v=2&amp;port=1313&amp;path=livereload" data-no-instant defer></script><meta charset='utf-8'>
+<meta name='viewport' content='width=device-width, initial-scale=1'><meta name='description' content='paper progress'>
+<title>Adversarial Nets Papers</title>
+
+<link rel='canonical' href='http://localhost:1313/p/adversarial-nets-papers/'>
+
+<link rel="stylesheet" href="/scss/style.min.24ef1cc321916467896e8c70c10c0ad7b98c2a8df14298032fb637216e397f50.css"><meta property='og:title' content='Adversarial Nets Papers'>
+<meta property='og:description' content='paper progress'>
+<meta property='og:url' content='http://localhost:1313/p/adversarial-nets-papers/'>
+<meta property='og:site_name' content='Three Liters'>
+<meta property='og:type' content='article'><meta property='article:section' content='Post' /><meta property='article:tag' content='CS' /><meta property='article:tag' content='paper' /><meta property='article:tag' content='GAN' /><meta property='article:published_time' content='2024-03-12T00:00:00&#43;00:00'/><meta property='article:modified_time' content='2024-03-12T00:00:00&#43;00:00'/>
+<meta name="twitter:title" content="Adversarial Nets Papers">
+<meta name="twitter:description" content="paper progress">
+    <link rel="shortcut icon" href="img/lun.png" />
+
+    </head>
+    <body class="
+    article-page
+    ">
+    <script>
+        (function() {
+            const colorSchemeKey = 'StackColorScheme';
+            if(!localStorage.getItem(colorSchemeKey)){
+                localStorage.setItem(colorSchemeKey, "auto");
+            }
+        })();
+    </script><script>
+    (function() {
+        const colorSchemeKey = 'StackColorScheme';
+        const colorSchemeItem = localStorage.getItem(colorSchemeKey);
+        const supportDarkMode = window.matchMedia('(prefers-color-scheme: dark)').matches === true;
+
+        if (colorSchemeItem == 'dark' || colorSchemeItem === 'auto' && supportDarkMode) {
+            
+
+            document.documentElement.dataset.scheme = 'dark';
+        } else {
+            document.documentElement.dataset.scheme = 'light';
+        }
+    })();
+</script>
+<div class="container main-container flex on-phone--column extended"><aside class="sidebar left-sidebar sticky ">
+    <button class="hamburger hamburger--spin" type="button" id="toggle-menu" aria-label="Toggle Menu">
+        <span class="hamburger-box">
+            <span class="hamburger-inner"></span>
+        </span>
+    </button>
+
+    <header>
+        
+            
+            <figure class="site-avatar">
+                <a href="/">
+                
+                    
+                    
+                    
+                        
+                        <img src="/img/lun_huf3b0cfd5503273d08bbe3905c5de8cd8_181667_300x0_resize_box_3.png" width="300"
+                            height="300" class="site-logo" loading="lazy" alt="Avatar">
+                    
+                
+                </a>
+                
+            </figure>
+            
+        
+        
+        <div class="site-meta">
+            <h1 class="site-name"><a href="/">Three Liters</a></h1>
+            <h2 class="site-description">in progress</h2>
+        </div>
+    </header><ol class="social-menu">
+            
+                <li>
+                    <a 
+                        href='https://github.com/Hlunlun'
+                        target="_blank"
+                        title="GitHub"
+                        rel="me"
+                    >
+                        
+                        
+                            <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-brand-github" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z" fill="none"/>
+  <path d="M9 19c-4.3 1.4 -4.3 -2.5 -6 -3m12 5v-3.5c0 -1 .1 -1.4 -.5 -2c2.8 -.3 5.5 -1.4 5.5 -6a4.6 4.6 0 0 0 -1.3 -3.2a4.2 4.2 0 0 0 -.1 -3.2s-1.1 -.3 -3.5 1.3a12.3 12.3 0 0 0 -6.2 0c-2.4 -1.6 -3.5 -1.3 -3.5 -1.3a4.2 4.2 0 0 0 -.1 3.2a4.6 4.6 0 0 0 -1.3 3.2c0 4.6 2.7 5.7 5.5 6c-.6 .6 -.6 1.2 -.5 2v3.5" />
+</svg>
+
+
+
+                        
+                    </a>
+                </li>
+            
+                <li>
+                    <a 
+                        href='https://twitter.com'
+                        target="_blank"
+                        title="Twitter"
+                        rel="me"
+                    >
+                        
+                        
+                            <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-brand-twitter" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z" fill="none"/>
+  <path d="M22 4.01c-1 .49 -1.98 .689 -3 .99c-1.121 -1.265 -2.783 -1.335 -4.38 -.737s-2.643 2.06 -2.62 3.737v1c-3.245 .083 -6.135 -1.395 -8 -4c0 0 -4.182 7.433 4 11c-1.872 1.247 -3.739 2.088 -6 2c3.308 1.803 6.913 2.423 10.034 1.517c3.58 -1.04 6.522 -3.723 7.651 -7.742a13.84 13.84 0 0 0 .497 -3.753c-.002 -.249 1.51 -2.772 1.818 -4.013z" />
+</svg>
+
+
+
+                        
+                    </a>
+                </li>
+            
+        </ol><ol class="menu" id="main-menu">
+        
+        
+        
+        <li >
+            <a href='/' >
+                
+                
+                
+                    <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-home" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <polyline points="5 12 3 12 12 3 21 12 19 12" />
+  <path d="M5 12v7a2 2 0 0 0 2 2h10a2 2 0 0 0 2 -2v-7" />
+  <path d="M9 21v-6a2 2 0 0 1 2 -2h2a2 2 0 0 1 2 2v6" />
+</svg>
+
+
+
+                
+                <span>Home</span>
+            </a>
+        </li>
+        
+        
+        <li >
+            <a href='/about/' >
+                
+                
+                
+                    <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-user" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <circle cx="12" cy="7" r="4" />
+  <path d="M6 21v-2a4 4 0 0 1 4 -4h4a4 4 0 0 1 4 4v2" />
+</svg>
+
+
+
+                
+                <span>About</span>
+            </a>
+        </li>
+        
+        
+        <li >
+            <a href='/archives/' >
+                
+                
+                
+                    <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-archive" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <rect x="3" y="4" width="18" height="4" rx="2" />
+  <path d="M5 8v10a2 2 0 0 0 2 2h10a2 2 0 0 0 2 -2v-10" />
+  <line x1="10" y1="12" x2="14" y2="12" />
+</svg>
+
+
+
+                
+                <span>Archives</span>
+            </a>
+        </li>
+        
+        
+        <li >
+            <a href='/search/' >
+                
+                
+                
+                    <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-search" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <circle cx="10" cy="10" r="7" />
+  <line x1="21" y1="21" x2="15" y2="15" />
+</svg>
+
+
+
+                
+                <span>Search</span>
+            </a>
+        </li>
+        
+        
+        <li >
+            <a href='/sources/' >
+                
+                
+                
+                    <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-link" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <path d="M10 14a3.5 3.5 0 0 0 5 0l4 -4a3.5 3.5 0 0 0 -5 -5l-.5 .5" />
+  <path d="M14 10a3.5 3.5 0 0 0 -5 0l-4 4a3.5 3.5 0 0 0 5 5l.5 -.5" />
+</svg>
+
+
+
+                
+                <span>Sources</span>
+            </a>
+        </li>
+        
+
+        <div class="menu-bottom-section">
+                
+                    <li id="i18n-switch">  
+                        <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-language" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z" fill="none"/>
+  <path d="M4 5h7" />
+  <path d="M9 3v2c0 4.418 -2.239 8 -5 8" />
+  <path d="M5 9c-.003 2.144 2.952 3.908 6.7 4" />
+  <path d="M12 20l4 -9l4 9" />
+  <path d="M19.1 18h-6.2" />
+</svg>
+
+
+
+                        <select name="language" onchange="window.location.href = this.selectedOptions[0].value">
+                            
+                                <option value="http://localhost:1313/" selected>English</option>
+                            
+                                <option value="http://localhost:1313/zh-tw/" >中文</option>
+                            
+                        </select>
+                    </li>
+                
+            
+
+            
+                <li id="dark-mode-toggle">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-toggle-left" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <circle cx="8" cy="12" r="2" />
+  <rect x="2" y="6" width="20" height="12" rx="6" />
+</svg>
+
+
+
+                    <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-toggle-right" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <circle cx="16" cy="12" r="2" />
+  <rect x="2" y="6" width="20" height="12" rx="6" />
+</svg>
+
+
+
+                    <span>Dark Mode</span>
+                </li>
+            
+        </div>
+    </ol>
+</aside>
+
+    
+
+            <main class="main full-width">
+    <article class="main-article">
+    <header class="article-header">
+
+    <div class="article-details">
+    
+    <header class="article-category">
+        
+            <a href="/categories/research/" >
+                Research
+            </a>
+        
+    </header>
+    
+
+    <div class="article-title-wrapper">
+        <h2 class="article-title">
+            <a href="/p/adversarial-nets-papers/">Adversarial Nets Papers</a>
+        </h2>
+    
+        
+        <h3 class="article-subtitle">
+            paper progress
+        </h3>
+        
+    </div>
+
+    
+    
+    
+    
+    <footer class="article-time">
+        
+            <div>
+                <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-calendar-time" width="56" height="56" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <path d="M11.795 21h-6.795a2 2 0 0 1 -2 -2v-12a2 2 0 0 1 2 -2h12a2 2 0 0 1 2 2v4" />
+  <circle cx="18" cy="18" r="4" />
+  <path d="M15 3v4" />
+  <path d="M7 3v4" />
+  <path d="M3 11h16" />
+  <path d="M18 16.496v1.504l1 1" />
+</svg>
+                <time class="article-time--published">Mar 12, 2024</time>
+            </div>
+        
+
+        
+            <div>
+                <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-clock" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <circle cx="12" cy="12" r="9" />
+  <polyline points="12 7 12 12 15 15" />
+</svg>
+
+
+
+                <time class="article-time--reading">
+                    5 minute read
+                </time>
+            </div>
+        
+    </footer>
+    
+
+    
+</div>
+
+</header>
+
+    <section class="article-content">
+    
+    
+    <p><strong>First Paper</strong></p>
+<div class="table-wrapper"><table>
+<thead>
+<tr>
+<th>Key word</th>
+<th>Published</th>
+<th>Title</th>
+<th>Paper<br>Link</th>
+<th>Code<br>Link</th>
+<th>Progress</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>GAN</td>
+<td>NIPS 2014</td>
+<td>Generative Adversarial Networks</td>
+<td><a class="link" href="https://arxiv.org/abs/1406.2661"  target="_blank" rel="noopener"
+    >arXiv</a></td>
+<td><a class="link" href="https://github.com/goodfeli/adversarial"  target="_blank" rel="noopener"
+    >github</a></td>
+<td>todo</td>
+</tr>
+</tbody>
+</table></div>
+<p><strong>Image Translation</strong></p>
+<div class="table-wrapper"><table>
+<thead>
+<tr>
+<th>Key word</th>
+<th>Published</th>
+<th>Title</th>
+<th>Paper<br>Link</th>
+<th>Code<br>Link</th>
+<th>Progress</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>DTN</td>
+<td></td>
+<td>Unsupervised Cross-Domain Image Generation</td>
+<td><a class="link" href="https://arxiv.org/abs/1611.02200"  target="_blank" rel="noopener"
+    >arXiv</a></td>
+<td><a class="link" href="https://github.com/yunjey/domain-transfer-network"  target="_blank" rel="noopener"
+    >github</a></td>
+<td>todo</td>
+</tr>
+<tr>
+<td>pix2pix</td>
+<td>CVPR 2017</td>
+<td>Image-to-Image Translation with Conditional Adversarial Networks</td>
+<td><a class="link" href="https://openaccess.thecvf.com/content_cvpr_2017/papers/Isola_Image-To-Image_Translation_With_CVPR_2017_paper.pdf"  target="_blank" rel="noopener"
+    >CVPR</a></td>
+<td><a class="link" href="https://github.com/phillipi/pix2pix"  target="_blank" rel="noopener"
+    >pix2pix</a></td>
+<td>todo</td>
+</tr>
+<tr>
+<td>DiscoGAN</td>
+<td>ICML 2017</td>
+<td>Learning to Discover Cross-Domain Relations with Generative Adversarial Networks</td>
+<td><a class="link" href="https://arxiv.org/abs/1703.05192"  target="_blank" rel="noopener"
+    >arXiv</a></td>
+<td><a class="link" href="https://github.com/carpedm20/DiscoGAN-pytorch"  target="_blank" rel="noopener"
+    >DiscoGAN-pytorch</a></td>
+<td>todo</td>
+</tr>
+<tr>
+<td>CycleGAN</td>
+<td>CVPR 2017</td>
+<td>Unpaired Image-to-Image Translation using Cycle-Consistent Adversarial Networks</td>
+<td><a class="link" href="https://junyanz.github.io/CycleGAN/"  target="_blank" rel="noopener"
+    >github.io</a></td>
+<td><a class="link" href="https://github.com/junyanz/CycleGAN"  target="_blank" rel="noopener"
+    >cycleGAN</a><br> <a class="link" href="https://github.com/junyanz/pytorch-CycleGAN-and-pix2pix"  target="_blank" rel="noopener"
+    >pytorch-CycleGAN-and-pix2pix </a></td>
+<td>todo</td>
+</tr>
+<tr>
+<td>CoGAN</td>
+<td>NIPS 2016</td>
+<td>Coupled Generative Adversarial Networks</td>
+<td><a class="link" href="https://arxiv.org/abs/1606.07536"  target="_blank" rel="noopener"
+    >arXiv</a></td>
+<td><a class="link" href="https://github.com/andrewliao11/CoGAN-tensorflow"  target="_blank" rel="noopener"
+    >CoGAN-tensorflow</a></td>
+<td>todo</td>
+</tr>
+<tr>
+<td></td>
+<td>NIPS 2017</td>
+<td>Unsupervised Image-to-Image Translation with Generative Adversarial Networks</td>
+<td><a class="link" href="https://arxiv.org/abs/1701.02676"  target="_blank" rel="noopener"
+    >arXiv</a></td>
+<td></td>
+<td>todo</td>
+</tr>
+<tr>
+<td>DualGAN</td>
+<td>ICCV 2017</td>
+<td>DualGAN: Unsupervised Dual Learning for Image-to-Image Translation</td>
+<td><a class="link" href="https://arxiv.org/abs/1704.02510"  target="_blank" rel="noopener"
+    >arXiv</a></td>
+<td><a class="link" href="https://github.com/duxingren14/DualGAN"  target="_blank" rel="noopener"
+    >github</a></td>
+<td>todo</td>
+</tr>
+<tr>
+<td>pix2pixHD</td>
+<td>CVPR 2017</td>
+<td>Unsupervised Image-to-Image Translation Networks</td>
+<td><a class="link" href="https://arxiv.org/abs/1703.00848"  target="_blank" rel="noopener"
+    >arXiv</a></td>
+<td><a class="link" href="https://github.com/NVIDIA/pix2pixHD"  target="_blank" rel="noopener"
+    >github</a></td>
+<td>todo</td>
+</tr>
+<tr>
+<td>XGAN</td>
+<td>ICML'18</td>
+<td>XGAN: Unsupervised Image-to-Image Translation for Many-to-Many Mappings</td>
+<td><a class="link" href="https://arxiv.org/abs/1711.05139"  target="_blank" rel="noopener"
+    >arXiv</a></td>
+<td></td>
+<td>todo</td>
+</tr>
+<tr>
+<td>UNIT</td>
+<td>NIPS 2017</td>
+<td>UNIT: UNsupervised Image-to-image Translation Networks</td>
+<td><a class="link" href="https://arxiv.org/abs/1703.00848"  target="_blank" rel="noopener"
+    >arXiv</a></td>
+<td><a class="link" href="https://github.com/mingyuliutw/UNIT"  target="_blank" rel="noopener"
+    >github</a></td>
+<td>todo</td>
+</tr>
+<tr>
+<td>BicycleGAN</td>
+<td>NIPS 2017</td>
+<td>Toward Multimodal Image-to-Image Translation</td>
+<td><a class="link" href="https://arxiv.org/abs/1711.11586"  target="_blank" rel="noopener"
+    >arXiv</a></td>
+<td><a class="link" href="https://github.com/junyanz/BicycleGAN"  target="_blank" rel="noopener"
+    >github</a></td>
+<td>todo</td>
+</tr>
+<tr>
+<td>MUNIT</td>
+<td>ECCV 2018</td>
+<td>Multimodal Unsupervised Image-to-Image Translation</td>
+<td><a class="link" href="https://arxiv.org/abs/1804.04732"  target="_blank" rel="noopener"
+    >arXiv</a></td>
+<td><a class="link" href="https://github.com/nvlabs/MUNIt"  target="_blank" rel="noopener"
+    >github</a></td>
+<td>todo</td>
+</tr>
+<tr>
+<td>Vid2vid</td>
+<td>NIPS 2018</td>
+<td>Video-to-Video Synthesis</td>
+<td><a class="link" href="https://arxiv.org/abs/1808.06601"  target="_blank" rel="noopener"
+    >arXiv</a></td>
+<td><a class="link" href="https://github.com/NVIDIA/vid2vid"  target="_blank" rel="noopener"
+    >github</a></td>
+<td>todo</td>
+</tr>
+<tr>
+<td>motion transfer</td>
+<td>ICCV 2019</td>
+<td>Everybody Dance Now</td>
+<td><a class="link" href="https://arxiv.org/abs/1808.07371"  target="_blank" rel="noopener"
+    >arXiv</a></td>
+<td><a class="link" href="https://github.com/nyoki-mtl/pytorch-EverybodyDanceNow"  target="_blank" rel="noopener"
+    >github</a></td>
+<td>todo</td>
+</tr>
+<tr>
+<td>Art2Real</td>
+<td>CVPR 2019</td>
+<td>Art2Real: Unfolding the Reality of Artworks via Semantically-Aware Image-to-Image Translation</td>
+<td><a class="link" href="https://arxiv.org/abs/1811.10666"  target="_blank" rel="noopener"
+    >arXiv</a></td>
+<td></td>
+<td>todo</td>
+</tr>
+<tr>
+<td>SelectionGAN</td>
+<td>CVPR 2019 oral</td>
+<td>Multi-Channel Attention Selection GAN with Cascaded Semantic Guidance for Cross-View Image Translation</td>
+<td><a class="link" href="https://arxiv.org/abs/1904.06807"  target="_blank" rel="noopener"
+    >arXiv</a></td>
+<td><a class="link" href="https://github.com/Ha0Tang/SelectionGAN"  target="_blank" rel="noopener"
+    >github</a></td>
+<td>todo</td>
+</tr>
+<tr>
+<td>LGGAN</td>
+<td>CVPR 2020</td>
+<td>Local Class-Specific and Global Image-Level Generative Adversarial Networks for Semantic-Guided Scene Generation</td>
+<td><a class="link" href="https://arxiv.org/abs/1912.12215"  target="_blank" rel="noopener"
+    >arXiv</a></td>
+<td><a class="link" href="https://github.com/Ha0Tang/LGGAN"  target="_blank" rel="noopener"
+    >github</a></td>
+<td>todo</td>
+</tr>
+<tr>
+<td>StarGAN</td>
+<td>CVPR 2020</td>
+<td>StarGAN v2: Diverse Image Synthesis for Multiple Domains</td>
+<td><a class="link" href="https://arxiv.org/abs/1912.01865"  target="_blank" rel="noopener"
+    >arXiv</a></td>
+<td><a class="link" href="https://github.com/clovaai/stargan-v2"  target="_blank" rel="noopener"
+    >github</a></td>
+<td>todo</td>
+</tr>
+<tr>
+<td>structural-analogy</td>
+<td>Computer Graphics Forum</td>
+<td>Structural-analogy from a Single Image Pair</td>
+<td><a class="link" href="https://arxiv.org/abs/2004.02222"  target="_blank" rel="noopener"
+    >arXiv</a></td>
+<td><a class="link" href="https://github.com/rmokady/structural-analogy"  target="_blank" rel="noopener"
+    >github</a></td>
+<td>todo</td>
+</tr>
+<tr>
+<td>Owner avatar</td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td>HiDT</td>
+<td>CVPR 2020</td>
+<td>High-Resolution Daytime Translation Without Domain Labels</td>
+<td><a class="link" href="https://arxiv.org/abs/2003.08791"  target="_blank" rel="noopener"
+    >arXiv</a></td>
+<td><a class="link" href="https://github.com/saic-mdal/HiDT"  target="_blank" rel="noopener"
+    >github</a></td>
+<td>todo</td>
+</tr>
+<tr>
+<td>tunit</td>
+<td>ICCV 2021</td>
+<td>Rethinking the Truly Unsupervised Image-to-Image Translation</td>
+<td><a class="link" href="https://arxiv.org/abs/2006.06500"  target="_blank" rel="noopener"
+    >arXiv</a></td>
+<td><a class="link" href="https://github.com/clovaai/tunit"  target="_blank" rel="noopener"
+    >github</a></td>
+<td>todo</td>
+</tr>
+<tr>
+<td>self-conditioned gan</td>
+<td>CVPR 2020</td>
+<td>Diverse Image Generation via Self-Conditioned GANs</td>
+<td><a class="link" href="https://arxiv.org/abs/2006.10728"  target="_blank" rel="noopener"
+    >arXiv</a></td>
+<td><a class="link" href="https://github.com/stevliu/self-conditioned-gan"  target="_blank" rel="noopener"
+    >github</a></td>
+<td>todo</td>
+</tr>
+<tr>
+<td>contrastive-unpaired-translation</td>
+<td>ECCV 2020</td>
+<td>Contrastive Learning for Unpaired Image-to-Image Translation</td>
+<td><a class="link" href="https://taesung.me/ContrastiveUnpairedTranslation/"  target="_blank" rel="noopener"
+    >github.io</a></td>
+<td><a class="link" href="https://github.com/taesungp/contrastive-unpaired-translation"  target="_blank" rel="noopener"
+    >github</a></td>
+<td>todo</td>
+</tr>
+<tr>
+<td>VAE/GAN</td>
+<td>ICML 2016</td>
+<td>Autoencoding beyond pixels using a learned similarity metric</td>
+<td><a class="link" href="https://arxiv.org/abs/1512.09300"  target="_blank" rel="noopener"
+    >arXiv</a></td>
+<td><a class="link" href="https://github.com/andersbll/autoencoding_beyond_pixels"  target="_blank" rel="noopener"
+    >torch</a><br><a class="link" href="https://github.com/zhangqianhui/vae-gan-tensorflow"  target="_blank" rel="noopener"
+    >tensorflow</a></td>
+<td>todo</td>
+</tr>
+<tr>
+<td>CoGAN</td>
+<td>NIPS 2016</td>
+<td>Coupled Generative Adversarial Networks</td>
+<td><a class="link" href="https://arxiv.org/abs/1606.07536"  target="_blank" rel="noopener"
+    >arXiv</a></td>
+<td><a class="link" href="https://github.com/mingyuliutw/CoGAN"  target="_blank" rel="noopener"
+    >torch</a><br><a class="link" href="https://github.com/andrewliao11/CoGAN-tensorflow"  target="_blank" rel="noopener"
+    >tensorflow</a></td>
+<td>todo</td>
+</tr>
+<tr>
+<td>IcGAN</td>
+<td>NIPS 2016</td>
+<td>Invertible Conditional GANs for image editing</td>
+<td><a class="link" href="https://arxiv.org/abs/1611.06355"  target="_blank" rel="noopener"
+    >arXiv</a></td>
+<td><a class="link" href="https://github.com/Guim3/IcGAN"  target="_blank" rel="noopener"
+    >github</a></td>
+<td>todo</td>
+</tr>
+<tr>
+<td>FaceAttributeManipulation</td>
+<td>CVPR 2017</td>
+<td>Learning Residual Images for Face Attribute Manipulation</td>
+<td><a class="link" href="https://arxiv.org/abs/1612.05363"  target="_blank" rel="noopener"
+    >arXiv</a></td>
+<td><a class="link" href="https://github.com/Zhongdao/FaceAttributeManipulation"  target="_blank" rel="noopener"
+    >github</a></td>
+<td>todo</td>
+</tr>
+<tr>
+<td>Neural-Photo-Editor</td>
+<td></td>
+<td>Neural Photo Editing with Introspective Adversarial Networks</td>
+<td><a class="link" href="https://arxiv.org/abs/1609.07093"  target="_blank" rel="noopener"
+    >arXiv</a></td>
+<td><a class="link" href="https://github.com/ajbrock/Neural-Photo-Editor"  target="_blank" rel="noopener"
+    >github</a></td>
+<td>todo</td>
+</tr>
+<tr>
+<td>NeuralFaceEditing</td>
+<td>CVPR 2017 oral</td>
+<td>Neural Face Editing with Intrinsic Image Disentangling</td>
+<td><a class="link" href="https://arxiv.org/abs/1704.04131"  target="_blank" rel="noopener"
+    >arXiv</a></td>
+<td><a class="link" href="https://github.com/zhixinshu/NeuralFaceEditing"  target="_blank" rel="noopener"
+    >github</a></td>
+<td>todo</td>
+</tr>
+<tr>
+<td>GeneGAN</td>
+<td>BMVC 2017</td>
+<td>GeneGAN: Learning Object Transfiguration and Attribute Subspace from Unpaired Data</td>
+<td><a class="link" href="https://arxiv.org/abs/1705.04932"  target="_blank" rel="noopener"
+    >arXiv</a></td>
+<td><a class="link" href="https://github.com/Prinsphield/GeneGAN"  target="_blank" rel="noopener"
+    >github</a></td>
+<td>todo</td>
+</tr>
+<tr>
+<td>TP-GAN</td>
+<td>ICCV 2017</td>
+<td>Beyond Face Rotation: Global and Local Perception GAN for Photorealistic and Identity Preserving Frontal View Synthesis</td>
+<td><a class="link" href="https://arxiv.org/abs/1704.04086"  target="_blank" rel="noopener"
+    >arXiv</a></td>
+<td><a class="link" href="https://github.com/HRLTY/TP-GAN"  target="_blank" rel="noopener"
+    >github</a></td>
+<td>todo</td>
+</tr>
+<tr>
+<td>StarGAN</td>
+<td>CVPR 2018</td>
+<td>StarGAN: Unified Generative Adversarial Networks for Multi-Domain Image-to-Image Translation</td>
+<td><a class="link" href="https://arxiv.org/abs/1711.09020"  target="_blank" rel="noopener"
+    >arXiv</a></td>
+<td><a class="link" href="https://github.com/yunjey/StarGAN"  target="_blank" rel="noopener"
+    >github</a></td>
+<td>todo</td>
+</tr>
+<tr>
+<td>AttGAN</td>
+<td>TIP(top Jounal)</td>
+<td>AttGAN: Facial Attribute Editing by Only Changing What You Want</td>
+<td><a class="link" href="https://arxiv.org/abs/1711.10678"  target="_blank" rel="noopener"
+    >arXiv</a></td>
+<td><a class="link" href="https://github.com/LynnHo/AttGAN-Tensorflow"  target="_blank" rel="noopener"
+    >github</a></td>
+<td>todo</td>
+</tr>
+<tr>
+<td>ELEGANT</td>
+<td>ECCV 2018</td>
+<td>ELEGANT: Exchanging Latent Encodings with GAN for Transferring Multiple Face Attributes</td>
+<td><a class="link" href="https://arxiv.org/abs/1803.10562"  target="_blank" rel="noopener"
+    >arXiv</a></td>
+<td><a class="link" href="https://github.com/Prinsphield/ELEGANT"  target="_blank" rel="noopener"
+    >github</a></td>
+<td>todo</td>
+</tr>
+<tr>
+<td>SGGAN</td>
+<td>ACM MM2018 oral</td>
+<td>Sparsely Grouped Multi-task Generative Adversarial Networks for Facial Attribute Manipulation</td>
+<td><a class="link" href="https://arxiv.org/abs/1805.07509"  target="_blank" rel="noopener"
+    >arXiv</a></td>
+<td><a class="link" href="https://github.com/zhangqianhui/Sparsely-Grouped-GAN"  target="_blank" rel="noopener"
+    >github</a></td>
+<td>todo</td>
+</tr>
+<tr>
+<td>GANimation</td>
+<td>ECCV 2018 oral</td>
+<td>GANimation: Anatomically-aware Facial Animation from a Single Image</td>
+<td><a class="link" href="http://www.albertpumarola.com/research/GANimation/index.html"  target="_blank" rel="noopener"
+    >github.io</a></td>
+<td><a class="link" href="https://github.com/albertpumarola/GANimation"  target="_blank" rel="noopener"
+    >github</a></td>
+<td>todo</td>
+</tr>
+<tr>
+<td></td>
+<td>ACM MM2018</td>
+<td>Geometry Guided Adversarial Facial Expression Synthesis</td>
+<td><a class="link" href="https://arxiv.org/abs/1712.03474"  target="_blank" rel="noopener"
+    >arXiv</a></td>
+<td></td>
+<td>todo</td>
+</tr>
+<tr>
+<td>STGAN</td>
+<td>CVPR 2019</td>
+<td>STGAN: A Unified Selective Transfer Network for Arbitrary Image Attribute Editing</td>
+<td><a class="link" href="https://arxiv.org/abs/1904.09709"  target="_blank" rel="noopener"
+    >arXiv</a></td>
+<td><a class="link" href="https://github.com/csmliu/STGAN"  target="_blank" rel="noopener"
+    >github</a></td>
+<td>todo</td>
+</tr>
+<tr>
+<td></td>
+<td></td>
+<td>3d guided fine-grained face manipulation</td>
+<td><a class="link" href="https://arxiv.org/abs/1902.08900"  target="_blank" rel="noopener"
+    >arXiv</a></td>
+<td></td>
+<td>todo</td>
+</tr>
+<tr>
+<td>SC-FEGAN</td>
+<td>ICCV 2019</td>
+<td>SC-FEGAN: Face Editing Generative Adversarial Network with User&rsquo;s Sketch and Color</td>
+<td><a class="link" href="" >arXiv</a></td>
+<td><a class="link" href="https://github.com/run-youngjoo/SC-FEGAN"  target="_blank" rel="noopener"
+    >github</a></td>
+<td>todo</td>
+</tr>
+<tr>
+<td></td>
+<td>IJCV 2019(Journal)</td>
+<td>A Survey of Deep Facial Attribute Analysis</td>
+<td><a class="link" href="https://link.springer.com/content/pdf/10.1007/s11263-020-01308-z.pdf"  target="_blank" rel="noopener"
+    >link</a></td>
+<td></td>
+<td>todo</td>
+</tr>
+<tr>
+<td>PA-GAN</td>
+<td></td>
+<td>PA-GAN: Progressive Attention Generative Adversarial Network for Facial Attribute Editing</td>
+<td><a class="link" href="https://arxiv.org/abs/2007.05892"  target="_blank" rel="noopener"
+    >arXiv</a></td>
+<td><a class="link" href="https://github.com/LynnHo/PA-GAN-Tensorflow"  target="_blank" rel="noopener"
+    >github</a></td>
+<td>todo</td>
+</tr>
+<tr>
+<td>SSCGAN</td>
+<td>ECCV 2020</td>
+<td>SSCGAN: Facial Attribute Editing via StyleSkip Connections</td>
+<td><a class="link" href="https://www.ecva.net/papers/eccv_2020/papers_ECCV/papers/123600409.pdf"  target="_blank" rel="noopener"
+    >ECCV</a></td>
+<td></td>
+<td>todo</td>
+</tr>
+<tr>
+<td>CAFE-GAN</td>
+<td>ECCV 2020</td>
+<td>CAFE-GAN: Arbitrary Face Attribute Editingwith Complementary Attention Feature</td>
+<td><a class="link" href="https://arxiv.org/abs/2011.11900"  target="_blank" rel="noopener"
+    >arXiv</a></td>
+<td></td>
+<td>todo</td>
+</tr>
+</tbody>
+</table></div>
+<p><strong>Generative Models</strong></p>
+<div class="table-wrapper"><table>
+<thead>
+<tr>
+<th>Key word</th>
+<th>Published</th>
+<th>Title</th>
+<th>Paper<br>Link</th>
+<th>Code<br>Link</th>
+<th>Progress</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td></td>
+<td>ICLR 2016 <br>(Representation)</td>
+<td>Unsupervised Representation Learning with Deep Convolutional Generative Adversarial Networks</td>
+<td><a class="link" href="https://arxiv.org/abs/1511.06434"  target="_blank" rel="noopener"
+    >arXiv</a></td>
+<td><a class="link" href="https://github.com/jacobgil/keras-dcgan"  target="_blank" rel="noopener"
+    >github</a></td>
+<td>todo</td>
+</tr>
+<tr>
+<td>LAPGAN</td>
+<td>NIPS 2015</td>
+<td>Deep Generative Image Models using a Laplacian Pyramid of Adversarial Networks</td>
+<td><a class="link" href="https://arxiv.org/abs/1506.05751"  target="_blank" rel="noopener"
+    >arXiv</a></td>
+<td><a class="link" href="https://github.com/AaronYALai/Generative_Adversarial_Networks_PyTorch/tree/master/LAPGAN"  target="_blank" rel="noopener"
+    >github</a></td>
+<td>todo</td>
+</tr>
+<tr>
+<td>text2image</td>
+<td>ICML 2016</td>
+<td>Generative Adversarial Text to Image Synthesis</td>
+<td><a class="link" href="https://arxiv.org/abs/1605.05396"  target="_blank" rel="noopener"
+    >arXiv</a></td>
+<td><a class="link" href="https://github.com/reedscot/icml2016?tab=readme-ov-file"  target="_blank" rel="noopener"
+    >torch</a> <br> <a class="link" href="https://github.com/paarthneekhara/text-to-image"  target="_blank" rel="noopener"
+    >tensorflow</a></td>
+<td>todo</td>
+</tr>
+<tr>
+<td>improved GAN</td>
+<td>Goodfellow&rsquo;s paper</td>
+<td>Improved Techniques for Training GANs</td>
+<td><a class="link" href="https://arxiv.org/abs/1606.03498"  target="_blank" rel="noopener"
+    >arXiv</a></td>
+<td><a class="link" href="https://github.com/openai/improved-gan"  target="_blank" rel="noopener"
+    >github</a></td>
+<td>todo</td>
+</tr>
+<tr>
+<td>PPGN</td>
+<td>CVPR 2017</td>
+<td>Plug &amp; Play Generative Networks: Conditional Iterative Generation of Images in Latent Space</td>
+<td><a class="link" href="https://arxiv.org/abs/1612.00005v1"  target="_blank" rel="noopener"
+    >arXiv</a></td>
+<td><a class="link" href="https://github.com/Evolving-AI-Lab/ppgn"  target="_blank" rel="noopener"
+    >github</a></td>
+<td>todo</td>
+</tr>
+<tr>
+<td>StackGAN</td>
+<td>ICCV 2017 Oral</td>
+<td>StackGAN: Text to Photo-realistic Image Synthesis with Stacked Generative Adversarial Networks</td>
+<td><a class="link" href="https://arxiv.org/abs/1612.03242"  target="_blank" rel="noopener"
+    >arXiv</a></td>
+<td><a class="link" href="https://github.com/hanzhanggit/StackGAN"  target="_blank" rel="noopener"
+    >github</a></td>
+<td>todo</td>
+</tr>
+<tr>
+<td>improved_wgan</td>
+<td>NIPS 2017 camera-ready</td>
+<td>Improved Training of Wasserstein GANs</td>
+<td><a class="link" href="https://arxiv.org/abs/1704.00028"  target="_blank" rel="noopener"
+    >arXiv</a></td>
+<td><a class="link" href="https://github.com/igul222/improved_wgan_training"  target="_blank" rel="noopener"
+    >github</a></td>
+<td>todo</td>
+</tr>
+<tr>
+<td>BEGAN</td>
+<td></td>
+<td>BEGAN: Boundary Equilibrium Generative Adversarial Networks</td>
+<td><a class="link" href="https://arxiv.org/abs/1703.10717"  target="_blank" rel="noopener"
+    >arXiv</a></td>
+<td><a class="link" href="https://github.com/artcg/BEGAN"  target="_blank" rel="noopener"
+    >github</a></td>
+<td>todo</td>
+</tr>
+<tr>
+<td></td>
+<td>ICLR 2018 paper</td>
+<td>Progressive Growing of GANs for Improved Quality, Stability, and Variation</td>
+<td><a class="link" href="https://arxiv.org/abs/1710.10196"  target="_blank" rel="noopener"
+    >arXiv</a></td>
+<td><a class="link" href="https://github.com/tkarras/progressive_growing_of_gans"  target="_blank" rel="noopener"
+    >1</a><br><a class="link" href="https://github.com/zhangqianhui/progressive_growing_of_gans_tensorflow"  target="_blank" rel="noopener"
+    >2</a></td>
+<td>todo</td>
+</tr>
+<tr>
+<td>SAGAN</td>
+<td>NIPS 2018</td>
+<td>Self-Attention Generative Adversarial Networks</td>
+<td><a class="link" href="https://arxiv.org/abs/1805.08318"  target="_blank" rel="noopener"
+    >arXiv</a></td>
+<td><a class="link" href="https://github.com/heykeetae/Self-Attention-GAN"  target="_blank" rel="noopener"
+    >github</a></td>
+<td><code>doing</code></td>
+</tr>
+<tr>
+<td>BigGAN</td>
+<td>ICLR 2019</td>
+<td>Large Scale GAN Training for High Fidelity Natural Image Synthesis</td>
+<td><a class="link" href="https://arxiv.org/abs/1809.11096"  target="_blank" rel="noopener"
+    >arXiv</a></td>
+<td><a class="link" href="https://github.com/ajbrock/BigGAN-PyTorch"  target="_blank" rel="noopener"
+    >github</a></td>
+<td>todo</td>
+</tr>
+<tr>
+<td>StyleGAN</td>
+<td>CVPR 2019</td>
+<td>A Style-Based Generator Architecture for Generative Adversarial Networks</td>
+<td><a class="link" href="https://arxiv.org/abs/1812.04948"  target="_blank" rel="noopener"
+    >arXiv</a></td>
+<td><a class="link" href="https://github.com/NVlabs/stylegan"  target="_blank" rel="noopener"
+    >github</a></td>
+<td>todo</td>
+</tr>
+<tr>
+<td>StyleGAN2</td>
+<td>CVPR 2020</td>
+<td>Analyzing and Improving the Image Quality of StyleGAN</td>
+<td><a class="link" href="https://arxiv.org/abs/1912.04958"  target="_blank" rel="noopener"
+    >arXiv</a></td>
+<td><a class="link" href="https://github.com/NVlabs/stylegan2"  target="_blank" rel="noopener"
+    >github</a></td>
+<td>todo</td>
+</tr>
+<tr>
+<td>SinGAN</td>
+<td>ICCV 2019 best paper</td>
+<td>SinGAN: Learning a Generative Model from a Single Natural Image</td>
+<td><a class="link" href="https://arxiv.org/abs/1905.01164"  target="_blank" rel="noopener"
+    >arXiv</a></td>
+<td><a class="link" href="https://github.com/tamarott/SinGAN"  target="_blank" rel="noopener"
+    >github</a></td>
+<td>todo</td>
+</tr>
+<tr>
+<td></td>
+<td>ICLR 2020 Spot</td>
+<td>Real or Not Real, that is the Question</td>
+<td><a class="link" href="https://openreview.net/forum?id=B1lPaCNtPB"  target="_blank" rel="noopener"
+    >arXiv</a></td>
+<td><a class="link" href="https://github.com/kam1107/RealnessGAN"  target="_blank" rel="noopener"
+    >github</a></td>
+<td>todo</td>
+</tr>
+<tr>
+<td></td>
+<td></td>
+<td>Training End-to-end Single Image Generators without GANs</td>
+<td><a class="link" href="https://arxiv.org/abs/2004.06014"  target="_blank" rel="noopener"
+    >arXiv</a></td>
+<td></td>
+<td>todo</td>
+</tr>
+<tr>
+<td>ALAE</td>
+<td>CVPR 2020</td>
+<td>Adversarial Latent Autoencoders</td>
+<td><a class="link" href="https://arxiv.org/abs/2004.04467"  target="_blank" rel="noopener"
+    >arXiv</a></td>
+<td><a class="link" href="https://github.com/podgorskiy/ALAE"  target="_blank" rel="noopener"
+    >github</a></td>
+<td>todo</td>
+</tr>
+</tbody>
+</table></div>
+<p><strong>Gaze Correction and Redirection</strong></p>
+<p>DCGAN|2015| Unsupervised Representation Learning with Deep Convolutional Generative Adversarial Networks| <a class="link" href="https://arxiv.org/abs/1511.06434"  target="_blank" rel="noopener"
+    >arXiv</a>| todo
+ImprovedGAN| 2016| Improved Techniques for Training GANs|<a class="link" href="https://arxiv.org/abs/1606.03498"  target="_blank" rel="noopener"
+    >arXiv</a>|todo
+WGAN|2017|Wasserstein GAN |<a class="link" href="https://arxiv.org/abs/1701.07875"  target="_blank" rel="noopener"
+    >arXiv</a>|todo
+WGAN-GP|2017|Improved Training of Wasserstein GANs |<a class="link" href="https://arxiv.org/abs/1704.00028"  target="_blank" rel="noopener"
+    >arXiv</a>|todo
+|CVPR 2017|High-Resolution Image Synthesis and Semantic Manipulation with Conditional GANs|<a class="link" href="https://arxiv.org/abs/1711.11585"  target="_blank" rel="noopener"
+    >arXiv</a>||todo</p>
+<p>PGGAN|2017|Progressive Growing of GANs for Improved Quality, Stability, and Variation|<a class="link" href="https://arxiv.org/abs/1710.10196"  target="_blank" rel="noopener"
+    >arXiv</a>|todo
+StackGAN|2017|StackGAN: Text to Photo-realistic Image Synthesis with Stacked Generative Adversarial Networks|<a class="link" href="https://arxiv.org/abs/1606.03498"  target="_blank" rel="noopener"
+    >arXiv</a>|todo
+SeqGAN|2017|SeqGAN: Sequence Generative Adversarial Nets with Policy Gradient|<a class="link" href="https://arxiv.org/pdf/1609.05473.pdf"  target="_blank" rel="noopener"
+    >arXiv</a>|todo
+SNGAN | 2018|Spectral Normalization for Generative Adversarial Networks| <a class="link" href="https://arxiv.org/abs/1802.05957"  target="_blank" rel="noopener"
+    >arXiv</a>| todo</p>
+<p>SAGAN |2019 |Self-Attention Generative Adversarial Networks| <a class="link" href="https://arxiv.org/abs/1805.08318"  target="_blank" rel="noopener"
+    >arXiv</a>| <code>doing</code></p>
+<p>Attention||Attention Is All You Need| <a class="link" href="https://arxiv.org/abs/1706.03762"  target="_blank" rel="noopener"
+    >arXiv</a>| todo|
+BigGAN| |Large Scale GAN Training for High Fidelity Natural Image Synthesis| <a class="link" href="https://arxiv.org/abs/1809.11096"  target="_blank" rel="noopener"
+    >arXiv</a>| todo|
+CV| |Non-local Neural Networks| <a class="link" href="https://arxiv.org/abs/1711.07971v3"  target="_blank" rel="noopener"
+    >arXiv</a>| todo|</p>
+<p>CV||A Closed-form Solution to Photorealistic Image Stylization|<a class="link" href="https://arxiv.org/abs/1802.06474"  target="_blank" rel="noopener"
+    >arXiv</a>|todo|
+CV | |Adversarial Examples that Fool both Computer Vision and Time-Limited Humans| <a class="link" href="https://arxiv.org/abs/1802.08195"  target="_blank" rel="noopener"
+    >arXiv</a>|todo|
+CNN||Spherical CNNs|<a class="link" href="https://arxiv.org/abs/1801.10130"  target="_blank" rel="noopener"
+    >arXiv</a>|todo|
+SRGAN| |Photo-Realistic Single Image Super-Resolution Using a Generative Adversarial Network| <a class="link" href="https://arxiv.org/abs/1609.04802"  target="_blank" rel="noopener"
+    >arXiv</a>| todo|</p>
+<p><strong>NLP</strong></p>
+
+</section>
+
+
+    <footer class="article-footer">
+    
+    <section class="article-tags">
+        
+            <a href="/tags/cs/">CS</a>
+        
+            <a href="/tags/paper/">Paper</a>
+        
+            <a href="/tags/gan/">GAN</a>
+        
+    </section>
+
+
+    </footer>
+
+
+    
+</article>
+
+    
+
+    
+
+<aside class="related-content--wrapper">
+    <h2 class="section-title">Related content</h2>
+    <div class="related-content">
+        <div class="flex article-list--tile">
+            
+                
+<article class="">
+    <a href="/p/how-to-find-and-collect-papers-in-cs/">
+        
+        
+
+        <div class="article-details">
+            <h2 class="article-title">How to find and collect papers in CS</h2>
+        </div>
+    </a>
+</article>
+
+            
+                
+<article class="">
+    <a href="/p/arxiv-snaity/">
+        
+        
+
+        <div class="article-details">
+            <h2 class="article-title">arXiv snaity</h2>
+        </div>
+    </a>
+</article>
+
+            
+                
+<article class="has-image">
+    <a href="/p/report-self-attention-generative-adversarial-networks/">
+        
+        
+            <div class="article-image">
+                <img src="/p/report-self-attention-generative-adversarial-networks/Self-AttentionGAN.7291f848c33108883d3ceda37ce099f6_hud7fd30d4bb250d4727554ecf0fc6a708_983433_250x150_fill_box_smart1_3.png" 
+                        width="250" 
+                        height="150" 
+                        loading="lazy"
+                        alt="Featured image of post Report - Self-Attention Generative Adversarial Networks"
+                        
+                        data-hash="md5-cpH4SMMxCIg9PO2jfOCZ9g==">
+                
+            </div>
+        
+
+        <div class="article-details">
+            <h2 class="article-title">Report - Self-Attention Generative Adversarial Networks</h2>
+        </div>
+    </a>
+</article>
+
+            
+        </div>
+    </div>
+</aside>
+
+     
+    
+        
+    
+
+    <footer class="site-footer">
+    <section class="copyright">
+        &copy; 
+        
+        2024 Three Liters
+    </section>
+    
+    <section class="powerby">
+        Built with <a href="https://gohugo.io/" target="_blank" rel="noopener">Hugo</a> <br />
+        Theme <b><a href="https://github.com/CaiJimmy/hugo-theme-stack" target="_blank" rel="noopener" data-version="3.22.0">Stack</a></b> designed by <a href="https://jimmycai.com" target="_blank" rel="noopener">Jimmy</a>
+    </section>
+</footer>
+
+
+    
+<div class="pswp" tabindex="-1" role="dialog" aria-hidden="true">
+
+    
+    <div class="pswp__bg"></div>
+
+    
+    <div class="pswp__scroll-wrap">
+
+        
+        <div class="pswp__container">
+            <div class="pswp__item"></div>
+            <div class="pswp__item"></div>
+            <div class="pswp__item"></div>
+        </div>
+
+        
+        <div class="pswp__ui pswp__ui--hidden">
+
+            <div class="pswp__top-bar">
+
+                
+
+                <div class="pswp__counter"></div>
+
+                <button class="pswp__button pswp__button--close" title="Close (Esc)"></button>
+
+                <button class="pswp__button pswp__button--share" title="Share"></button>
+
+                <button class="pswp__button pswp__button--fs" title="Toggle fullscreen"></button>
+
+                <button class="pswp__button pswp__button--zoom" title="Zoom in/out"></button>
+
+                
+                
+                <div class="pswp__preloader">
+                    <div class="pswp__preloader__icn">
+                        <div class="pswp__preloader__cut">
+                            <div class="pswp__preloader__donut"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="pswp__share-modal pswp__share-modal--hidden pswp__single-tap">
+                <div class="pswp__share-tooltip"></div>
+            </div>
+
+            <button class="pswp__button pswp__button--arrow--left" title="Previous (arrow left)">
+            </button>
+
+            <button class="pswp__button pswp__button--arrow--right" title="Next (arrow right)">
+            </button>
+
+            <div class="pswp__caption">
+                <div class="pswp__caption__center"></div>
+            </div>
+
+        </div>
+
+    </div>
+
+</div><script 
+                src="https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/photoswipe.min.js"integrity="sha256-ePwmChbbvXbsO02lbM3HoHbSHTHFAeChekF1xKJdleo="crossorigin="anonymous"
+                defer
+                >
+            </script><script 
+                src="https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/photoswipe-ui-default.min.js"integrity="sha256-UKkzOn/w1mBxRmLLGrSeyB4e1xbrp4xylgAWb3M42pU="crossorigin="anonymous"
+                defer
+                >
+            </script><link 
+                rel="stylesheet" 
+                href="https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/default-skin/default-skin.min.css"crossorigin="anonymous"
+            ><link 
+                rel="stylesheet" 
+                href="https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/photoswipe.min.css"crossorigin="anonymous"
+            >
+
+            </main>
+        </div>
+        <script 
+                src="https://cdn.jsdelivr.net/npm/node-vibrant@3.1.6/dist/vibrant.min.js"integrity="sha256-awcR2jno4kI5X0zL8ex0vi2z&#43;KMkF24hUW8WePSA9HM="crossorigin="anonymous"
+                
+                >
+            </script><script type="text/javascript" src="/ts/main.js" defer></script>
+<script>
+    (function () {
+        const customFont = document.createElement('link');
+        customFont.href = "https://fonts.googleapis.com/css2?family=Lato:wght@300;400;700&display=swap";
+
+        customFont.type = "text/css";
+        customFont.rel = "stylesheet";
+
+        document.head.appendChild(customFont);
+    }());
+</script>
+
+    </body>
+</html>
