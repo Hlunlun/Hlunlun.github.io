@@ -187,6 +187,8 @@
     <loc>http://localhost:1313/p/emoji-support/</loc>
     <lastmod>2019-03-05T00:00:00+00:00</lastmod>
   </url><url>
+    <loc>http://localhost:1313/p/</loc>
+  </url><url>
     <loc>http://localhost:1313/search/</loc>
   </url><url>
     <loc>http://localhost:1313/sources/</loc>

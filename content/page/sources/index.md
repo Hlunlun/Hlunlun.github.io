@@ -27,9 +27,6 @@ links:
   - title: AdversarialNetsPapers List
     description: list of paper with source code
     website: https://github.com/zhangqianhui/AdversarialNetsPapers
-  - title: 還有甚麼GAN可以用？
-    description: GAN related paper and implementation
-    website: https://ithelp.ithome.com.tw/m/articles/10329022
   - title: KATEX
     description: equation syntax 
     website: https://katex.org/docs/supported.html
