@@ -12,7 +12,7 @@ image:
 **First Paper**
 Key word | Published | Title	| Paper<br>Link|Code<br>Link| Progress
 ---|---|---|---|---|---
-GAN|NIPS 2014| Generative Adversarial Networks| [arXiv](https://arxiv.org/abs/1406.2661)|[github](https://github.com/goodfeli/adversarial)| todo
+GAN|NIPS 2014| Generative Adversarial Networks| [arXiv](https://arxiv.org/abs/1406.2661)|[github](https://github.com/goodfeli/adversarial)| `doing`
 
 **Image Translation**
 Key word | Published | Title	| Paper<br>Link|Code<br>Link| Progress
@@ -76,7 +76,7 @@ StackGAN|ICCV 2017 Oral|StackGAN: Text to Photo-realistic Image Synthesis with S
 improved_wgan|NIPS 2017 camera-ready|Improved Training of Wasserstein GANs|[arXiv](https://arxiv.org/abs/1704.00028)|[github](https://github.com/igul222/improved_wgan_training)|todo
 BEGAN||BEGAN: Boundary Equilibrium Generative Adversarial Networks|[arXiv](https://arxiv.org/abs/1703.10717)|[github](https://github.com/artcg/BEGAN)|todo
 ||ICLR 2018 paper|Progressive Growing of GANs for Improved Quality, Stability, and Variation|[arXiv](https://arxiv.org/abs/1710.10196)| [1](https://github.com/tkarras/progressive_growing_of_gans)<br>[2](https://github.com/zhangqianhui/progressive_growing_of_gans_tensorflow)| todo
-SAGAN|NIPS 2018|Self-Attention Generative Adversarial Networks|[arXiv](https://arxiv.org/abs/1805.08318)|[github](https://github.com/heykeetae/Self-Attention-GAN) |`doing`
+SAGAN|NIPS 2018|Self-Attention Generative Adversarial Networks|[arXiv](https://arxiv.org/abs/1805.08318)|[github](https://github.com/heykeetae/Self-Attention-GAN) |done
 BigGAN|ICLR 2019|Large Scale GAN Training for High Fidelity Natural Image Synthesis|[arXiv](https://arxiv.org/abs/1809.11096)|[github](https://github.com/ajbrock/BigGAN-PyTorch)|todo
 StyleGAN|CVPR 2019|A Style-Based Generator Architecture for Generative Adversarial Networks|[arXiv](https://arxiv.org/abs/1812.04948)|[github](https://github.com/NVlabs/stylegan)|todo
 StyleGAN2|CVPR 2020|Analyzing and Improving the Image Quality of StyleGAN|[arXiv](https://arxiv.org/abs/1912.04958)|[github](https://github.com/NVlabs/stylegan2)|todo
@@ -175,6 +175,10 @@ GP-GAN|ACMMM 2019|GP-GAN: Towards Realistic High-Resolution Image Blending|[arXi
 
 
 
+**Mechanism**
+Key word | Published | Title	| Paper<br>Link|Code<br>Link| Progress
+---|---|---|---|---|---
+Attention||Attention Is All You Need| [arXiv](https://arxiv.org/abs/1706.03762)|| `doing`
 
 
 
@@ -196,7 +200,6 @@ SeqGAN|2017|SeqGAN: Sequence Generative Adversarial Nets with Policy Gradient|[a
 
 
 
-Attention||Attention Is All You Need| [arXiv](https://arxiv.org/abs/1706.03762)| todo|
 
 
 

@@ -6,12 +6,44 @@
         <description>Recent content in Tags on Three Liters</description>
         <generator>Hugo -- gohugo.io</generator>
         <language>en</language>
-        <lastBuildDate>Tue, 12 Mar 2024 00:00:00 +0000</lastBuildDate><atom:link href="http://localhost:1313/tags/index.xml" rel="self" type="application/rss+xml" /><item>
+        <lastBuildDate>Wed, 27 Mar 2024 00:00:00 +0000</lastBuildDate><atom:link href="http://localhost:1313/tags/index.xml" rel="self" type="application/rss+xml" /><item>
+        <title>Algorithm</title>
+        <link>http://localhost:1313/tags/algorithm/</link>
+        <pubDate>Wed, 27 Mar 2024 00:00:00 +0000</pubDate>
+        
+        <guid>http://localhost:1313/tags/algorithm/</guid>
+        <description></description>
+        </item>
+        <item>
+        <title>Probability</title>
+        <link>http://localhost:1313/tags/probability/</link>
+        <pubDate>Wed, 27 Mar 2024 00:00:00 +0000</pubDate>
+        
+        <guid>http://localhost:1313/tags/probability/</guid>
+        <description></description>
+        </item>
+        <item>
         <title>CS</title>
         <link>http://localhost:1313/tags/cs/</link>
-        <pubDate>Tue, 12 Mar 2024 00:00:00 +0000</pubDate>
+        <pubDate>Fri, 15 Mar 2024 00:00:00 +0000</pubDate>
         
         <guid>http://localhost:1313/tags/cs/</guid>
+        <description></description>
+        </item>
+        <item>
+        <title>Datasets</title>
+        <link>http://localhost:1313/tags/datasets/</link>
+        <pubDate>Fri, 15 Mar 2024 00:00:00 +0000</pubDate>
+        
+        <guid>http://localhost:1313/tags/datasets/</guid>
+        <description></description>
+        </item>
+        <item>
+        <title>Paper</title>
+        <link>http://localhost:1313/tags/paper/</link>
+        <pubDate>Fri, 15 Mar 2024 00:00:00 +0000</pubDate>
+        
+        <guid>http://localhost:1313/tags/paper/</guid>
         <description></description>
         </item>
         <item>
@@ -20,14 +52,6 @@
         <pubDate>Tue, 12 Mar 2024 00:00:00 +0000</pubDate>
         
         <guid>http://localhost:1313/tags/gan/</guid>
-        <description></description>
-        </item>
-        <item>
-        <title>Paper</title>
-        <link>http://localhost:1313/tags/paper/</link>
-        <pubDate>Tue, 12 Mar 2024 00:00:00 +0000</pubDate>
-        
-        <guid>http://localhost:1313/tags/paper/</guid>
         <description></description>
         </item>
         <item>

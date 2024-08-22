@@ -30,6 +30,13 @@ links:
   - title: KATEX
     description: equation syntax 
     website: https://katex.org/docs/supported.html
+  - title: Semantic Scholar
+    description: cite for paper
+    website: https://www.semanticscholar.org/
+  - title: Citing references
+    description: Guidance on citing references 
+    website: https://libguides.reading.ac.uk/citing-references/citationexamples
+
 
 menu:
     main: 

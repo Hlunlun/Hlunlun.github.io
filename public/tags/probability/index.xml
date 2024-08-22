@@ -1,0 +1,146 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+    <channel>
+        <title>Probability on Three Liters</title>
+        <link>http://localhost:1313/tags/probability/</link>
+        <description>Recent content in Probability on Three Liters</description>
+        <generator>Hugo -- gohugo.io</generator>
+        <language>en</language>
+        <lastBuildDate>Wed, 27 Mar 2024 00:00:00 +0000</lastBuildDate><atom:link href="http://localhost:1313/tags/probability/index.xml" rel="self" type="application/rss+xml" /><item>
+        <title>Random Walk Implement</title>
+        <link>http://localhost:1313/p/random-walk-implement/</link>
+        <pubDate>Wed, 27 Mar 2024 00:00:00 +0000</pubDate>
+        
+        <guid>http://localhost:1313/p/random-walk-implement/</guid>
+        <description>&lt;p&gt;This is a rough draft for the first homework. I may add some more instructions later. In particular I may ask you to compared the mpirical results to theoretical expectation according to a Gaussian distribution.&lt;/p&gt;
+&lt;h2 id=&#34;programming&#34;&gt;Programming&lt;/h2&gt;
+&lt;ul&gt;
+&lt;li&gt;Implement a program for simulating a particle making a random walk in D dimensions.&lt;/li&gt;
+&lt;li&gt;Write the core part of the simulation yourself.&lt;/li&gt;
+&lt;li&gt;In othe words &lt;strong&gt;DO NOT&lt;/strong&gt; use a library for the core part of the simulation.&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h2 id=&#34;dimension&#34;&gt;Dimension&lt;/h2&gt;
+&lt;ul&gt;
+&lt;li&gt;The random walks are to be performed independently in each dimension.&lt;/li&gt;
+&lt;li&gt;In 2D for example the particle will have two coordinates (x,y)
+&lt;blockquote&gt;
+&lt;p&gt;Let x⁽ⁱ⁾ denote the x coordinate of the particla at time step i.Then&lt;br&gt;
+x⁽ⁱ⁾ = x⁽ⁱ⁾ +  {+1 with 50% prob, or -1 with 50% prob}&lt;br&gt;
+y⁽ⁱ⁾ = y⁽ⁱ⁾ +  {+1 with 50% prob, or -1 with 50% prob}&lt;br&gt;
+Note that movement in each dimension is independent of movement in the other dimensions.&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;/li&gt;
+&lt;li&gt;Experiments to do for dimensions D={1,2,3,4}&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h2 id=&#34;time&#34;&gt;Time&lt;/h2&gt;
+&lt;ul&gt;
+&lt;li&gt;At time zero, the particle always starts at the origin (e.g. the point (0,0) in 2D).&lt;/li&gt;
+&lt;li&gt;After n steps the particle will be somewhere. For example for 2D, n=1; after 1 step the particle will be at each of the 4 coordinates (±1,±1) with probability ¼ each.&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h2 id=&#34;walks&#34;&gt;Walks&lt;/h2&gt;
+&lt;ul&gt;
+&lt;li&gt;Perform 1000 walks of n steps, for n = {10²,10³,10⁴,10⁵,10⁶}.&lt;/li&gt;
+&lt;li&gt;If your implementation is slow
+&lt;ul&gt;
+&lt;li&gt;it might take a long time to do 1000 walks of length 10⁶, in which case I recommend you do {10²,10³,10⁴,10⁵} first&lt;/li&gt;
+&lt;li&gt;then try to optimize your program to do the longer 10⁶ walks.&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;For each walk
+&lt;ul&gt;
+&lt;li&gt;record several statistics&lt;/li&gt;
+&lt;li&gt;make plots to summarize the results.&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;With D dimensions, there are 2ᴰ sections (象限: half, quadrant, octant,&amp;hellip;)
+&lt;blockquote&gt;
+&lt;p&gt;For example in 2D there are 4 quadrants. &lt;br&gt;
+x,y &amp;gt; 0   x,y &amp;lt; 0   x &amp;lt; 0 &amp;lt; y   y &amp;lt; 0 &amp;lt; x&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;/li&gt;
+&lt;li&gt;For simplicity, we ignore time steps for which x=0 or y=0.&lt;/li&gt;
+&lt;li&gt;For a reality check that your simulation seems okay
+&lt;ul&gt;
+&lt;li&gt;record which the number of time steps the particle is in each section&lt;/li&gt;
+&lt;li&gt;confirm that average over all walks of a given length, the particle spends approximately the same time in each section (象限).&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;For each walk
+&lt;ul&gt;
+&lt;li&gt;record any time steps for which the particle happens to come back to the origin.&lt;/li&gt;
+&lt;li&gt;This could happen many times or not at all.&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;For each combination D={1,2,3,4} × n={10²,10³,10⁴,10⁵,10⁶}, plot
+&lt;ul&gt;
+&lt;li&gt;the distribution of the L1-norm&lt;/li&gt;
+&lt;li&gt;L2-norm of the final position of the particle for the origin&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;The horizontal axis of this plot should be distance (L1 or L2) and vertical axis should be an estimate of the probability density based on your data. One way to do this is to bin your data points and plots the data as a histogram with many bins.&lt;/p&gt;
+&lt;h2 id=&#34;notice-&#34;&gt;Notice !&lt;/h2&gt;
+&lt;ul&gt;
+&lt;li&gt;
+&lt;p&gt;Again, do not just call a library function to take care of how to do the probability density estimation. Your code should do this.&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;It IS okay (of course) to use a library function to produce the image of the histogram.&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;For each walk, also record the steps in which the particle is at the origin (means the particle returned to the origin).&lt;br&gt;
+This may happen many times, or may not happen at all.&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;Use this data to estimate the distribution of the number of time steps required to return to the origin.&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;This distribution depends strongly on the dimensionality, so estimate it separately for dimensionality D = {1,2,3,4}.&lt;/li&gt;
+&lt;li&gt;Also estimate the expected value of the number or steps needed to return to the origin
+&lt;ul&gt;
+&lt;li&gt;For the higher dimensionality you may find the particle often never returns to the origin during your simulation&lt;/li&gt;
+&lt;li&gt;in which case &lt;em&gt;use your data&lt;/em&gt; to discuss a lower bound on the expected number of steps before returning to the origin&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;For each dimensionality describe and vizualize these results.&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;For 1D walk only.&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;
+&lt;p&gt;Let x denote the position in the 1D walk.&lt;/p&gt;
+&lt;blockquote&gt;
+&lt;p&gt;Let n₋, n₀, n₊  denote the number of time steps for which&lt;br&gt;
+x &amp;lt; 0, x = 0, x &amp;gt; 0 respectively&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;p&gt;Obviously n = n₋ + n₀ + n₊&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;Let m be defined as:  m ≝ ½n₀ + max(n₋,n₊)&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;Note that the time zero step does not count.&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;So for example with n=4, suppose your coin flips are (+1,-1,-1,-1)&lt;br&gt;
+The x values for time &amp;gt; 0 will be  +1,  0, -1, -2&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;Our statistics for this will be:&lt;/p&gt;
+&lt;blockquote&gt;
+&lt;p&gt;n₋ = 2, n₀ = 1, n₊ = 1, m = 2.5&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;For the 1000 samples from walk lengths n = {10²,10³,10⁴,10⁵,10⁶},
+plot the distribution of m/n.  Discuss the results.&lt;/p&gt;
+&lt;p&gt;Note this experiment relates to the statistical notion of a martingale.&lt;/p&gt;
+</description>
+        </item>
+        
+    </channel>
+</rss>
