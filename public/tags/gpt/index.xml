@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss
+  version="2.0"
+  xmlns:atom="http://www.w3.org/2005/Atom"
+  xmlns:wfw="http://wellformedweb.org/CommentAPI/"
+  
+    xmlns:content="http://purl.org/rss/1.0/modules/content/"
+  
+>
+  <channel>
+    <title>Gpt on Lun&#39;s Blog</title>
+    <link>http://localhost:1313/Hlunlun/tags/gpt/</link>
+    <description>Recent content in Gpt on Lun&#39;s Blog</description>
+    <generator>Hugo</generator>
+    <language>en-us</language>
+    <lastBuildDate>Tue, 10 Dec 2024 01:42:16 +0800</lastBuildDate>
+    <atom:link href="http://localhost:1313/Hlunlun/tags/gpt/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>GPT 1.0: Improving Language Understanding by Generative Pre-Training.</title>
+      <link>http://localhost:1313/Hlunlun/posts/gpt1/</link>
+      <pubDate>Tue, 10 Dec 2024 01:42:16 +0800</pubDate>
+      <guid>http://localhost:1313/Hlunlun/posts/gpt1/</guid>
+      <description>Radford, A., &amp;amp; Narasimhan, K. (2018). Improving Language Understanding by Generative Pre-Training.</description>
+      
+        <content:encoded><![CDATA[<p>論文引用: Radford, A., &amp; Narasimhan, K. (2018). Improving Language Understanding by Generative Pre-Training.</p>
+]]></content:encoded>
+      
+    </item>
+  </channel>
+</rss>

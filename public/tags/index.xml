@@ -13,8 +13,18 @@
     <description>Recent content in Tags on Lun&#39;s Blog</description>
     <generator>Hugo</generator>
     <language>en-us</language>
-    <lastBuildDate>Sun, 08 Dec 2024 23:18:01 +0800</lastBuildDate>
+    <lastBuildDate>Tue, 10 Dec 2024 01:42:16 +0800</lastBuildDate>
     <atom:link href="http://localhost:1313/Hlunlun/tags/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>Gpt</title>
+      <link>http://localhost:1313/Hlunlun/tags/gpt/</link>
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      <guid>http://localhost:1313/Hlunlun/tags/gpt/</guid>
+      <description></description>
+      
+        <content:encoded><![CDATA[]]></content:encoded>
+      
+    </item>
     <item>
       <title>Bert</title>
       <link>http://localhost:1313/Hlunlun/tags/bert/</link>
