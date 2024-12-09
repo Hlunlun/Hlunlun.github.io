@@ -1,7 +1,7 @@
 baseURL: https://github.com/Hlunlun
 languageCode: en-us
 defaultContentLanguage: en
-title: Lun's Blog
+title: Lun's
 theme: fluency
 enableRobotsTXT: true
 summaryLength: 0 # Configure how long the post summary should be on the homepage.
