@@ -8,13 +8,137 @@
   
 >
   <channel>
-    <title>Lun&#39;s Blog</title>
+    <title>Lun&#39;s</title>
     <link>http://localhost:1313/Hlunlun/</link>
-    <description>Recent content on Lun&#39;s Blog</description>
+    <description>Recent content on Lun&#39;s</description>
     <generator>Hugo</generator>
     <language>en-us</language>
-    <lastBuildDate>Tue, 10 Dec 2024 01:42:16 +0800</lastBuildDate>
+    <lastBuildDate>Tue, 10 Dec 2024 23:38:26 +0800</lastBuildDate>
     <atom:link href="http://localhost:1313/Hlunlun/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>Layer Normalization VS. Batch Normalization</title>
+      <link>http://localhost:1313/Hlunlun/posts/layer_norm/</link>
+      <pubDate>Tue, 10 Dec 2024 23:38:26 +0800</pubDate>
+      <guid>http://localhost:1313/Hlunlun/posts/layer_norm/</guid>
+      <description>為什麼Transformer要用Layer Normalization</description>
+      
+        <content:encoded><![CDATA[<p>通過<img src="https://hackmd.io/_uploads/SJEEkEBEJe.png" alt="圖">可以很明顯看出，BN就是把多個layer後正規化，而LN是把單一個layer的正規化</p>
+<table>
+<thead>
+<tr>
+<th>H</th>
+<th>C</th>
+<th>N</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>The number of hidden units in a layer</td>
+<td>channel(指feauture的維度，像是圖片的pixel有RGB那就是3個channel)</td>
+<td>Batch size</td>
+</tr>
+</tbody>
+</table>
+<h2 id="所以為什麼要batch-normalization">所以為什麼要Batch Normalization?</h2>
+<ul>
+<li>出自<a href="https://arxiv.org/pdf/1502.03167">Batch Normalization: Accelerating Deep Network Training by Reducing Internal Covariate Shift</a></li>
+</ul>
+<h3 id="不適合序列模型">不適合序列模型</h3>
+<ul>
+<li>想像現在有四個句子
+<pre tabindex="0"><code>我是成大資工系的學生
+他在英國倫敦的公司上班
+星際效應要重映了
+批次正規化是一種防止梯度爆炸的方法
+</code></pre></li>
+<li>如果用BN對上述句子做正規化
+<ul>
+<li>依照BN做法: 我們會選出不同資料中同位置的字，假設選取位置為0的字
+<pre tabindex="0"><code>我...
+他...
+星...
+批...
+</code></pre></li>
+<li>所以呢?這是在幹嘛?即使是同一個位置但語境不同，他們完全沒有相關之處，遑論要將他們&quot;正規化&quot;</li>
+</ul>
+</li>
+<li>應該是在他們的語境中正規化，量化一個句子並正規化其中的token</li>
+</ul>
+<h2 id="所以為什麼要layer-normalization">所以為什麼要Layer Normalization?</h2>
+<h3 id="論文">論文</h3>
+<p>出自2016的這篇論文: <a href="https://arxiv.org/pdf/1607.06450">Layer Normalization</a></p>
+<h3 id="數學意義">數學意義</h3>
+<p>先從數學上來說LN，其實也是正規化會遇到的數學算式，我們要先找到平均值，這個平均值是用整個layer $l$ 的所有 $H$ 個 hidden unit $a^l_i$ 算出來的，標準差就是用剛剛算的平均值再倒入算式即可得出</p>
+<img src="layer_norm.png" style=" margin: auto; display: block;">
+<h3 id="適合序列模型">適合序列模型</h3>
+
+<p>所以這裡的最小單位是hidden unit $a^l_i$，所有值都是在一個layer中，跟BN看的角度相比就比較微觀，畢竟BN是多個layer後在正規化，但是LN正好對RNN、LSTM、Transformer等這種序列模型非常加分，為何?</p>
+<ul>
+<li>可以先參考<a href="https://blog.csdn.net/jq_98/article/details/123300010">這張圖</a></li>
+<li>因為對於RNN來說，用BN來學習平均值和標準差是很難的，所以用LN的方式讓序列模型可以在自己所處的context(上下文)中學習 $\mu$ 和 $std$ 是比較容易的，所以LN是對序列模型來說最佳的正規化方法</li>
+</ul>
+<h3 id="程式碼的呈現">程式碼的呈現</h3>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-python" data-lang="python"><span class="line"><span class="cl"><span class="k">class</span> <span class="nc">LayerNorm</span><span class="p">(</span><span class="n">nn</span><span class="o">.</span><span class="n">Module</span><span class="p">):</span>
+</span></span><span class="line"><span class="cl">    <span class="s2">&#34;Construct a layernorm module (See citation for details).&#34;</span>
+</span></span><span class="line"><span class="cl">    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">features</span><span class="p">,</span> <span class="n">eps</span><span class="o">=</span><span class="mf">1e-6</span><span class="p">):</span>
+</span></span><span class="line"><span class="cl">        <span class="nb">super</span><span class="p">(</span><span class="n">LayerNorm</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="fm">__init__</span><span class="p">()</span>
+</span></span><span class="line"><span class="cl">        <span class="bp">self</span><span class="o">.</span><span class="n">a_2</span> <span class="o">=</span> <span class="n">nn</span><span class="o">.</span><span class="n">Parameter</span><span class="p">(</span><span class="n">torch</span><span class="o">.</span><span class="n">ones</span><span class="p">(</span><span class="n">features</span><span class="p">))</span>
+</span></span><span class="line"><span class="cl">        <span class="bp">self</span><span class="o">.</span><span class="n">b_2</span> <span class="o">=</span> <span class="n">nn</span><span class="o">.</span><span class="n">Parameter</span><span class="p">(</span><span class="n">torch</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="n">features</span><span class="p">))</span>
+</span></span><span class="line"><span class="cl">        <span class="bp">self</span><span class="o">.</span><span class="n">eps</span> <span class="o">=</span> <span class="n">eps</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">    <span class="k">def</span> <span class="nf">forward</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">x</span><span class="p">):</span>
+</span></span><span class="line"><span class="cl">        <span class="n">mean</span> <span class="o">=</span> <span class="n">x</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="n">keepdim</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">        <span class="n">std</span> <span class="o">=</span> <span class="n">x</span><span class="o">.</span><span class="n">std</span><span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="n">keepdim</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">a_2</span> <span class="o">*</span> <span class="p">(</span><span class="n">x</span> <span class="o">-</span> <span class="n">mean</span><span class="p">)</span> <span class="o">/</span> <span class="p">(</span><span class="n">std</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">eps</span><span class="p">)</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">b_2</span>
+</span></span></code></pre></div><ul>
+<li>
+<p>這邊要解釋一下扣，因為我們是每一層layer自己正規化的LN，不是跨layer正規化的BN，所以維度是 <code>x=-1</code> (表示最後一個維度，就是一筆資料) ，然後關於keepdim以下解釋</p>
+<pre tabindex="0"><code># 沒有 keepdim
+print(x.mean(-1))  # 結果: tensor([1.5, 3.5]), shape 為 (2,)
+
+# 使用 keepdim=True
+print(x.mean(-1, keepdim=True))  # 結果: tensor([[1.5], [3.5]]), shape 為 (2, 1)
+</code></pre></li>
+<li>
+<p>參考<a href="https://blog.csdn.net/jq_98/article/details/123300010">這張圖</a></p>
+  <img src="ln_bn.png" width=500>
+</li>
+</ul>
+<h2 id="bn-vs-ln">BN VS. LN</h2>
+<table>
+<thead>
+<tr>
+<th></th>
+<th>BN</th>
+<th>LN</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>size</td>
+<td>batch size中的同位置不同樣本點座標準化</td>
+<td>每個樣本自己內部座標準化，和batch size沒關</td>
+</tr>
+<tr>
+<td>適合模型</td>
+<td>CNN</td>
+<td>RNN, LSTM, Transformer</td>
+</tr>
+<tr>
+<td>原因</td>
+<td>每層輸出的數據分布不穩定</td>
+<td>序列之間沒有相關性，直接在單一序列做LN必較合理</td>
+</tr>
+</tbody>
+</table>
+<h2 id="reference">Reference</h2>
+<ul>
+<li><a href="https://blog.csdn.net/HUSTHY/article/details/106665809">关于batch normalization和layer normalization的理解</a></li>
+<li><a href="https://paperswithcode.com/method/layer-normalization">Layer Normalization</a></li>
+</ul>
+]]></content:encoded>
+      
+    </item>
     <item>
       <title>GPT 1.0: Improving Language Understanding by Generative Pre-Training.</title>
       <link>http://localhost:1313/Hlunlun/posts/gpt1/</link>

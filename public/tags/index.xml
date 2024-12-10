@@ -8,13 +8,33 @@
   
 >
   <channel>
-    <title>Tags on Lun&#39;s Blog</title>
+    <title>Tags on Lun&#39;s</title>
     <link>http://localhost:1313/Hlunlun/tags/</link>
-    <description>Recent content in Tags on Lun&#39;s Blog</description>
+    <description>Recent content in Tags on Lun&#39;s</description>
     <generator>Hugo</generator>
     <language>en-us</language>
-    <lastBuildDate>Tue, 10 Dec 2024 01:42:16 +0800</lastBuildDate>
+    <lastBuildDate>Tue, 10 Dec 2024 23:38:26 +0800</lastBuildDate>
     <atom:link href="http://localhost:1313/Hlunlun/tags/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>Layer_norm</title>
+      <link>http://localhost:1313/Hlunlun/tags/layer_norm/</link>
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      <guid>http://localhost:1313/Hlunlun/tags/layer_norm/</guid>
+      <description></description>
+      
+        <content:encoded><![CDATA[]]></content:encoded>
+      
+    </item>
+    <item>
+      <title>Normalization</title>
+      <link>http://localhost:1313/Hlunlun/tags/normalization/</link>
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      <guid>http://localhost:1313/Hlunlun/tags/normalization/</guid>
+      <description></description>
+      
+        <content:encoded><![CDATA[]]></content:encoded>
+      
+    </item>
     <item>
       <title>Gpt</title>
       <link>http://localhost:1313/Hlunlun/tags/gpt/</link>
