@@ -1,0 +1,469 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss
+  version="2.0"
+  xmlns:atom="http://www.w3.org/2005/Atom"
+  xmlns:wfw="http://wellformedweb.org/CommentAPI/"
+  
+    xmlns:content="http://purl.org/rss/1.0/modules/content/"
+  
+>
+  <channel>
+    <title>Low-Pass Filter on Lun&#39;s</title>
+    <link>http://localhost:1313/Hlunlun/tags/low-pass-filter/</link>
+    <description>Recent content in Low-Pass Filter on Lun&#39;s</description>
+    <generator>Hugo</generator>
+    <language>en-us</language>
+    <lastBuildDate>Thu, 19 Dec 2024 11:22:05 +0800</lastBuildDate>
+    <atom:link href="http://localhost:1313/Hlunlun/tags/low-pass-filter/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>Image Enhancement in Frequency Domain</title>
+      <link>http://localhost:1313/Hlunlun/posts/image_process/img_freq-domain/</link>
+      <pubDate>Thu, 19 Dec 2024 11:22:05 +0800</pubDate>
+      <guid>http://localhost:1313/Hlunlun/posts/image_process/img_freq-domain/</guid>
+      <description>Implementation of Low-pass and High-pass Filter with Fourier Transform</description>
+      
+        <content:encoded><![CDATA[<h2 id="q1-remove-noise-from-figure-1">Q1. Remove noise from Figure 1.</h2>
+<h3 id="用average-filter和-median-filter-分別對左圖去除雜訊並分析和比較兩者的差別">用average filter和 median filter 分別對左圖去除雜訊，並分析和比較兩者的差別</h3>
+<p><img src="https://prod-files-secure.s3.us-west-2.amazonaws.com/5c0abaf5-b9fa-4a9b-97e3-5ae6c274eec7/351b25a8-2b46-4fcf-a66c-c6529ca6403c/image.png" alt="Figure 1."></p>
+<p>Figure 1.</p>
+<ol>
+<li>
+<p>Average filter</p>
+<p>average filter也可以叫Smoothing Method，是用mask去對原圖做捲積，將捲積的運算的值再放到mask中心的像素，mask的size越大，整張圖會變得越平滑，如果 <code>k_size</code> =1，就跟原圖相同</p>
+<ul>
+<li><code>k_size</code>=1</li>
+</ul>
+<p><img src="https://prod-files-secure.s3.us-west-2.amazonaws.com/5c0abaf5-b9fa-4a9b-97e3-5ae6c274eec7/2a933251-bdf8-4396-b33d-c95bbd9893ef/image.png" alt="image.png"></p>
+<ul>
+<li><code>k_size</code> =5</li>
+</ul>
+<p><img src="https://prod-files-secure.s3.us-west-2.amazonaws.com/5c0abaf5-b9fa-4a9b-97e3-5ae6c274eec7/93829ca6-2ec4-41d2-8f77-2a8310c3aee7/image.png" alt="image.png"></p>
+<ul>
+<li><code>k_size</code> =9</li>
+</ul>
+<p><img src="https://prod-files-secure.s3.us-west-2.amazonaws.com/5c0abaf5-b9fa-4a9b-97e3-5ae6c274eec7/d7d32223-8856-4c11-a15f-74d704424256/image.png" alt="image.png"></p>
+</li>
+<li>
+<p>Median filter</p>
+<p>找出mask到的所有數值的中間值，用這個中間值取代整個mask區塊的中間像素，也是mask的size越大，整張圖會變得越平滑</p>
+<ul>
+<li><code>k_size</code>=1</li>
+</ul>
+<p><img src="https://prod-files-secure.s3.us-west-2.amazonaws.com/5c0abaf5-b9fa-4a9b-97e3-5ae6c274eec7/d1421737-d5c7-4568-8dd5-52a6ef55431d/image.png" alt="image.png"></p>
+<ul>
+<li><code>k_size</code> =5</li>
+</ul>
+<p><img src="https://prod-files-secure.s3.us-west-2.amazonaws.com/5c0abaf5-b9fa-4a9b-97e3-5ae6c274eec7/8450a1b7-bf4b-4d6a-bdc7-780913989c76/image.png" alt="image.png"></p>
+<ul>
+<li><code>k_size</code> = 9</li>
+</ul>
+<p><img src="https://prod-files-secure.s3.us-west-2.amazonaws.com/5c0abaf5-b9fa-4a9b-97e3-5ae6c274eec7/97be47a7-c10e-4d12-ad47-79de465e75c4/image.png" alt="image.png"></p>
+</li>
+<li>
+<p>Comparison</p>
+<p>以上改變kernel大小其實看不太出來average filter和median filter的差異，所以以下隨意添加30000黑色像素(如右圖)後再分別用這兩種方式來去除雜訊，差別就很明顯。</p>
+<ol>
+<li>
+<p>Average Filter</p>
+<p>讓整張圖都變得很暗，因為它會平均像素和雜訊，造成整張圖跟添加的黑色像素融合再一起。</p>
+</li>
+<li>
+<p>Median Filter</p>
+<p>取中間值較有效的去除雜訊，因為整張圖是偏白色的，所以選取的中間值都會比較大(較接近白色)，讓整張圖沒有暗掉。</p>
+</li>
+</ol>
+<p><img src="https://prod-files-secure.s3.us-west-2.amazonaws.com/5c0abaf5-b9fa-4a9b-97e3-5ae6c274eec7/64936077-0835-4aca-a785-1587b66bac14/image.png" alt="image1_noise"></p>
+<p>image1_noise</p>
+<h3 id="average-filter">Average Filter</h3>
+<ul>
+<li><code>k_size</code> = 3</li>
+</ul>
+<p><img src="https://prod-files-secure.s3.us-west-2.amazonaws.com/5c0abaf5-b9fa-4a9b-97e3-5ae6c274eec7/b721a7ad-903b-4933-a3ac-8a02dc2cf87d/image.png" alt="image.png"></p>
+<ul>
+<li><code>k_size</code> = 5</li>
+</ul>
+<p><img src="https://prod-files-secure.s3.us-west-2.amazonaws.com/5c0abaf5-b9fa-4a9b-97e3-5ae6c274eec7/9424fc4b-495a-4e15-b547-f22ba78a76ea/hw1_1_1_k-5.jpg" alt="hw1_1_1_k-5.jpg"></p>
+<ul>
+<li><code>k_size</code> = 9</li>
+</ul>
+<p><img src="https://prod-files-secure.s3.us-west-2.amazonaws.com/5c0abaf5-b9fa-4a9b-97e3-5ae6c274eec7/c7f395a9-87ca-42f8-9d11-f3e014e8cef0/hw1_1_1_k-9.jpg" alt="hw1_1_1_k-9.jpg"></p>
+<h3 id="median-filter">Median Filter</h3>
+<ul>
+<li><code>k_size</code> = 3</li>
+</ul>
+<p><img src="https://prod-files-secure.s3.us-west-2.amazonaws.com/5c0abaf5-b9fa-4a9b-97e3-5ae6c274eec7/01089548-1ef0-4ade-8146-fe4c67b99227/hw1_1_2_k-3.jpg" alt="hw1_1_2_k-3.jpg"></p>
+<ul>
+<li><code>k_size</code> = 5</li>
+</ul>
+<p><img src="https://prod-files-secure.s3.us-west-2.amazonaws.com/5c0abaf5-b9fa-4a9b-97e3-5ae6c274eec7/76a5b5fd-26a7-4ef1-9fc4-d0a71f1a4032/hw1_1_2_k-5.jpg" alt="hw1_1_2_k-5.jpg"></p>
+<ul>
+<li><code>k_size</code> = 9</li>
+</ul>
+<p><img src="https://prod-files-secure.s3.us-west-2.amazonaws.com/5c0abaf5-b9fa-4a9b-97e3-5ae6c274eec7/8ffe7c38-9b33-4cf6-a08b-27c5f33f4b7a/hw1_1_2_k-9.jpg" alt="hw1_1_2_k-9.jpg"></p>
+</li>
+</ol>
+<h2 id="q2-sharp-the-figure-2">Q2. Sharp the Figure 2.</h2>
+<h3 id="分別用-sobel-mask-和-fourier-transform-對左圖銳利化並分析和比較兩者的差別">分別用 Sobel mask 和 Fourier transform 對左圖銳利化，並分析和比較兩者的差別</h3>
+<p><img src="https://prod-files-secure.s3.us-west-2.amazonaws.com/5c0abaf5-b9fa-4a9b-97e3-5ae6c274eec7/b3cfce63-5b40-4aa5-a40b-05c94999d394/image.png" alt="Figure 2."></p>
+<p>Figure 2.</p>
+<ol>
+<li>
+<p>Sobel mask</p>
+<ol>
+<li>
+<p>Sobel vs. Gaussian+Sobel: 如果有先用Gaussian去除雜訊，並且取得的邊緣pixel的值只要大於70全部調成255，會取得的乾淨俐落的邊緣，在原圖與邊緣比例皆為0.5 ( <code>alpha</code> = 0.5, <code>beta</code> = 0.5)的條件下結合兩張圖可以更明顯看出邊緣</p>
+<ul>
+<li>Only Sobel</li>
+</ul>
+<p><img src="https://prod-files-secure.s3.us-west-2.amazonaws.com/5c0abaf5-b9fa-4a9b-97e3-5ae6c274eec7/1abad72c-2bfd-47ec-acb9-a379824e5b31/image.png" alt="image.png"></p>
+<ul>
+<li>加上原本的圖片</li>
+</ul>
+<p><img src="https://prod-files-secure.s3.us-west-2.amazonaws.com/5c0abaf5-b9fa-4a9b-97e3-5ae6c274eec7/e2b29eeb-54bf-413b-ba99-d2de373db12d/image.png" alt="image.png"></p>
+<ul>
+<li>Gaussian+Sobel</li>
+</ul>
+<p><img src="https://prod-files-secure.s3.us-west-2.amazonaws.com/5c0abaf5-b9fa-4a9b-97e3-5ae6c274eec7/55c15998-cedd-4406-acb9-f7c0c8abfa0d/image.png" alt="image.png"></p>
+<ul>
+<li>加上原本的圖片</li>
+</ul>
+<p><img src="https://prod-files-secure.s3.us-west-2.amazonaws.com/5c0abaf5-b9fa-4a9b-97e3-5ae6c274eec7/baf612e1-f31e-49d3-aa82-2a65ff5a44e4/image.png" alt="image.png"></p>
+</li>
+<li>
+<p>改變 <code>k_size</code> 肉眼來看沒甚麼差別</p>
+<ul>
+<li><code>k_size</code>=3</li>
+</ul>
+<p><img src="https://prod-files-secure.s3.us-west-2.amazonaws.com/5c0abaf5-b9fa-4a9b-97e3-5ae6c274eec7/a2a67eec-69f0-48b2-81e9-e97788b5aaf8/image.png" alt="image.png"></p>
+<ul>
+<li><code>k_size</code> =9</li>
+</ul>
+<p><img src="https://prod-files-secure.s3.us-west-2.amazonaws.com/5c0abaf5-b9fa-4a9b-97e3-5ae6c274eec7/54d9d830-540c-4819-a72f-60273a7e2f2a/image.png" alt="image.png"></p>
+</li>
+<li>
+<p>改變sobel後只剩的邊緣的圖和原圖的各占比例 <code>alpha</code> 、 <code>beta</code> ，並將 <code>k_size</code> 固定為 3</p>
+<h3 id="alpha--1"><code>alpha</code> = 1</h3>
+<ul>
+<li><code>beta</code> = -0.5</li>
+</ul>
+<p><img src="https://prod-files-secure.s3.us-west-2.amazonaws.com/5c0abaf5-b9fa-4a9b-97e3-5ae6c274eec7/e48d0b05-ed5d-45d4-8ed3-d65c90da9379/image.png" alt="image.png"></p>
+<ul>
+<li><code>beta</code> = -1</li>
+</ul>
+<p><img src="https://prod-files-secure.s3.us-west-2.amazonaws.com/5c0abaf5-b9fa-4a9b-97e3-5ae6c274eec7/fe960365-4631-417d-81eb-7e7cb2cb1f29/image.png" alt="image.png"></p>
+<ul>
+<li><code>beta</code> = -1.5</li>
+</ul>
+<p><img src="https://prod-files-secure.s3.us-west-2.amazonaws.com/5c0abaf5-b9fa-4a9b-97e3-5ae6c274eec7/8a1548b5-e946-45b9-af11-57c9779d817b/image.png" alt="image.png"></p>
+<h3 id="beta----1"><code>beta</code>  =- 1</h3>
+<ul>
+<li><code>alpha</code> = 0.5</li>
+</ul>
+<p><img src="https://prod-files-secure.s3.us-west-2.amazonaws.com/5c0abaf5-b9fa-4a9b-97e3-5ae6c274eec7/f4ecbd93-e312-4322-aa0c-e2e47f4eecef/image.png" alt="image.png"></p>
+<ul>
+<li><code>alpha</code> = 1</li>
+</ul>
+<p><img src="https://prod-files-secure.s3.us-west-2.amazonaws.com/5c0abaf5-b9fa-4a9b-97e3-5ae6c274eec7/1ce0e2f2-4b61-44f4-83c9-db67f9a82161/image.png" alt="image.png"></p>
+<ul>
+<li><code>alpha</code> = 1.5</li>
+</ul>
+<p><img src="https://prod-files-secure.s3.us-west-2.amazonaws.com/5c0abaf5-b9fa-4a9b-97e3-5ae6c274eec7/c40070a4-39be-4dd8-bc6b-f4c5a75bbb65/image.png" alt="image.png"></p>
+</li>
+</ol>
+</li>
+<li>
+<p>Fourier transform</p>
+<p>我用了兩種方法來盡量將邊緣強化:</p>
+<ol>
+<li>
+<p>第一種是從phase angle去做inverse Fourier transform然後會找出邊緣，再加回原圖，效果沒有很好。基本跟原圖看不出有啥差別</p>
+<p><img src="https://prod-files-secure.s3.us-west-2.amazonaws.com/5c0abaf5-b9fa-4a9b-97e3-5ae6c274eec7/6b0fe172-667e-4426-90f4-be7089bd77a5/image.png" alt="image.png"></p>
+</li>
+<li>
+<p>第二種用上課教的先算出圖片的傅立葉轉換 $F(u,v)$，然後找一個高通濾波器 $H(u,v)$ ，對 $F(u,v)$ 做捲積，最後再做 inverse Fourier transform 回去就會得到銳化的圖片。</p>
+<p>高通濾波器會呈現中間延伸某個半徑 <code>radius</code> 的範圍皆為0，其他都是1，以下分別用不同 <code>radius</code> 來比較銳化的效果</p>
+<ul>
+<li>
+<p>改變 <code>radius</code> : 半徑越大，會過濾掉越多低頻資訊，所以當 <code>radius</code> = 30 就只剩邊緣這種細節的高頻資訊了，但如果太大，到最後邊緣的資訊也比較不完整了</p>
+<p><code>radius</code> =0</p>
+<p><img src="https://prod-files-secure.s3.us-west-2.amazonaws.com/5c0abaf5-b9fa-4a9b-97e3-5ae6c274eec7/698e69aa-1d3a-4d70-a080-51b0f0807c3c/fd769350-3fec-42dc-b75a-e3629fc8e12d.png" alt="image.png"></p>
+<p><code>radius</code> = 30</p>
+<p><img src="https://prod-files-secure.s3.us-west-2.amazonaws.com/5c0abaf5-b9fa-4a9b-97e3-5ae6c274eec7/cfbe37fa-a781-4ad8-981c-d6834fa106d0/73ea8710-28a8-4fb1-a00a-25a42164d013.png" alt="image.png"></p>
+<p><code>radius</code> = 80</p>
+<p><img src="https://prod-files-secure.s3.us-west-2.amazonaws.com/5c0abaf5-b9fa-4a9b-97e3-5ae6c274eec7/aff61795-66ae-492f-9a69-0cd3742e188b/138361a3-118e-4776-b11a-f92bb91b0f15.png" alt="image.png"></p>
+<p><code>radius</code> = 10</p>
+<p><img src="https://prod-files-secure.s3.us-west-2.amazonaws.com/5c0abaf5-b9fa-4a9b-97e3-5ae6c274eec7/2ff61b6c-fa6d-49fe-b5c6-ad6a460d6559/4f20f349-6efc-40e9-8659-70b862749df0.png" alt="image.png"></p>
+<p><code>radius</code> = 60</p>
+<p><img src="https://prod-files-secure.s3.us-west-2.amazonaws.com/5c0abaf5-b9fa-4a9b-97e3-5ae6c274eec7/bbcc9dd8-4b86-4af2-9f9d-62fabff35724/0ef918d5-e937-48ab-b4e7-c54f697eb7fd.png" alt="image.png"></p>
+<p><code>radius</code> = 100</p>
+<p><img src="https://prod-files-secure.s3.us-west-2.amazonaws.com/5c0abaf5-b9fa-4a9b-97e3-5ae6c274eec7/a05b9d13-fe63-493b-8d06-a76e1e1393d6/abcfdfdd-bcb4-41f1-b498-096a1f2d9634.png" alt="image.png"></p>
+</li>
+<li>
+<p>在 filter function 中隨便加上一個常數( 一半的 filter 高度)，並改變 <code>radius</code> ，也就是</p>
+<p>$G(u,v) = F(u,v) [H(u,v) + 0.5]$，半徑等於0時就看起來非常清晰了，並且隨著半徑增大，並沒有像上一種方法一樣篩出邊緣，會越接近原圖</p>
+<p><code>radius</code> =0</p>
+<p><img src="https://prod-files-secure.s3.us-west-2.amazonaws.com/5c0abaf5-b9fa-4a9b-97e3-5ae6c274eec7/62c2c7b5-8f4f-4c2e-8380-d9b632d73a33/034ac19f-17a9-4440-9182-83166602cee5.png" alt="image.png"></p>
+<p><code>radius</code> = 30</p>
+<p><img src="https://prod-files-secure.s3.us-west-2.amazonaws.com/5c0abaf5-b9fa-4a9b-97e3-5ae6c274eec7/781e9bea-40f3-463e-8c2a-95128a034539/e7dd7b64-a107-4f3e-83e5-053bc18ea371.png" alt="image.png"></p>
+<p><code>radius</code> =80</p>
+<p><img src="https://prod-files-secure.s3.us-west-2.amazonaws.com/5c0abaf5-b9fa-4a9b-97e3-5ae6c274eec7/d76d3b90-543c-4100-a0c4-38c3a62e969c/56a3790a-e974-4654-954c-0416f48b47ad.png" alt="image.png"></p>
+<p><code>radius</code> = 10</p>
+<p><img src="https://prod-files-secure.s3.us-west-2.amazonaws.com/5c0abaf5-b9fa-4a9b-97e3-5ae6c274eec7/e4227da3-a705-461c-a4e2-5b07b2204265/082b9b4e-b3c3-42bb-9d74-dae3d19ef816.png" alt="image.png"></p>
+<p><code>radius</code> = 60</p>
+<p><img src="https://prod-files-secure.s3.us-west-2.amazonaws.com/5c0abaf5-b9fa-4a9b-97e3-5ae6c274eec7/a8b18758-ec49-4ec1-82a4-a6a616ed8469/dcfe17b6-51d4-4356-a814-e07f278d1d8c.png" alt="image.png"></p>
+<p><code>radius</code> = 100</p>
+<p><img src="https://prod-files-secure.s3.us-west-2.amazonaws.com/5c0abaf5-b9fa-4a9b-97e3-5ae6c274eec7/42aa6bf5-0794-4f5a-a35d-fe00e5ce291b/d2a6cd7c-be01-4342-84cf-55a2b2ba1996.png" alt="image.png"></p>
+</li>
+</ul>
+</li>
+</ol>
+</li>
+<li>
+<p>Comparison</p>
+<ul>
+<li>
+<p>如果單純從這張青椒圖的邊緣偵測來看，Sobel 取得的邊緣是比Fourier Transform完整的</p>
+<p>Sobel</p>
+<p><img src="https://prod-files-secure.s3.us-west-2.amazonaws.com/5c0abaf5-b9fa-4a9b-97e3-5ae6c274eec7/1abad72c-2bfd-47ec-acb9-a379824e5b31/image.png" alt="image.png"></p>
+<p>Fourier Transform</p>
+<p><img src="https://prod-files-secure.s3.us-west-2.amazonaws.com/5c0abaf5-b9fa-4a9b-97e3-5ae6c274eec7/cfbe37fa-a781-4ad8-981c-d6834fa106d0/73ea8710-28a8-4fb1-a00a-25a42164d013.png" alt="image.png"></p>
+</li>
+<li>
+<p>Sobel 銳化圖片的方式是將偵測到的邊緣在加回原圖，Fourier Transform 可以直接由高通濾波器得到邊緣相對清晰的圖</p>
+<p>Sobel</p>
+<p><img src="https://prod-files-secure.s3.us-west-2.amazonaws.com/5c0abaf5-b9fa-4a9b-97e3-5ae6c274eec7/fe960365-4631-417d-81eb-7e7cb2cb1f29/image.png" alt="image.png"></p>
+<p>Fourier Transform</p>
+<p><img src="https://prod-files-secure.s3.us-west-2.amazonaws.com/5c0abaf5-b9fa-4a9b-97e3-5ae6c274eec7/62c2c7b5-8f4f-4c2e-8380-d9b632d73a33/034ac19f-17a9-4440-9182-83166602cee5.png" alt="image.png"></p>
+</li>
+</ul>
+</li>
+</ol>
+<h2 id="q3-design-low-pass-gaussian-filter">Q3. Design Low-pass Gaussian Filter</h2>
+<p>Design Gaussian filter of 3*3 mask and use this mask to low-pass filter of Figure 1.</p>
+<ol>
+<li>Low-pass Gaussian filter
+<ul>
+<li>中心權重高、邊緣權重低 → 保留主要像素，平滑掉高頻雜訊</li>
+<li>中心值最大為4，最接近中心的是2，其他較遠的的是1</li>
+</ul>
+</li>
+</ol>
+<p>$\begin{bmatrix}1 &amp; 2 &amp; 1 \ 2 &amp; 4 &amp;  2\ 1 &amp; 2 &amp; 1 \end{bmatrix}$</p>
+<ol>
+<li>
+<p>用高斯低頻濾波器會將較小的像素(較暗的顏色)濾掉，使圖片少了原圖的顆粒感變得較平滑，可以去除雜訊，但是也變得比較模糊。</p>
+<ul>
+<li>original</li>
+</ul>
+<p><img src="https://prod-files-secure.s3.us-west-2.amazonaws.com/5c0abaf5-b9fa-4a9b-97e3-5ae6c274eec7/351b25a8-2b46-4fcf-a66c-c6529ca6403c/image.png" alt="Figure 1."></p>
+<p>Figure 1.</p>
+<ul>
+<li>after low-pass filter</li>
+</ul>
+<p><img src="https://prod-files-secure.s3.us-west-2.amazonaws.com/5c0abaf5-b9fa-4a9b-97e3-5ae6c274eec7/d993f0ba-f509-46c9-9654-2dc7be347a98/image.png" alt="low-pass gaussian filter"></p>
+<p>low-pass gaussian filter</p>
+</li>
+</ol>
+<h2 id="q4-design-low-pass-fourier-filter">Q4. Design Low-pass Fourier Filter</h2>
+<p>Design Fourier filter using q3. mask to smooth Figure 1.</p>
+<ol>
+<li>
+<p>如果直接把第三題的filter放到 $H(u,v)$ 中間，其他地方都是0，跟直接用第三題的 filter 去對圖像做處理肉眼其實看不出差別</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-python" data-lang="python"><span class="line"><span class="cl"><span class="n">H</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="n">rows</span><span class="p">,</span> <span class="n">cols</span><span class="p">),</span> <span class="n">dtype</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">float32</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl"><span class="n">gh</span><span class="p">,</span> <span class="n">gw</span> <span class="o">=</span> <span class="n">gaussian_filter</span><span class="o">.</span><span class="n">shape</span>
+</span></span><span class="line"><span class="cl"><span class="n">crow</span><span class="p">,</span> <span class="n">ccol</span> <span class="o">=</span> <span class="p">(</span><span class="n">rows</span> <span class="o">-</span> <span class="n">gh</span><span class="p">)</span> <span class="o">//</span> <span class="mi">2</span><span class="p">,</span> <span class="p">(</span><span class="n">cols</span> <span class="o">-</span> <span class="n">gw</span><span class="p">)</span> <span class="o">//</span> <span class="mi">2</span>
+</span></span><span class="line"><span class="cl"><span class="n">H</span><span class="p">[</span><span class="n">crow</span><span class="p">:</span><span class="n">crow</span><span class="o">+</span><span class="n">gh</span><span class="p">,</span> <span class="n">ccol</span><span class="p">:</span><span class="n">ccol</span><span class="o">+</span><span class="n">gw</span><span class="p">]</span> <span class="o">=</span> <span class="n">gaussian_filter</span>
+</span></span></code></pre></div><ul>
+<li>original</li>
+</ul>
+<p><img src="https://prod-files-secure.s3.us-west-2.amazonaws.com/5c0abaf5-b9fa-4a9b-97e3-5ae6c274eec7/351b25a8-2b46-4fcf-a66c-c6529ca6403c/image.png" alt="Figure 1."></p>
+<p>Figure 1.</p>
+<ul>
+<li>After Low-pass Fourier Filter</li>
+</ul>
+<p><img src="https://prod-files-secure.s3.us-west-2.amazonaws.com/5c0abaf5-b9fa-4a9b-97e3-5ae6c274eec7/131ca123-fcff-4ec1-b715-5d86f57d6893/image.png" alt="image.png"></p>
+</li>
+<li>
+<p>用這個公式來創建low-pass filter，在丟到傅立葉轉換</p>
+</li>
+</ol>
+<h2 id="q5-please-compute-the-corresponding-phase-angle-and-fourier-spectrum-of-figure-3">Q5. Please compute the corresponding phase angle and Fourier spectrum of Figure 3.</h2>
+<table>
+<thead>
+<tr>
+<th>1</th>
+<th>0</th>
+<th>7</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>5</td>
+<td>1</td>
+<td>8</td>
+</tr>
+<tr>
+<td>4</td>
+<td>0</td>
+<td>9</td>
+</tr>
+</tbody>
+</table>
+<ol>
+<li>Fourier spectrum and phase angle
+<ul>
+<li>
+<p>Fourier transform</p>
+<table>
+<thead>
+<tr>
+<th>$35$</th>
+<th>$-5/2+\cfrac{23\sqrt{3}}{2}j$</th>
+<th>$-5/2-\cfrac{23\sqrt{3}}{2}j$</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>$\cfrac{-11}{2}-\cfrac{\sqrt{3}}{2}j$</td>
+<td>$-4-\sqrt{3}j$</td>
+<td>$-1$</td>
+</tr>
+<tr>
+<td>$\cfrac{-11}{2}+\cfrac{\sqrt{3}}{2}j$</td>
+<td>$-1$</td>
+<td>$-4+\sqrt{3}j$</td>
+</tr>
+</tbody>
+</table>
+</li>
+<li>
+<p>運算結果</p>
+<p>Spectrum</p>
+<table>
+<thead>
+<tr>
+<th>$35$</th>
+<th>$20.07$</th>
+<th>$20.07$</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>$5.57$</td>
+<td>$4.36$</td>
+<td>$1$</td>
+</tr>
+<tr>
+<td>$5.57$</td>
+<td>$1$</td>
+<td>$4.36$</td>
+</tr>
+</tbody>
+</table>
+<p>Phase Angle(rad)</p>
+<table>
+<thead>
+<tr>
+<th>0</th>
+<th>$-1.446$</th>
+<th>$1.446$</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>$0.156$</td>
+<td>$0.409$</td>
+<td>$0$</td>
+</tr>
+<tr>
+<td>$-0.156$</td>
+<td>$0$</td>
+<td>0.409</td>
+</tr>
+</tbody>
+</table>
+</li>
+<li>
+<p>運算過程</p>
+<ul>
+<li>
+<p>$F(0,0)$</p>
+<p><img src="https://prod-files-secure.s3.us-west-2.amazonaws.com/5c0abaf5-b9fa-4a9b-97e3-5ae6c274eec7/cadc134b-a004-4728-8add-0777416ff649/image.png" alt="image.png"></p>
+</li>
+<li>
+<p>$F(0,1)$</p>
+<p><img src="https://prod-files-secure.s3.us-west-2.amazonaws.com/5c0abaf5-b9fa-4a9b-97e3-5ae6c274eec7/9543855f-9dc6-4654-ba92-9c859fa80000/image.png" alt="image.png"></p>
+</li>
+<li>
+<p>$F(0,2)$</p>
+<p><img src="https://prod-files-secure.s3.us-west-2.amazonaws.com/5c0abaf5-b9fa-4a9b-97e3-5ae6c274eec7/3aa0ba70-87d2-45ed-8e2a-0cfaf7702129/image.png" alt="image.png"></p>
+</li>
+<li>
+<p>$F(1,0)$</p>
+<p><img src="https://prod-files-secure.s3.us-west-2.amazonaws.com/5c0abaf5-b9fa-4a9b-97e3-5ae6c274eec7/ed61d556-fadc-4147-9842-77153f41b157/image.png" alt="image.png"></p>
+</li>
+<li>
+<p>$F(1,1)$</p>
+<p><img src="https://prod-files-secure.s3.us-west-2.amazonaws.com/5c0abaf5-b9fa-4a9b-97e3-5ae6c274eec7/84ba55d6-42dc-40af-b036-6009f97eca38/image.png" alt="image.png"></p>
+</li>
+<li>
+<p>$F(1,2)$</p>
+<p><img src="https://prod-files-secure.s3.us-west-2.amazonaws.com/5c0abaf5-b9fa-4a9b-97e3-5ae6c274eec7/c4474801-1eeb-4400-8a14-b1252f6c1a2d/image.png" alt="image.png"></p>
+</li>
+<li>
+<p>$F(2,0)$</p>
+<p><img src="https://prod-files-secure.s3.us-west-2.amazonaws.com/5c0abaf5-b9fa-4a9b-97e3-5ae6c274eec7/e88f2adb-0053-486e-9889-ee83f83d1300/image.png" alt="image.png"></p>
+</li>
+<li>
+<p>$F(2,1)$</p>
+<p><img src="https://prod-files-secure.s3.us-west-2.amazonaws.com/5c0abaf5-b9fa-4a9b-97e3-5ae6c274eec7/95d6f36a-eecf-4204-bdd5-7f921e6959f1/image.png" alt="image.png"></p>
+</li>
+<li>
+<p>$F(2,2)$</p>
+<p><img src="https://prod-files-secure.s3.us-west-2.amazonaws.com/5c0abaf5-b9fa-4a9b-97e3-5ae6c274eec7/33074ebd-a2e0-4e73-b3cf-8d71f91dcaca/image.png" alt="image.png"></p>
+</li>
+</ul>
+</li>
+<li>
+<p>程式碼實現</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-python" data-lang="python"><span class="line"><span class="cl"><span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="c1"># Define the given matrix f(x, y)</span>
+</span></span><span class="line"><span class="cl"><span class="n">f</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span>
+</span></span><span class="line"><span class="cl">    <span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">7</span><span class="p">],</span>
+</span></span><span class="line"><span class="cl">    <span class="p">[</span><span class="mi">5</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">8</span><span class="p">],</span>
+</span></span><span class="line"><span class="cl">    <span class="p">[</span><span class="mi">4</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">9</span><span class="p">]</span>
+</span></span><span class="line"><span class="cl"><span class="p">])</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="c1"># Define parameters</span>
+</span></span><span class="line"><span class="cl"><span class="n">N</span> <span class="o">=</span> <span class="mi">3</span>  <span class="c1"># Size of the matrix</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="c1"># Initialize F(u, v) as a zero matrix</span>
+</span></span><span class="line"><span class="cl"><span class="n">F</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="n">N</span><span class="p">,</span> <span class="n">N</span><span class="p">),</span> <span class="n">dtype</span><span class="o">=</span><span class="nb">complex</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="c1"># Compute the 2D DFT</span>
+</span></span><span class="line"><span class="cl"><span class="k">for</span> <span class="n">u</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">N</span><span class="p">):</span>
+</span></span><span class="line"><span class="cl">    <span class="k">for</span> <span class="n">v</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">N</span><span class="p">):</span>
+</span></span><span class="line"><span class="cl">        <span class="n">sum_val</span> <span class="o">=</span> <span class="mi">0</span>
+</span></span><span class="line"><span class="cl">        <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">N</span><span class="p">):</span>
+</span></span><span class="line"><span class="cl">            <span class="k">for</span> <span class="n">y</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">N</span><span class="p">):</span>
+</span></span><span class="line"><span class="cl">                <span class="n">exp_factor</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">exp</span><span class="p">(</span><span class="o">-</span><span class="mi">2</span><span class="n">j</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">pi</span> <span class="o">*</span> <span class="p">((</span><span class="n">u</span> <span class="o">*</span> <span class="n">x</span> <span class="o">+</span> <span class="n">v</span> <span class="o">*</span> <span class="n">y</span><span class="p">)</span> <span class="o">/</span> <span class="n">N</span><span class="p">))</span>
+</span></span><span class="line"><span class="cl">                <span class="n">sum_val</span> <span class="o">+=</span> <span class="n">f</span><span class="p">[</span><span class="n">x</span><span class="p">][</span><span class="n">y</span><span class="p">]</span> <span class="o">*</span> <span class="n">exp_factor</span>
+</span></span><span class="line"><span class="cl">        <span class="n">F</span><span class="p">[</span><span class="n">u</span><span class="p">,</span> <span class="n">v</span><span class="p">]</span> <span class="o">=</span> <span class="n">sum_val</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="c1"># Print matrix</span>
+</span></span><span class="line"><span class="cl"><span class="nb">print</span><span class="p">(</span><span class="n">F</span><span class="p">)</span>
+</span></span></code></pre></div></li>
+</ul>
+</li>
+</ol>
+<h2 id="reference">Reference</h2>
+<ul>
+<li><a href="https://medium.com/%E9%9B%BB%E8%85%A6%E8%A6%96%E8%A6%BA/%E5%BD%B1%E5%83%8F%E9%9B%9C%E8%A8%8A%E5%8E%BB%E9%99%A4-%E4%B8%AD%E5%80%BC%E6%BF%BE%E6%B3%A2%E5%99%A8-median-filter-e00e1ec4c86d">雜訊去除 — 中值濾波器 (Median filter)</a></li>
+<li><a href="https://www.ee.nthu.edu.tw/clhuang/09420EE368000DIP/chapter04.pdf">Image Enhancement in the Frequency Domain</a></li>
+</ul>
+]]></content:encoded>
+      
+    </item>
+  </channel>
+</rss>

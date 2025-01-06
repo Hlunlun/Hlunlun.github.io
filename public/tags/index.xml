@@ -13,8 +13,78 @@
     <description>Recent content in Tags on Lun&#39;s</description>
     <generator>Hugo</generator>
     <language>en-us</language>
-    <lastBuildDate>Tue, 10 Dec 2024 23:38:26 +0800</lastBuildDate>
+    <lastBuildDate>Tue, 07 Jan 2025 01:00:59 +0800</lastBuildDate>
     <atom:link href="http://localhost:1313/Hlunlun/tags/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>Detection</title>
+      <link>http://localhost:1313/Hlunlun/tags/detection/</link>
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      <guid>http://localhost:1313/Hlunlun/tags/detection/</guid>
+      <description></description>
+      
+        <content:encoded><![CDATA[]]></content:encoded>
+      
+    </item>
+    <item>
+      <title>Faster R-CNN</title>
+      <link>http://localhost:1313/Hlunlun/tags/faster-r-cnn/</link>
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      <guid>http://localhost:1313/Hlunlun/tags/faster-r-cnn/</guid>
+      <description></description>
+      
+        <content:encoded><![CDATA[]]></content:encoded>
+      
+    </item>
+    <item>
+      <title>YOLOv11-OBB</title>
+      <link>http://localhost:1313/Hlunlun/tags/yolov11-obb/</link>
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      <guid>http://localhost:1313/Hlunlun/tags/yolov11-obb/</guid>
+      <description></description>
+      
+        <content:encoded><![CDATA[]]></content:encoded>
+      
+    </item>
+    <item>
+      <title>Attention</title>
+      <link>http://localhost:1313/Hlunlun/tags/attention/</link>
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      <guid>http://localhost:1313/Hlunlun/tags/attention/</guid>
+      <description></description>
+      
+        <content:encoded><![CDATA[]]></content:encoded>
+      
+    </item>
+    <item>
+      <title>Fourier Transform</title>
+      <link>http://localhost:1313/Hlunlun/tags/fourier-transform/</link>
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      <guid>http://localhost:1313/Hlunlun/tags/fourier-transform/</guid>
+      <description></description>
+      
+        <content:encoded><![CDATA[]]></content:encoded>
+      
+    </item>
+    <item>
+      <title>High-Pass Filter</title>
+      <link>http://localhost:1313/Hlunlun/tags/high-pass-filter/</link>
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      <guid>http://localhost:1313/Hlunlun/tags/high-pass-filter/</guid>
+      <description></description>
+      
+        <content:encoded><![CDATA[]]></content:encoded>
+      
+    </item>
+    <item>
+      <title>Low-Pass Filter</title>
+      <link>http://localhost:1313/Hlunlun/tags/low-pass-filter/</link>
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      <guid>http://localhost:1313/Hlunlun/tags/low-pass-filter/</guid>
+      <description></description>
+      
+        <content:encoded><![CDATA[]]></content:encoded>
+      
+    </item>
     <item>
       <title>Layer_norm</title>
       <link>http://localhost:1313/Hlunlun/tags/layer_norm/</link>

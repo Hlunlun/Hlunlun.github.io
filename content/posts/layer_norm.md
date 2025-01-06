@@ -5,7 +5,9 @@ summary: 為什麼Transformer要用Layer Normalization
 tags: ["normalization", "layer_norm"]
 ---
 
-通過![圖](https://hackmd.io/_uploads/SJEEkEBEJe.png)可以很明顯看出，BN就是把多個layer後正規化，而LN是把單一個layer的正規化
+<img src="ln_bn_0.png" width =500 style=" margin: auto; display: block;">
+
+通過上圖可以很明顯看出，BN就是把多個layer後正規化，而LN是把單一個layer的正規化
 
 |H|C|N|
 |---|---|---|

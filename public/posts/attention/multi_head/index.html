@@ -1,0 +1,534 @@
+<!DOCTYPE html>
+<html
+  lang="en-us"
+  prefix="og: http://ogp.me/ns# fb: http://ogp.me/ns/fb#"
+>
+  
+
+
+
+  
+  
+
+
+<head lang="en-us"><script src="/Hlunlun/livereload.js?mindelay=10&amp;v=2&amp;port=1313&amp;path=Hlunlun/livereload" data-no-instant defer></script>
+  <meta charset="utf-8" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+  <meta name="HandheldFriendly" content="True" />
+  <meta name="MobileOptimized" content="320" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="color-scheme" content="dark light">
+  <meta name="description" content="實作參考Annotated Transformer : Implementation and concept of Multi-Head Attention" />
+  <meta name="author" content="Lun">
+  <meta name="keywords" content="Attention">
+  <title>Multi-Head Attention | Lun&#39;s</title>
+  <link rel="canonical" href="http://localhost:1313/Hlunlun/posts/attention/multi_head/" />
+  
+
+  
+  <meta property="og:type" content="article" />
+  <meta property="og:description" content="實作參考Annotated Transformer : Implementation and concept of Multi-Head Attention" />
+  <meta property="og:title" content="Multi-Head Attention" />
+  <meta property="og:site_name" content="Lun&#39;s" />
+  <meta property="og:image:type" content="image/jpeg" />
+  <meta property="og:url" content="http://localhost:1313/Hlunlun/posts/attention/multi_head/" />
+  <meta property="og:locale" content="en-us" />
+
+  
+    <meta property="article:published_time" content="2024-12-21" />
+    <meta property="article:modified_time" content="2024-12-21" />
+     
+      <meta property="article:tag" content="Attention" />
+     
+  
+
+  
+  <meta name="twitter:card" content="summary" />
+  <meta name="twitter:title" content="Multi-Head Attention | Lun&#39;s" />
+  <meta name="twitter:description" content="實作參考Annotated Transformer : Implementation and concept of Multi-Head Attention" />
+  <meta name="twitter:domain" content="http://localhost:1313/Hlunlun/posts/attention/multi_head/" />
+
+  
+  
+    <link rel="icon" href="http://localhost:1313/Hlunlun/favicon.ico">
+  
+  
+  
+  
+
+  
+  <link rel="stylesheet" href="//cdn.jsdelivr.net/npm/modern-normalize/modern-normalize.min.css">
+
+  
+  
+  
+
+  
+
+  
+    <link rel="stylesheet" href="http://localhost:1313/Hlunlun/style.css" rel="preload stylesheet" as="style"/>
+  
+
+  
+  
+</head>
+
+  <body>
+    <header id="header">
+  <div class="row">
+    <div class="container has-padding nav">
+      <button id="navbar-toggler" class="navbar-button" aria-hidden="true">
+
+
+
+
+
+
+
+
+
+
+
+<svg xmlns='http://www.w3.org/2000/svg' class='ionicon' viewBox='0 0 512 512'><path d='M64 384h384v-42.67H64zm0-106.67h384v-42.66H64zM64 128v42.67h384V128z'/></svg>
+
+
+
+
+
+</button>
+      <div class="navbar-brand">
+        <a class="logo navbar-button" href="http://localhost:1313/Hlunlun/" title="Lun&#39;s">
+          <span>Lun&#39;s</span>
+        </a>
+      </div>
+      <nav class="navbar" role="navigation">
+        <ul>
+          
+          
+            <li class="nav-bar-item active">
+              <a class="nav-link navbar-button" href="/Hlunlun/posts/" title="posts">
+                <span>posts</span>
+              </a>
+            </li>
+          
+            <li class="nav-bar-item">
+              <a class="nav-link navbar-button" href="/Hlunlun/tags/" title="tags">
+                <span>tags</span>
+              </a>
+            </li>
+          
+            <li class="nav-bar-item">
+              <a class="nav-link navbar-button" href="/Hlunlun/archives/" title="archives">
+                <span>archives</span>
+              </a>
+            </li>
+          
+            <li class="nav-bar-item">
+              <a class="nav-link navbar-button" href="/Hlunlun/about/" title="about">
+                <span>about</span>
+              </a>
+            </li>
+          
+        </ul>
+      </nav>
+      <div class="theme-selector">
+        <button class="button is-text" id="theme-selector-button" title="toggle theme">
+          <span class="label icon">
+
+
+
+
+
+<svg xmlns='http://www.w3.org/2000/svg' class='ionicon' viewBox='0 0 512 512'><path d='M256 32C132.29 32 32 132.29 32 256s100.29 224 224 224 224-100.29 224-224S379.71 32 256 32zM128.72 383.28A180 180 0 01256 76v360a178.82 178.82 0 01-127.28-52.72z'/></svg>
+
+
+
+
+
+
+
+
+
+
+
+</span>
+        </button>
+      </div>
+    </div>
+    
+      <div class="container has-padding">
+        <div class="breadcrumb">
+          
+<ol  class="breadcrumb-nav">
+  
+
+  
+
+  
+
+<li >
+  <a href="http://localhost:1313/Hlunlun/">Home</a>
+</li>
+
+
+<li >
+  <a href="http://localhost:1313/Hlunlun/posts/">Posts</a>
+</li>
+
+
+<li class="active">
+  <a href="http://localhost:1313/Hlunlun/posts/attention/multi_head/">Multi-Head Attention</a>
+</li>
+
+</ol>
+
+
+
+
+        </div>
+      </div>
+    
+  </div>
+</header>
+
+    
+
+<main id="main">
+  <div class="container has-padding">
+    <div class="article-card post single">
+      <h1 class="title">Multi-Head Attention</h1>
+      <div class="post-info">
+        <span>
+
+
+
+<svg xmlns='http://www.w3.org/2000/svg' class='ionicon' viewBox='0 0 512 512'><path d='M32 456a24 24 0 0024 24h400a24 24 0 0024-24V176H32zm320-244a4 4 0 014-4h40a4 4 0 014 4v40a4 4 0 01-4 4h-40a4 4 0 01-4-4zm0 80a4 4 0 014-4h40a4 4 0 014 4v40a4 4 0 01-4 4h-40a4 4 0 01-4-4zm-80-80a4 4 0 014-4h40a4 4 0 014 4v40a4 4 0 01-4 4h-40a4 4 0 01-4-4zm0 80a4 4 0 014-4h40a4 4 0 014 4v40a4 4 0 01-4 4h-40a4 4 0 01-4-4zm0 80a4 4 0 014-4h40a4 4 0 014 4v40a4 4 0 01-4 4h-40a4 4 0 01-4-4zm-80-80a4 4 0 014-4h40a4 4 0 014 4v40a4 4 0 01-4 4h-40a4 4 0 01-4-4zm0 80a4 4 0 014-4h40a4 4 0 014 4v40a4 4 0 01-4 4h-40a4 4 0 01-4-4zm-80-80a4 4 0 014-4h40a4 4 0 014 4v40a4 4 0 01-4 4h-40a4 4 0 01-4-4zm0 80a4 4 0 014-4h40a4 4 0 014 4v40a4 4 0 01-4 4h-40a4 4 0 01-4-4zM456 64h-55.92V32h-48v32H159.92V32h-48v32H56a23.8 23.8 0 00-24 23.77V144h448V87.77A23.8 23.8 0 00456 64z'/></svg>
+
+
+
+
+
+
+
+
+
+
+
+
+
+<time datetime=2024-12-21T23:49:08&#43;0800 class="date">December 21, 2024</time></span>
+        <span>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<svg xmlns='http://www.w3.org/2000/svg' class='ionicon' viewBox='0 0 512 512'><path d='M256 48C141.13 48 48 141.13 48 256c0 114.69 93.32 208 208 208 114.86 0 208-93.14 208-208 0-114.69-93.31-208-208-208zm108 240H244a4 4 0 01-4-4V116a4 4 0 014-4h24a4 4 0 014 4v140h92a4 4 0 014 4v24a4 4 0 01-4 4z'/></svg>
+2 mins to read</span>
+        
+          <span>
+
+
+
+
+
+
+
+
+
+
+
+
+<svg xmlns='http://www.w3.org/2000/svg' class='ionicon' viewBox='0 0 512 512'><path d='M256 256a112 112 0 10-112-112 112 112 0 00112 112zm0 32c-69.42 0-208 42.88-208 128v64h416v-64c0-85.12-138.58-128-208-128z'/></svg>
+
+
+
+
+Lun</span>
+        
+        
+        
+          <span>posts </span>
+        
+      </div>
+      <article class="post-entry content">
+        
+          <p>實作參考<a href="https://nlp.seas.harvard.edu/2018/04/03/attention.html">Annotated Transformer</a></p>
+<img src="https://hackmd.io/_uploads/B1IzQb3Eye.png" style="display:block;margin:auto;" width=300>
+<h2 id="數學">數學<a hidden class="heading-anchor" aria-hidden="true" href="#數學">#</a></h2>
+<p>
+$$
+MultiHead(Q,K,V)=Concat({head}_1, {head}_2, ..., {head}_h)
+$$ 
+</p>
+<p>
+$${head}_i = Attention(Q{W_i}^Q, K{W_i}^K, V{W_i}^V)$$
+</p>
+<ul>
+<li>
+<p>可學習的參數就是其中Query的權重 \(W_i^Q\) 、Key的權重 \(W_i^K\) 、Value的權重 \(W_i^V\) </p>
+</li>
+<li>忘記Attention是怎麼算的可以看<a href="https://hackmd.io/@clh/transformer-attention-0">這裡</a></li>
+<li>結合算Attention的過程，整個Multi-Head Attention大概是以下這樣算</li>
+</ul>
+<h2 id="從程式碼看">從程式碼看<a hidden class="heading-anchor" aria-hidden="true" href="#從程式碼看">#</a></h2>
+<h3 id="全連接層-nnlineard_model-d_model">全連接層 <code>nn.Linear(d_model, d_model)</code><a hidden class="heading-anchor" aria-hidden="true" href="#全連接層-nnlineard_model-d_model">#</a></h3>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-python" data-lang="python"><span class="line"><span class="cl"><span class="bp">self</span><span class="o">.</span><span class="n">linears</span> <span class="o">=</span> <span class="n">clones</span><span class="p">(</span><span class="n">nn</span><span class="o">.</span><span class="n">Linear</span><span class="p">(</span><span class="n">d_model</span><span class="p">,</span> <span class="n">d_model</span><span class="p">),</span> <span class="mi">4</span><span class="p">)</span>
+</span></span></code></pre></div><ol>
+<li>輸入輸出維度: 整個模型的的維度
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-python" data-lang="python"><span class="line"><span class="cl"><span class="n">output</span><span class="p">:</span> <span class="p">(</span><span class="n">batch_size</span><span class="p">,</span> <span class="n">seq_length</span><span class="p">,</span> <span class="n">d_model</span><span class="p">)</span>
+</span></span></code></pre></div></li>
+<li>總共需要四個全連接層
+<ul>
+<li>K、Q、V各一個
+<img src="https://hackmd.io/_uploads/rken74T4ye.png" style="display:block;"></li>
+<li>最後輸出再一個
+<img src="https://hackmd.io/_uploads/H14J4ET4yx.png" style="display:block;"></li>
+</ul>
+</li>
+<li>經過 全連接層 的V, K, Q 就會長這樣
+<img src="https://hackmd.io/_uploads/SJJwrNpVyg.png" style="display:block;">
+<ul>
+<li>
+<p> \(W_i\) 一開始就是隨機初始化的的權重，在訓練過程中模型會自己用loss function來back propagate來學習並更新這些參數，就可以學習到最好的權重</p>
+</li>
+<li>關於全連接層詳細參考<a href="https://speech.ee.ntu.edu.tw/~hylee/ml/ml2021-course-data/regression%20(v16).pdf">李弘毅講義</a></li>
+</ul>
+</li>
+</ol>
+<h3> Q, K, V 透過 Linear 映射到 \(Q{W_i}^Q\), \(K{W_i}^K\), \(V{W_i}^V\) </h3>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-python" data-lang="python"><span class="line"><span class="cl"><span class="c1"># Do all the linear projections in batch from d_model =&gt; h x d_k</span>
+</span></span><span class="line"><span class="cl"><span class="n">query</span><span class="p">,</span> <span class="n">key</span><span class="p">,</span> <span class="n">value</span> <span class="o">=</span> <span class="p">[</span><span class="n">l</span><span class="p">(</span><span class="n">x</span><span class="p">)</span><span class="o">.</span><span class="n">view</span><span class="p">(</span><span class="n">nbatches</span><span class="p">,</span> <span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">h</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">d_k</span><span class="p">)</span><span class="o">.</span><span class="n">transpose</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span><span class="mi">2</span><span class="p">)</span> <span class="k">for</span> <span class="n">l</span><span class="p">,</span> <span class="n">x</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">linears</span><span class="p">,</span> <span class="p">(</span><span class="n">query</span><span class="p">,</span> <span class="n">key</span><span class="p">,</span><span class="n">value</span><span class="p">))]</span>
+</span></span></code></pre></div><ol>
+<li>先講 <code>view()</code>
+<ul>
+<li>
+<p><code>view(nbatches, -1, self.h, self.d_k)</code>: 對 輸出的張量 \(W_i x_i\) 進行reshape</p>
+  <!-- ```
+  view(nbatches, -1, self.h, self.d_k) 是对输出张量进行重塑（reshape）的操作。
+  参数解释：
+  nbatches: 保持批次的大小不变。
+  -1: 表示自动推断这一维度的大小，以保持总元素数量不变。在这里，它将根据输入的总元素数量自动计算出序列长度（seq_length）。
+  self.h: 表示头的数量。
+  self.d_k: 每个头的维度（即每个头处理的特征维度）。
+  功能：这个操作将张量重塑为四维形式，便于后续多头注意力计算。重塑后的形状为 [nbatches, seq_length, h, d_k]。
+  ``` -->
+</li>
+</ul>
+</li>
+<li>關於各種維度，用query Q 舉例，shape = (head, seq_length, d_k) = (2, 3, 2)
+ <p>
+ $$q_0=\begin{bmatrix}
+    1.45 & -0.79 \\
+    0.62 & -0.64 \\
+    0.97 & -0.21 \\ 
+ \end{bmatrix}$$    
+ $$q_1=\begin{bmatrix}
+    0.40 & 0.53 \\
+    0.40 & 0.29 \\
+    0.48 & 0.80 \\ 
+ \end{bmatrix}$$
+ </p>
+ <p>
+     <ul>
+         <li>\(d_k\) = 2，也就是 \(q_i\) 的行數</li>
+         <li> <code>seq_lenghth</code> = 3，<span>\(q_i\)</spn> 的列數</li>
+         <li><code>head</code> = 2，也就是 \(Q\) 的長度 2，因為有兩個 子陣列</li>
+     </ul>
+ </p>  
+</li>
+<li>整個過程的維度可以參考<a href="https://www.kaggle.com/code/aisuko/coding-cross-attention">這張圖</a>
+<img src="https://files.mastodon.social/media_attachments/files/111/819/100/204/990/207/original/09d504e16eb77ccc.png" width=600 style="display:block"></li>
+</ol>
+<h2 id="real-world-example">Real World Example<a hidden class="heading-anchor" aria-hidden="true" href="#real-world-example">#</a></h2>
+<p>可以到 <a href="https://github.com/Hlunlun/Transformer/blob/master/example/multi_head_attention.ipynb">GitHub</a> 看實際數據模擬</p>
+<h2 id="完整實作">完整實作<a hidden class="heading-anchor" aria-hidden="true" href="#完整實作">#</a></h2>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-python" data-lang="python"><span class="line"><span class="cl"><span class="k">class</span> <span class="nc">MultiHeadedAttention</span><span class="p">(</span><span class="n">nn</span><span class="o">.</span><span class="n">Module</span><span class="p">):</span>
+</span></span><span class="line"><span class="cl">    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">h</span><span class="p">,</span> <span class="n">d_model</span><span class="p">,</span> <span class="n">dropout</span><span class="o">=</span><span class="mf">0.1</span><span class="p">):</span>
+</span></span><span class="line"><span class="cl">        <span class="s2">&#34;Take in model size and number of heads&#34;</span>
+</span></span><span class="line"><span class="cl">        <span class="nb">super</span><span class="p">(</span><span class="n">MultiHeadedAttention</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="fm">__init__</span><span class="p">()</span>
+</span></span><span class="line"><span class="cl">        <span class="k">assert</span> <span class="n">d_model</span><span class="o">%</span><span class="n">h</span> <span class="o">==</span> <span class="mi">0</span>
+</span></span><span class="line"><span class="cl">        <span class="c1"># Assume d_v always d_k</span>
+</span></span><span class="line"><span class="cl">        <span class="bp">self</span><span class="o">.</span><span class="n">d_k</span> <span class="o">=</span> <span class="n">d_model</span> <span class="o">//</span> <span class="n">h</span>
+</span></span><span class="line"><span class="cl">        <span class="bp">self</span><span class="o">.</span><span class="n">h</span> <span class="o">=</span> <span class="n">h</span>
+</span></span><span class="line"><span class="cl">        <span class="bp">self</span><span class="o">.</span><span class="n">linears</span> <span class="o">=</span> <span class="n">clones</span><span class="p">(</span><span class="n">nn</span><span class="o">.</span><span class="n">Linear</span><span class="p">(</span><span class="n">d_model</span><span class="p">,</span> <span class="n">d_model</span><span class="p">),</span> <span class="mi">4</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">        <span class="bp">self</span><span class="o">.</span><span class="n">attn</span> <span class="o">=</span> <span class="kc">None</span>
+</span></span><span class="line"><span class="cl">        <span class="bp">self</span><span class="o">.</span><span class="n">dropout</span> <span class="o">=</span> <span class="n">nn</span><span class="o">.</span><span class="n">Dropout</span><span class="p">(</span><span class="n">p</span><span class="o">=</span><span class="n">dropout</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">    <span class="k">def</span> <span class="nf">forward</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">query</span><span class="p">,</span> <span class="n">key</span><span class="p">,</span> <span class="n">value</span><span class="p">,</span> <span class="n">mask</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+</span></span><span class="line"><span class="cl">        <span class="s2">&#34;Implement multi-head attention&#34;</span>
+</span></span><span class="line"><span class="cl">        <span class="k">if</span> <span class="n">mask</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+</span></span><span class="line"><span class="cl">            <span class="c1"># Same mask applied to all h heads.</span>
+</span></span><span class="line"><span class="cl">            <span class="n">mask</span> <span class="o">=</span> <span class="n">mask</span><span class="o">.</span><span class="n">unsqueeze</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">        <span class="n">nbatches</span> <span class="o">=</span> <span class="n">query</span><span class="o">.</span><span class="n">size</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">        <span class="c1"># 1) Do all the linear projections in batch from d_model =&gt; h x d_k</span>
+</span></span><span class="line"><span class="cl">        <span class="n">query</span><span class="p">,</span> <span class="n">key</span><span class="p">,</span> <span class="n">value</span> <span class="o">=</span> <span class="p">[</span><span class="n">l</span><span class="p">(</span><span class="n">x</span><span class="p">)</span><span class="o">.</span><span class="n">view</span><span class="p">(</span><span class="n">nbatches</span><span class="p">,</span> <span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">h</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">d_k</span><span class="p">)</span><span class="o">.</span><span class="n">transpose</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span><span class="mi">2</span><span class="p">)</span> <span class="k">for</span> <span class="n">l</span><span class="p">,</span> <span class="n">x</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">linears</span><span class="p">,</span> <span class="p">(</span><span class="n">query</span><span class="p">,</span> <span class="n">key</span><span class="p">,</span><span class="n">value</span><span class="p">))]</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">        <span class="c1"># 2) Apply attention on all the projected vectors in batch</span>
+</span></span><span class="line"><span class="cl">        <span class="n">x</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">attn</span> <span class="o">=</span> <span class="n">attention</span><span class="p">(</span><span class="n">query</span><span class="p">,</span> <span class="n">key</span><span class="p">,</span> <span class="n">value</span><span class="p">,</span> <span class="n">mask</span><span class="o">=</span><span class="n">mask</span><span class="p">,</span> <span class="n">dropout</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">dropout</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">        <span class="c1"># 3) &#34;Concat&#34; using a view and apply a final linear</span>
+</span></span><span class="line"><span class="cl">        <span class="n">x</span> <span class="o">=</span> <span class="n">x</span><span class="o">.</span><span class="n">transpose</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">)</span><span class="o">.</span><span class="n">contiguous</span><span class="p">()</span><span class="o">.</span><span class="n">view</span><span class="p">(</span><span class="n">nbatches</span><span class="p">,</span> <span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">h</span> <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">d_k</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">linear</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">](</span><span class="n">x</span><span class="p">)</span>
+</span></span></code></pre></div><h2 id="reference">Reference<a hidden class="heading-anchor" aria-hidden="true" href="#reference">#</a></h2>
+<ul>
+<li><a href="https://blog.csdn.net/philosophyatmath/article/details/128013258">Self -Attention、Multi-Head Attention、Cross-Attention</a></li>
+<li><a href="https://blog.csdn.net/qq_37541097/article/details/117691873">详解Transformer中Self-Attention以及Multi-Head Attention</a></li>
+</ul>
+
+
+
+        
+      </article>
+    </div>
+
+    
+      <div class="meta article-card">
+    <div class="row">
+      <span class="label">
+
+
+
+<svg xmlns='http://www.w3.org/2000/svg' class='ionicon' viewBox='0 0 512 512'><path d='M32 456a24 24 0 0024 24h400a24 24 0 0024-24V176H32zm320-244a4 4 0 014-4h40a4 4 0 014 4v40a4 4 0 01-4 4h-40a4 4 0 01-4-4zm0 80a4 4 0 014-4h40a4 4 0 014 4v40a4 4 0 01-4 4h-40a4 4 0 01-4-4zm-80-80a4 4 0 014-4h40a4 4 0 014 4v40a4 4 0 01-4 4h-40a4 4 0 01-4-4zm0 80a4 4 0 014-4h40a4 4 0 014 4v40a4 4 0 01-4 4h-40a4 4 0 01-4-4zm0 80a4 4 0 014-4h40a4 4 0 014 4v40a4 4 0 01-4 4h-40a4 4 0 01-4-4zm-80-80a4 4 0 014-4h40a4 4 0 014 4v40a4 4 0 01-4 4h-40a4 4 0 01-4-4zm0 80a4 4 0 014-4h40a4 4 0 014 4v40a4 4 0 01-4 4h-40a4 4 0 01-4-4zm-80-80a4 4 0 014-4h40a4 4 0 014 4v40a4 4 0 01-4 4h-40a4 4 0 01-4-4zm0 80a4 4 0 014-4h40a4 4 0 014 4v40a4 4 0 01-4 4h-40a4 4 0 01-4-4zM456 64h-55.92V32h-48v32H159.92V32h-48v32H56a23.8 23.8 0 00-24 23.77V144h448V87.77A23.8 23.8 0 00456 64z'/></svg>
+
+
+
+
+
+
+
+
+
+
+
+
+
+Published At</span><time>2024-12-21 23:49 CST</time>
+      
+    </div>
+
+    
+      <div class="row">
+        <span class="label">
+
+
+
+
+
+
+
+
+
+
+
+
+
+<svg xmlns='http://www.w3.org/2000/svg' class='ionicon' viewBox='0 0 512 512'><path d='M288 16L0 304l176 176 288-288V16zm80 128a32 32 0 1132-32 32 32 0 01-32 32z'/><path d='M480 64v144L216.9 471.1 242 496l270-272V64h-32z'/></svg>
+
+
+
+Tagged with</span>
+        <ul class="tags">
+        
+          <li class="hashed-tag"><a href="http://localhost:1313/Hlunlun/tags/attention">Attention</a></li>
+        
+        </ul>
+      </div>
+    
+
+    
+
+    
+</div>
+
+    
+
+    
+
+  </div>
+</main>
+
+    <footer id="footer">
+  <div class="container has-padding is-flex">
+    <ul class="links">
+      
+      <li>
+        
+        <a rel="nofollow" target="_blank" href="https://github.com/Hlunlun" title="Github">Github</a>
+      </li>
+      
+      <li>
+        <a
+          rel="nofollow"
+          target="_blank"
+          href="https://github.com/wayjam/hugo-theme-fluency"
+          title="using Hugo theme fluency">
+          Theme Fluency
+        </a>
+      </li>
+      <li>
+        <a rel="nofollow" target="_blank" href="https://gohugo.io" title="Built with hugo">Built with Hugo</a>
+      </li>
+    </ul>
+    <div class="copyright">
+       &copy; 2025 Lun&#39;s
+      
+    </div>
+  </div>
+</footer>
+
+<script>
+    window.FluencyCopyIcon = '\r\n\r\n\r\n\r\n\r\n\r\n\r\n\u003csvg xmlns=\u0027http:\/\/www.w3.org\/2000\/svg\u0027 class=\u0027ionicon\u0027 viewBox=\u00270 0 512 512\u0027\u003e\u003crect x=\u0027128\u0027 y=\u0027128\u0027 width=\u0027336\u0027 height=\u0027336\u0027 rx=\u002757\u0027 ry=\u002757\u0027 stroke-linejoin=\u0027round\u0027 class=\u0027ionicon-fill-none ionicon-stroke-width\u0027\/\u003e\u003cpath d=\u0027M383.5 128l.5-24a56.16 56.16 0 00-56-56H112a64.19 64.19 0 00-64 64v216a56.16 56.16 0 0056 56h24\u0027 stroke-linecap=\u0027round\u0027 stroke-linejoin=\u0027round\u0027 class=\u0027ionicon-fill-none ionicon-stroke-width\u0027\/\u003e\u003c\/svg\u003e\r\n\r\n\r\n\r\n\r\n\r\n\r\n\r\n\r\n\r\n\r\n'
+</script>
+
+
+<script defer src="http://localhost:1313/Hlunlun/js/main.min.15ea6de828b83519cdc1bc66872563a50cd5e59b4b1cfc6f31019951922b2e78.js" integrity="sha256-Fept6Ci4NRnNwbxmhyVjpQzV5ZtLHPxvMQGZUZIrLng=" crossorigin="anonymous" async></script>
+
+
+    <link
+  rel="stylesheet"
+  href="https://cdn.jsdelivr.net/npm/katex@0.12.0/dist/katex.min.css"
+  integrity="sha384-AfEj0r4/OFrOo5t7NnNe46zW/tFgW6x/bCJG8FqQCEo3+Aro6EYUG4+cU+KJWu/X"
+  crossorigin="anonymous"
+/>
+
+
+<script
+  defer
+  src="https://cdn.jsdelivr.net/npm/katex@0.12.0/dist/katex.min.js"
+  integrity="sha384-g7c+Jr9ZivxKLnZTDUhnkOnsh30B4H0rpLUpJ4jAIKs4fnJI+sEnkvrMWph2EDg4"
+  crossorigin="anonymous"
+></script>
+
+
+<script
+  defer
+  src="https://cdn.jsdelivr.net/npm/katex@0.12.0/dist/contrib/auto-render.min.js"
+  integrity="sha384-mll67QQFJfxn0IYznZYonOWZ644AWYC+Pt2cHqMaRhXVrursRwvLnLaebdGIlYNa"
+  crossorigin="anonymous"
+  onload="renderMathInElement(document.body);"
+></script>
+
+
+
+<noscript>
+<style type=text/css>#theme-selector-button{display:none}</style>
+</noscript>
+
+
+
+
+  </body>
+</html>

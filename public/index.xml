@@ -13,8 +13,1080 @@
     <description>Recent content on Lun&#39;s</description>
     <generator>Hugo</generator>
     <language>en-us</language>
-    <lastBuildDate>Tue, 10 Dec 2024 23:38:26 +0800</lastBuildDate>
+    <lastBuildDate>Tue, 07 Jan 2025 01:00:59 +0800</lastBuildDate>
     <atom:link href="http://localhost:1313/Hlunlun/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>Fractured Scaphoid Detection</title>
+      <link>http://localhost:1313/Hlunlun/posts/image_process/scaphoid_fracture_detection/</link>
+      <pubDate>Tue, 07 Jan 2025 01:00:59 +0800</pubDate>
+      <guid>http://localhost:1313/Hlunlun/posts/image_process/scaphoid_fracture_detection/</guid>
+      <description>Use Faster &lt;a href=&#34;https://arxiv.org/abs/1506.01497&#34;&gt;R-CNN&lt;/a&gt; and YOLOv11-&lt;a href=&#34;https://docs.ultralytics.com/datasets/obb/&#34;&gt;OBB&lt;/a&gt; to detect the scaphoid fracture location.</description>
+      
+        <content:encoded><![CDATA[<h2 id="get-started">Get started</h2>
+<ol>
+<li>
+<p>Training</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-python" data-lang="python"><span class="line"><span class="cl"><span class="n">python</span> <span class="n">main</span><span class="o">.</span><span class="n">py</span> <span class="o">--</span><span class="n">train</span> <span class="mi">1</span>
+</span></span></code></pre></div></li>
+<li>
+<p>Run System</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-python" data-lang="python"><span class="line"><span class="cl"><span class="n">python</span> <span class="n">main</span><span class="o">.</span><span class="n">py</span>
+</span></span></code></pre></div></li>
+</ol>
+<h2 id="model">Model</h2>
+<table>
+<thead>
+<tr>
+<th>Name</th>
+<th>Description</th>
+<th>path</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>ScaphoidDetector</strong></td>
+<td>Detects scaphoid bone in X-ray hand images using <a href="https://arxiv.org/abs/1506.01497">Faster R-CNN</a></td>
+<td><code>scaphoid_detector.py</code></td>
+</tr>
+<tr>
+<td><strong>FractureClassifier</strong></td>
+<td>Classify scaphoid fractures using <a href="https://pytorch.org/vision/main/models/generated/torchvision.models.vgg16.html">VGG16</a> pre-trained model after detection by ScaphoidDetector</td>
+<td><code>fracture_classifier.py</code></td>
+</tr>
+<tr>
+<td><strong>HandDetector</strong></td>
+<td>Detects scaphoid bones and fractures region in X-ray hand image using YOLOv11-<a href="https://docs.ultralytics.com/datasets/obb/">OBB</a></td>
+<td><code>hand_detector.py</code></td>
+</tr>
+</tbody>
+</table>
+<h2 id="methods">Methods</h2>
+<ol>
+<li>
+<p>ScaphoidDetector + FractureClassifier + HandDetector</p>
+<p>First, use Faster R-CNN to detect the scaphoid bone in the full X-ray hand image. Then, use VGG16 to classify whether there is a fracture. Finally, use YOLOv11-obb to detect the fracture location.</p>
+</li>
+<li>
+<p>HandDetector</p>
+<p>Directly use YOLOv11-obb to detect the scaphoid bone and fracture locations.</p>
+</li>
+</ol>
+<h2 id="scaphoiddetector--fractureclassifier--handdetector"><strong>ScaphoidDetector + FractureClassifier + HandDetector</strong></h2>
+<p><img src="https://prod-files-secure.s3.us-west-2.amazonaws.com/5c0abaf5-b9fa-4a9b-97e3-5ae6c274eec7/527516ba-ec1d-4333-b649-e193cba1a90d/image.png" alt="image.png"></p>
+<h3 id="datasets">Datasets</h3>
+<ol>
+<li>
+<p>File Structure:</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-python" data-lang="python"><span class="line"><span class="cl"><span class="n">ip_data</span>  
+</span></span><span class="line"><span class="cl"><span class="err">├──</span> <span class="n">fracture_detection</span>  
+</span></span><span class="line"><span class="cl"><span class="err">│</span>   <span class="err">└──</span> <span class="n">annotations</span> <span class="o">//</span> <span class="n">Fracture</span> <span class="n">locations</span><span class="p">:</span> <span class="p">[[</span><span class="n">x1</span><span class="p">,</span> <span class="n">y1</span><span class="p">],</span> <span class="p">[</span><span class="n">x2</span><span class="p">,</span> <span class="n">y2</span><span class="p">],</span> <span class="p">[</span><span class="n">x3</span><span class="p">,</span> <span class="n">y3</span><span class="p">],</span> <span class="p">[</span><span class="n">x4</span><span class="p">,</span> <span class="n">y4</span><span class="p">]]</span>  
+</span></span><span class="line"><span class="cl"><span class="err">└──</span> <span class="n">scaphoid_detection</span>  
+</span></span><span class="line"><span class="cl">    <span class="err">├──</span> <span class="n">annotations</span> <span class="o">//</span> <span class="n">Scaphoid</span> <span class="n">locations</span><span class="p">:</span> <span class="p">[</span><span class="n">x1</span><span class="p">,</span> <span class="n">y1</span><span class="p">,</span> <span class="n">x2</span><span class="p">,</span> <span class="n">y2</span><span class="p">]</span>  
+</span></span><span class="line"><span class="cl">    <span class="err">└──</span> <span class="n">images</span>      <span class="o">//</span> <span class="n">Hand</span> <span class="n">X</span><span class="o">-</span><span class="n">ray</span> <span class="n">images</span>  
+</span></span></code></pre></div></li>
+<li>
+<p>After data preprocessing in <code>dataset.py</code> :</p>
+<p><code>all_datas.json</code> and new folders will be created under fracture_detection and scaphoid_detection</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-python" data-lang="python"><span class="line"><span class="cl"><span class="err">├──</span> <span class="n">ip_data</span>
+</span></span><span class="line"><span class="cl">	  <span class="err">├──</span> <span class="n">fracture_detection</span>
+</span></span><span class="line"><span class="cl">	  <span class="err">│</span>   <span class="err">├──</span> <span class="n">annotations</span>
+</span></span><span class="line"><span class="cl">	  <span class="err">│</span>   <span class="err">├──</span> <span class="n">images</span>
+</span></span><span class="line"><span class="cl">	  <span class="err">│</span>   <span class="err">└──</span> <span class="n">images_rec</span>
+</span></span><span class="line"><span class="cl">	  <span class="err">└──</span> <span class="n">scaphoid_detection</span>
+</span></span><span class="line"><span class="cl">	      <span class="err">├──</span> <span class="n">annotations</span>
+</span></span><span class="line"><span class="cl">	      <span class="err">├──</span> <span class="n">images</span>
+</span></span><span class="line"><span class="cl">	      <span class="err">└──</span> <span class="n">images_rec</span>
+</span></span><span class="line"><span class="cl"><span class="err">├──</span> <span class="n">all_datas</span><span class="o">.</span><span class="n">json</span>
+</span></span></code></pre></div><ul>
+<li>
+<p><code>fracture_detection/</code> :</p>
+<ul>
+<li><code>images/</code> : Contains the full scaphoid images cropped based on scaphoid locations.</li>
+<li><code>images_rec/</code> : Contains the scaphoid images with highlighted fracture locations.</li>
+</ul>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-python" data-lang="python"><span class="line"><span class="cl"><span class="n">fracture_detection</span>
+</span></span><span class="line"><span class="cl"><span class="err">├──</span> <span class="n">annotations</span>
+</span></span><span class="line"><span class="cl"><span class="err">├──</span> <span class="n">images</span>
+</span></span><span class="line"><span class="cl"><span class="err">└──</span> <span class="n">images_rec</span>
+</span></span></code></pre></div></li>
+<li>
+<p><code>scaphoid_detection/images_rec</code> : Stores hand images with the scaphoid region framed.</p>
+</li>
+</ul>
+</li>
+</ol>
+<h3 id="training">Training</h3>
+<ol>
+<li>
+<p>Train ScaogiudDetector</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-python" data-lang="python"><span class="line"><span class="cl"><span class="kn">from</span> <span class="nn">scahpoid_detector</span> <span class="kn">import</span> <span class="n">ScaphoidDetector</span>
+</span></span><span class="line"><span class="cl"><span class="n">scaphoid_detector</span> <span class="o">=</span> <span class="n">ScaphoidDetector</span><span class="p">(</span><span class="n">args</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl"><span class="n">scaphoid_detector</span><span class="o">.</span><span class="n">train</span><span class="p">()</span>
+</span></span></code></pre></div></li>
+<li>
+<p>Train FractureClassifier</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-python" data-lang="python"><span class="line"><span class="cl"><span class="kn">from</span> <span class="nn">fracture_classifier</span> <span class="kn">import</span> <span class="n">FractureClassifier</span>
+</span></span><span class="line"><span class="cl"><span class="n">fracture_classifier</span> <span class="o">=</span> <span class="n">FractureClassifier</span><span class="p">(</span><span class="n">args</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl"><span class="n">fracture_classifier</span><span class="o">.</span><span class="n">train</span><span class="p">()</span>
+</span></span></code></pre></div></li>
+<li>
+<p>Train HandDetector</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-python" data-lang="python"><span class="line"><span class="cl"><span class="kn">from</span> <span class="nn">hand_detector</span> <span class="kn">import</span> <span class="n">HandDetector</span>
+</span></span><span class="line"><span class="cl"><span class="n">hand_detector</span> <span class="o">=</span> <span class="n">HandDetector</span><span class="p">(</span><span class="n">args</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl"><span class="n">hand_detector</span><span class="o">.</span><span class="n">train</span><span class="p">()</span>
+</span></span></code></pre></div></li>
+<li>
+<p>Analysis</p>
+<ul>
+<li>
+<p>ScaphoidDetector</p>
+<p><img src="https://prod-files-secure.s3.us-west-2.amazonaws.com/5c0abaf5-b9fa-4a9b-97e3-5ae6c274eec7/ce8bf7df-5077-4532-a170-47769001caa1/image.png" alt="image.png"></p>
+</li>
+<li>
+<p>FractureClassifier</p>
+<p>accuracy, recalls, precision, f1, loss</p>
+<p><img src="https://prod-files-secure.s3.us-west-2.amazonaws.com/5c0abaf5-b9fa-4a9b-97e3-5ae6c274eec7/a306967d-9e07-4485-9ad4-75645480b863/image.png" alt="image.png"></p>
+</li>
+<li>
+<p>HandDetector: Curves will be saved in <code>performance</code> and  <code>runs/</code>  respectively</p>
+<p><img src="https://prod-files-secure.s3.us-west-2.amazonaws.com/5c0abaf5-b9fa-4a9b-97e3-5ae6c274eec7/94f401d1-061e-4e91-997a-f3bb1a421ffe/image.png" alt="image.png"></p>
+</li>
+</ul>
+</li>
+</ol>
+<h3 id="detecting">Detecting</h3>
+<p>Steps 1. Detect Scaphoid</p>
+<ul>
+<li>
+<p>Use <code>detect()</code> function</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-python" data-lang="python"><span class="line"><span class="cl"><span class="n">scaphoid_detector</span><span class="o">.</span><span class="n">detect</span><span class="p">(</span><span class="n">dir_path</span><span class="p">)</span>
+</span></span></code></pre></div></li>
+<li>
+<p>Detected scaphoid location will be cropped and saved in <code>prediction/scaphoid/</code></p>
+<p><img src="https://prod-files-secure.s3.us-west-2.amazonaws.com/5c0abaf5-b9fa-4a9b-97e3-5ae6c274eec7/0d7062e3-c432-488b-bbae-c2fd86ea73b1/image.png" alt="image.png"></p>
+</li>
+</ul>
+<p>Steps 2. Classify fracture</p>
+<ul>
+<li>
+<p>Use <code>classify()</code> function</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-python" data-lang="python"><span class="line"><span class="cl"><span class="n">fracture_classifier</span><span class="o">.</span><span class="n">classify</span><span class="p">(</span><span class="n">dir_path</span><span class="p">)</span>
+</span></span></code></pre></div></li>
+<li>
+<p>Fracture scaphoid will be saved in <code>prediction/classifier/</code></p>
+</li>
+</ul>
+<p>Steps 3. Detect fracture location</p>
+<ul>
+<li>
+<p>Use <code>detect_fracture()</code> function</p>
+</li>
+<li>
+<p>The images with marked fracture locations will be saved in <code>prediction/fracture/</code></p>
+<p><img src="https://prod-files-secure.s3.us-west-2.amazonaws.com/5c0abaf5-b9fa-4a9b-97e3-5ae6c274eec7/d4cb9cf1-1573-4c54-9f86-638706d189d8/image.png" alt="image.png"></p>
+</li>
+</ul>
+<h2 id="handdetector">HandDetector</h2>
+<p><img src="https://prod-files-secure.s3.us-west-2.amazonaws.com/5c0abaf5-b9fa-4a9b-97e3-5ae6c274eec7/2f2a1611-db52-4026-b225-7ac49cd84c2d/image.png" alt="image.png"></p>
+<h3 id="training-datasets">Training Datasets</h3>
+<p>Use functions from <code>yolo_anno.py</code> to construct data for YOLOv11-OBB</p>
+<ol>
+<li>
+<p>File Structure</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-python" data-lang="python"><span class="line"><span class="cl"><span class="n">yolo_config</span>
+</span></span><span class="line"><span class="cl"><span class="err">├──</span> <span class="n">data</span>
+</span></span><span class="line"><span class="cl"><span class="err">├──</span> <span class="n">datasets</span>
+</span></span><span class="line"><span class="cl"><span class="err">│</span>   <span class="err">├──</span> <span class="n">fracture</span>
+</span></span><span class="line"><span class="cl"><span class="err">│</span>   <span class="err">│</span>   <span class="err">├──</span> <span class="n">images</span>
+</span></span><span class="line"><span class="cl"><span class="err">│</span>   <span class="err">│</span>   <span class="err">│</span>   <span class="err">├──</span> <span class="n">train</span>
+</span></span><span class="line"><span class="cl"><span class="err">│</span>   <span class="err">│</span>   <span class="err">│</span>   <span class="err">└──</span> <span class="n">val</span>
+</span></span><span class="line"><span class="cl"><span class="err">│</span>   <span class="err">│</span>   <span class="err">└──</span> <span class="n">labels</span>
+</span></span><span class="line"><span class="cl"><span class="err">│</span>   <span class="err">│</span>       <span class="err">├──</span> <span class="n">train</span>
+</span></span><span class="line"><span class="cl"><span class="err">│</span>   <span class="err">│</span>       <span class="err">└──</span> <span class="n">val</span>
+</span></span><span class="line"><span class="cl"><span class="err">│</span>   <span class="err">└──</span> <span class="n">hand</span>
+</span></span><span class="line"><span class="cl"><span class="err">│</span>       <span class="err">├──</span> <span class="n">images</span>
+</span></span><span class="line"><span class="cl"><span class="err">│</span>       <span class="err">│</span>   <span class="err">├──</span> <span class="n">train</span>
+</span></span><span class="line"><span class="cl"><span class="err">│</span>       <span class="err">│</span>   <span class="err">└──</span> <span class="n">val</span>
+</span></span><span class="line"><span class="cl"><span class="err">│</span>       <span class="err">└──</span> <span class="n">labels</span>
+</span></span><span class="line"><span class="cl"><span class="err">│</span>           <span class="err">├──</span> <span class="n">train</span>
+</span></span><span class="line"><span class="cl"><span class="err">│</span>           <span class="err">└──</span> <span class="n">val</span>
+</span></span><span class="line"><span class="cl"><span class="err">└──</span> <span class="n">weights</span>
+</span></span></code></pre></div></li>
+<li>
+<p>During Training: YOLO 會自動將所有圖片拼在一起，最後再裁成設定得大小 (以下範例為1024)，圖片就會前處理成以下，一個batch的圖片數量會根據 <code>batch_size</code> (以下範例為 8)</p>
+<p><img src="https://prod-files-secure.s3.us-west-2.amazonaws.com/5c0abaf5-b9fa-4a9b-97e3-5ae6c274eec7/24c73464-a8e2-4fe5-93b6-72811075c6c6/image.png" alt="image.png"></p>
+</li>
+</ol>
+<h3 id="training-1">Training</h3>
+<ol>
+<li>
+<p>Train HandDetector</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-python" data-lang="python"><span class="line"><span class="cl"><span class="kn">from</span> <span class="nn">hand_detector</span> <span class="kn">import</span> <span class="n">HandDetector</span>
+</span></span><span class="line"><span class="cl"><span class="n">hand_detector</span> <span class="o">=</span> <span class="n">HandDetector</span><span class="p">(</span><span class="n">args</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl"><span class="n">hand_detector</span><span class="o">.</span><span class="n">train</span><span class="p">()</span>
+</span></span></code></pre></div></li>
+<li>
+<p>Results will be saved in <code>runs/</code></p>
+<p><img src="https://prod-files-secure.s3.us-west-2.amazonaws.com/5c0abaf5-b9fa-4a9b-97e3-5ae6c274eec7/aa14525d-8d76-4d12-b39a-501fcb275de6/image.png" alt="image.png"></p>
+</li>
+</ol>
+<h3 id="results">Results</h3>
+<ol>
+<li>
+<p>Confusion Matrix:</p>
+<ul>
+<li><strong>Scaphoid:</strong> Using YOLOv11-OBB to detect the position of the scaphoid performed exceptionally well, with an accuracy of up to 98% in predictions.</li>
+<li><strong>Fracture:</strong> YOLOv11-OBB correctly predicted 41% of fracture locations in full-hand X-ray images, slightly outperforming the two-stage detection method.</li>
+</ul>
+<p><img src="https://prod-files-secure.s3.us-west-2.amazonaws.com/5c0abaf5-b9fa-4a9b-97e3-5ae6c274eec7/6977b654-bf48-4842-8962-e0710b1fc121/image.png" alt="image.png"></p>
+</li>
+<li>
+<p>Precision, Recall, F1</p>
+<p><img src="https://prod-files-secure.s3.us-west-2.amazonaws.com/5c0abaf5-b9fa-4a9b-97e3-5ae6c274eec7/e0885c3a-c85d-45a6-8aa8-002dcd4a99e5/image.png" alt="image.png"></p>
+</li>
+<li>
+<p>During Testing</p>
+<p><img src="https://prod-files-secure.s3.us-west-2.amazonaws.com/5c0abaf5-b9fa-4a9b-97e3-5ae6c274eec7/0198ca53-98df-4f3f-9013-e0822b20fecd/image.png" alt="image.png"></p>
+<p><img src="https://prod-files-secure.s3.us-west-2.amazonaws.com/5c0abaf5-b9fa-4a9b-97e3-5ae6c274eec7/b8847e82-05a5-4d3e-9ed2-617656c16d50/image.png" alt="image.png"></p>
+<p><img src="https://prod-files-secure.s3.us-west-2.amazonaws.com/5c0abaf5-b9fa-4a9b-97e3-5ae6c274eec7/8e42960a-62b0-48b0-83f7-818cc3391d61/image.png" alt="image.png"></p>
+</li>
+</ol>
+<h3 id="detecting-1">Detecting</h3>
+<ol>
+<li>
+<p>Detect scaphoid</p>
+<ul>
+<li>
+<p>Detect images in folder</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-python" data-lang="python"><span class="line"><span class="cl"><span class="n">hand_detector</span><span class="o">.</span><span class="n">detect_scaphoid</span><span class="p">(</span><span class="n">dir_name</span><span class="p">)</span>
+</span></span></code></pre></div></li>
+<li>
+<p>Detect one image</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-python" data-lang="python"><span class="line"><span class="cl"><span class="n">hand_detector</span><span class="o">.</span><span class="n">_detect_scaphoid</span><span class="p">(</span><span class="n">img_name</span><span class="p">,</span> <span class="n">img_path</span><span class="p">)</span>
+</span></span></code></pre></div></li>
+</ul>
+</li>
+<li>
+<p>Detect fracture</p>
+<ul>
+<li>
+<p>Detect images in folder</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-python" data-lang="python"><span class="line"><span class="cl"><span class="n">hand_detector</span><span class="o">.</span><span class="n">detect_fracture</span><span class="p">(</span><span class="n">dir_name</span><span class="p">)</span>
+</span></span></code></pre></div></li>
+<li>
+<p>Detect one image</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-python" data-lang="python"><span class="line"><span class="cl"><span class="n">hand_detector</span><span class="o">.</span><span class="n">_detect_fracture</span><span class="p">(</span><span class="n">img_name</span><span class="p">,</span> <span class="n">img_path</span><span class="p">)</span>
+</span></span></code></pre></div></li>
+</ul>
+</li>
+<li>
+<p>Plot the rectangle</p>
+<p>The <code>detect_*()</code> function performs two key operations:</p>
+<ul>
+<li>Predicts the location of the scaphoid or fracture</li>
+<li>Uses <code>plot_xyxyxyxy()</code> to visualize the results with
+<ul>
+<li>Red rectangles showing the target (ground truth) locations</li>
+<li>Green rectangles showing the predicted locations</li>
+<li>Pictures will be saved in <code>prediction/hand/</code></li>
+</ul>
+</li>
+</ul>
+<p><img src="https://prod-files-secure.s3.us-west-2.amazonaws.com/5c0abaf5-b9fa-4a9b-97e3-5ae6c274eec7/66b9bca3-49ed-433d-97b7-6e010625718c/image.png" alt="image.png"></p>
+</li>
+</ol>
+<h2 id="system">System</h2>
+<p>Load a folder containing the dataset file structure. The system will then begin predicting and save the images with the scaphoid and fracture locations highlighted.</p>
+<p><img src="https://prod-files-secure.s3.us-west-2.amazonaws.com/5c0abaf5-b9fa-4a9b-97e3-5ae6c274eec7/4b659a84-7683-4662-bbbf-bf74900d1d81/image.png" alt="image.png"></p>
+<p><img src="https://prod-files-secure.s3.us-west-2.amazonaws.com/5c0abaf5-b9fa-4a9b-97e3-5ae6c274eec7/41af7a37-a41e-4a88-a40b-0332b21f98e5/image.png" alt="image.png"></p>
+<h2 id="code-availability">Code Availability</h2>
+<p><a href="https://github.com/Hlunlun/Fractured-Scaphoid-Detection">https://github.com/Hlunlun/Fractured-Scaphoid-Detection</a></p>
+<h2 id="datasets-availability">Datasets Availability</h2>
+<p>From <a href="https://sites.google.com/view/ncku-csie-vslab/home">NCKU CSIE Visual System Lab</a></p>
+<h2 id="reference">Reference</h2>
+<ul>
+<li><a href="https://github.com/pytorch/vision/issues/1952"><strong>FastRCNNPredictor doesn&rsquo;t return prediction in evaluation</strong></a></li>
+<li><a href="https://docs.ultralytics.com/datasets/obb/"><strong>Oriented Bounding Box (OBB) Datasets Overview</strong></a></li>
+<li><a href="https://blog.csdn.net/qq_41204464/article/details/143217068"><strong>一篇文章快速认识YOLO11 | 旋转目标检测 | 原理分析 | 模型训练 | 模型推理</strong></a></li>
+<li><a href="https://medium.com/@RobuRishabh/understanding-and-implementing-faster-r-cnn-248f7b25ff96"><strong>Understanding and Implementing Faster R-CNN</strong></a></li>
+<li><a href="https://www.mdpi.com/2075-4418/14/21/2425"><strong>The Detection and Classification of Scaphoid Fractures in Radiograph by Using a Convolutional Neural Network</strong></a></li>
+<li><a href="https://medium.com/@CVHub520/yolov5-obb-a-comprehensive-tutorial-from-data-preparation-to-model-deployment-8d7c6a98388f"><strong>yolov5_obb: A comprehensive tutorial from data preparation to model deployment</strong></a></li>
+<li><a href="https://github.com/XinzeLee/PolygonObjectDetection">PolygonObjectDetection</a></li>
+<li><a href="https://medium.com/@Mert.A/how-to-use-yolov11-for-object-detection-924aa18ac86f"><strong>How to use YOLOv11 for Object Detection</strong></a></li>
+</ul>
+]]></content:encoded>
+      
+    </item>
+    <item>
+      <title>Calculate Attention</title>
+      <link>http://localhost:1313/Hlunlun/posts/attention/attention/</link>
+      <pubDate>Sun, 22 Dec 2024 00:31:04 +0800</pubDate>
+      <guid>http://localhost:1313/Hlunlun/posts/attention/attention/</guid>
+      <description>實作參考&lt;a href=&#34;https://nlp.seas.harvard.edu/2018/04/03/attention.html&#34;&gt;Annotated Transformer&lt;/a&gt;: Implementation and Concept of Attention</description>
+      
+        <content:encoded><![CDATA[<p>實作參考<a href="https://nlp.seas.harvard.edu/2018/04/03/attention.html">Annotated Transformer</a></p>
+<h2 id="scaled-dot-product-attention">Scaled Dot-Product Attention</h2>
+<p>$$Attention(Q,K,V)=softmax(\frac{QK^T}{\sqrt{d_k}})V$$</p>
+<img src="https://hackmd.io/_uploads/rJuXRe24ye.png" style="margin:auto;display:block;">
+<h3> 關於 \(\sqrt{d_k}\) </h3>
+<ol>
+<li>
+<p>為何需要縮放因子 \(\sqrt{d_k}\) ? 這邊用例子簡單說明</p>
+<ul>
+<li>如果有一個值 <code>x[3]</code> 大其他值很多，經過softmax會將 <code>x</code> 範圍變到從0到1之間的 <code>y</code>，除了 <code>y[3]</code> 的其他值就會都趨近0(變得很不重要)，造成
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-python" data-lang="python"><span class="line"><span class="cl"><span class="n">x</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">FloatTensor</span><span class="p">([</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">5</span><span class="p">])</span>
+</span></span><span class="line"><span class="cl"><span class="n">y</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">softmax</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">dim</span><span class="o">=-</span><span class="mi">1</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl"><span class="c1"># y: [0.0174, 0.0174, 0.0174, 0.9479]</span>
+</span></span></code></pre></div></li>
+<li>畫成圖可能就會長這樣
+<img src="https://hackmd.io/_uploads/H1x1SlnN1g.png" width=300 style="display:block;"></li>
+</ul>
+</li>
+<li>
+<p>所以我們需要一個縮放因子縮小這個差異，這邊可以回憶一下<a href="https://zh.wikipedia.org/zh-tw/%E6%A0%87%E5%87%86%E5%8C%96_(%E7%BB%9F%E8%AE%A1%E5%AD%A6)">標準化</a>的原理，就是把資料分布改得較符合常態分佈，並縮小離群值對模型的影響，平均值為0，且標準差為1
+$$Z = \frac{X-\mu}{\sigma} \sim N(0,1)$$</p>
+<blockquote>
+<p>&#x1f4a1; <a href="https://ithelp.ithome.com.tw/articles/10293893">標準化VS.正規化</a></p>
+</blockquote>
+</li>
+<li>
+<p>那這個重責大任為啥落到 \(\sqrt{d_k}\) 身上呢?</p>
+<ul>
+<li>
+<p>先來看paper怎麼解釋: 假設 \(q\) 和 \(k\) 是常態分佈( \(\mu=0\)、\(\sigma=1\) )，那麼 \(q \cdot k\) 的 \(\mu=0\) 且 \(\sigma=d_k\) → 在說啥</p>
+<blockquote>
+<p>To illustrate why the dot products get large, assume that the components of q and k are independent random variables with mean 0 and variance 1. Then their dot product, \(q \cdot k = \textstyle\sum_{i=0}^{d_k} q_i k_i\) , has mean 0 and variance \(d_k\).</p>
+</blockquote>
+</li>
+<li>
+<p>先解決第一句:  <b>假設 \(q\) 和 \(k\) 是常態分佈( \(\mu=0\)、\(\sigma=1\) )</b></p>
+  期望值 <span>\(E[q_i \cdot k_i] = 0\)</span>
+<p>標準差</p>
+  <p>\(Var(q_i k_i) = 1\)</p>
+  <p>\(\implies E[q_i^2 k_i^2] - E^2[q_i k_i] = 1\)</p>
+  <p>\(\implies E[q_i^2] E[k_i^2] - E^2[q_i] E^2[k_i] = 1\)</p>
+  <p>\(\implies ( E[q_i^2] - E^2[q_i]) ( E[k_i^2] - E^2[k_i]) - E^2[q_i] E^2[k_i] = 1\)</p>
+  <p>\(\implies Var(q_i) \ Var(k_i) - 0 = 1\)</p>
+  <p>\(\implies Var(q_i) \ Var(k_i) = 1\)</p>
+</li>
+<li>
+<p>再解決第一句: \(q \cdot k\) 的 \(\mu=0\) 且 \(\sigma=d_k\)</p>
+  <p>$$
+      \begin{aligned}
+      E[q \cdot k] &= \textstyle\sum_{i=0}^{d_k} E[q_i k_i] \\
+      &= d_k \times0 \\ 
+      &=0
+      \end{aligned}
+  $$</p>
+  <p>$$\begin{aligned}
+  Var(q \cdot k)&=\textstyle\sum_{i=0}^{d_k} Var(q_i k_i)\\
+  &= d_k \times1 \\
+  &= d_k \\
+  \end{aligned}$$</p>
+</li>
+<li>
+<p>&#x1f389; 太棒了!破案了!
+最後套上標準化的公式</p>
+  <p>$$\begin{aligned}
+  Z&=\cfrac{QK^T - E[QK^T]}{\sqrt{Var(QK^T)}} \\
+  &=\cfrac{QK^T - 0}{\sqrt{d_k}}\\
+  &= \cfrac{QK^T}{\sqrt{d_k}}
+  \end{aligned}$$</p>
+</li>
+</ul>
+<p>&#x1f4a1; 最後 <span>(\cfrac{QK^T}{\sqrt{d_k}})</span> 就可以使attention map經過 Softmax 梯度就不會被削弱了!</p>
+</li>
+</ol>
+<ul>
+<li>更詳細數學可以看
+<ul>
+<li>比較不同角度解釋: <a href="https://blog.csdn.net/ytusdc/article/details/121622205">为什么在进行softmax之前需要对attention进行scaled（为什么除以 $d_k$的平方根）</a></li>
+<li>有推導數學(推推): <a href="https://allenwind.github.io/blog/16228/">分析與拓展：Transformer中的MultiHeadAttention為什麼要用scaled？</a></li>
+</ul>
+</li>
+</ul>
+<h3 id="如何知道-sqrtd_k-多大">如何知道 $\sqrt{d_k}$ 多大</h3>
+<ul>
+<li>
+<p>三個要關注的attention來源: query、value、key的維度可以當成都是一樣的，參考以下<a href="https://miro.medium.com/v2/resize:fit:828/format:webp/1*m58HPvaWXAt1bYNEHSwycA.png">這張圖</a>
+<img src="https://hackmd.io/_uploads/r1I7hAoEkg.png" alt="image"></p>
+</li>
+<li>
+<p>關於數學式視覺化後可以參考<a href="https://miro.medium.com/v2/resize:fit:828/format:webp/1*amnlT6Hjm5nV6NjFI0tRyg.png">這張圖</a>
+<img src="https://hackmd.io/_uploads/S1E5nAj4ye.png" alt="image"></p>
+</li>
+<li>
+<p>加上batch的維度，query、key、value變成tensor後的維度會長這樣</p>
+<pre tabindex="0"><code>query: (batch_size, num_heads, seq_length, d_q)
+key: (batch_size, num_heads, seq_length, d_k)
+query: (batch_size, num_heads, seq_length, d_v)
+</code></pre><blockquote>
+<p>&#x1f4a1; <code>num_heads</code> 因為有多個Multi-Head Attention
+<img src="https://nlp.seas.harvard.edu/images/the-annotated-transformer_38_0.png" width=300></p>
+</blockquote>
+</li>
+<li>
+<p>所以獲取 \(d_k\) 的方式就是取得 <code>query</code> 的最後一個維度(反正 <code>d_q</code> = <code>d_k</code> = <code>d_v</code> )</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-python" data-lang="python"><span class="line"><span class="cl"><span class="n">d_k</span> <span class="o">=</span> <span class="n">query</span><span class="o">.</span><span class="n">size</span><span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="p">)</span>
+</span></span></code></pre></div></li>
+</ul>
+<h3 id="計算attention分數">計算Attention分數</h3>
+<ul>
+<li>Key的Transpose(可以去複習線代就大概知道這是一個怎麼回事)就是將最後一個維度和倒數第二個維度翻轉
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-python" data-lang="python"><span class="line"><span class="cl"><span class="n">key</span> <span class="o">=</span> <span class="n">key</span><span class="o">.</span><span class="n">transpose</span><span class="p">(</span><span class="o">-</span><span class="mi">2</span><span class="p">,</span><span class="o">-</span><span class="mi">1</span><span class="p">)</span> 
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="o">-&gt;</span> <span class="n">key</span><span class="p">:</span> <span class="p">(</span><span class="n">batch_size</span><span class="p">,</span> <span class="n">num_heads</span><span class="p">,</span> <span class="n">d_k</span><span class="p">,</span> <span class="n">seq_length</span><span class="p">)</span>
+</span></span></code></pre></div></li>
+<li>dot product
+<ul>
+<li>為何要用dot product來看相關性呢?參考<a href="https://zilliz.com/blog/similarity-metrics-for-vector-search">這張圖</a>
+<img src="https://hackmd.io/_uploads/rkhfFWTEkl.png" alt="image"></li>
+<li>
+<p>\(\theta\) 越大 → dot product 越小 → 代表越不相關</p>
+</li>
+<li>
+<p>\(\theta\) 越小 → dot product 越大 → 代表越相關</p>
+</li>
+</ul>
+</li>
+<li>接下來就是query和key、以及value做矩陣相乘算出attention分數，
+<ul>
+<li>
+<p>我個人覺得可以這樣理解<br>
+▶ query: 搜尋詞</p>
+<p>▶ 搜出來的的資料，每個資料會長這樣</p>
+<pre tabindex="0"><code>{key1: value1, key2: value2, ..., keyN:valueN}
+key: 資料的標題
+value: 資料內容
+</code></pre><p>▶ 注意力機制就是要看哪個資料跟我的搜尋詞最相關，於是用dot product來看他們相關性的分數</p>
+<pre tabindex="0"><code>attention = query * key
+</code></pre><p>     ➜ attention 算出來就是每筆資料的標題和我搜尋的相關分數
+<img src="https://hackmd.io/_uploads/S1_K613VJx.png" alt="image"><br>
+     ➜ 分數越高，代表越接近我在搜尋的東西</p>
+<p>▶ 最後在將這個分數乘上value，啥意思?<br>
+     ➜ 給每筆資料打完相關性的分數後，在乘上資料內容就可以取得那些是重要資料內容了<br>
+     ➜ 像這樣，把每筆資料的分數乘上資料內容，就可以知道如果分數較大，資料內容乘上分數就會比較大<br>
+     ➜ 也代表著此內容較重要的意義，相反則同樣意義<br>
+     ➜ 量化後就是一堆數字相乘，以下大概就是分數和資料內容矩陣相乘的樣子<br>
+         <img src="https://hackmd.io/_uploads/H1He912Vkg.png" width=600>\</p>
+</li>
+<li>
+<p>所以程式碼實現就是以下</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-python" data-lang="python"><span class="line"><span class="cl"><span class="n">scores</span> <span class="o">=</span>  <span class="n">torch</span><span class="o">.</span><span class="n">matmul</span><span class="p">(</span><span class="n">query</span><span class="p">,</span> <span class="n">key</span><span class="o">.</span><span class="n">transpose</span><span class="p">(</span><span class="o">-</span><span class="mi">2</span><span class="p">,</span> <span class="o">-</span><span class="mi">1</span><span class="p">))</span> <span class="o">/</span> <span class="n">math</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="n">d_k</span><span class="p">)</span>
+</span></span></code></pre></div></li>
+</ul>
+<blockquote>
+<p>&#x1f4a1; 為何是query與key相乘的細節可以參考<a href="https://www.youtube.com/watch?v=hYdO9CscNes">李宏毅的教材</a></p>
+</blockquote>
+</li>
+</ul>
+<h2 id="real-world-example">Real World Example</h2>
+<p>到 <a href="https://github.com/Hlunlun/Transformer/blob/master/example/scaled_dot_product.ipynb">GitHub</a> 看實際數據模擬</p>
+<h2 id="implementation">Implementation</h2>
+<p>完整的 Scaled Dot-Product Attention 實作</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-python" data-lang="python"><span class="line"><span class="cl"><span class="k">def</span> <span class="nf">attention</span><span class="p">(</span><span class="n">query</span><span class="p">,</span> <span class="n">key</span><span class="p">,</span> <span class="n">value</span><span class="p">,</span> <span class="n">mask</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">dropout</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+</span></span><span class="line"><span class="cl">    <span class="s2">&#34;&#34;&#34;
+</span></span></span><span class="line"><span class="cl"><span class="s2">    Compute &#39;Scaled Dot Product Attention&#39;
+</span></span></span><span class="line"><span class="cl"><span class="s2">    &#34;&#34;&#34;</span>
+</span></span><span class="line"><span class="cl">    <span class="n">d_k</span> <span class="o">=</span> <span class="n">query</span><span class="o">.</span><span class="n">size</span><span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">    <span class="n">scores</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">matmul</span><span class="p">(</span><span class="n">query</span><span class="p">,</span> <span class="n">key</span><span class="o">.</span><span class="n">transpose</span><span class="p">(</span><span class="o">-</span><span class="mi">2</span><span class="p">,</span> <span class="o">-</span><span class="mi">1</span><span class="p">))</span> <span class="o">/</span> <span class="n">math</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="n">d_k</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">    <span class="k">if</span> <span class="n">mask</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+</span></span><span class="line"><span class="cl">        <span class="n">scores</span> <span class="o">=</span> <span class="n">scores</span><span class="o">.</span><span class="n">masked_fill</span><span class="p">(</span><span class="n">mask</span> <span class="o">==</span> <span class="mi">0</span><span class="p">,</span> <span class="o">-</span><span class="mf">1e9</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">    <span class="n">p_attn</span> <span class="o">=</span> <span class="n">F</span><span class="o">.</span><span class="n">softmax</span><span class="p">(</span><span class="n">scores</span><span class="p">,</span> <span class="n">dim</span><span class="o">=-</span><span class="mi">1</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">    <span class="k">if</span> <span class="n">dropout</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+</span></span><span class="line"><span class="cl">        <span class="n">p_attn</span> <span class="o">=</span> <span class="n">dropout</span><span class="p">(</span><span class="n">p_attn</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">    <span class="k">return</span> <span class="n">torch</span><span class="o">.</span><span class="n">matmul</span><span class="p">(</span><span class="n">p_attn</span><span class="p">,</span> <span class="n">value</span><span class="p">),</span> <span class="n">p_attn</span>
+</span></span></code></pre></div><h2 id="reference">Reference</h2>
+<ul>
+<li><a href="https://medium.com/@vmirly/tutorial-on-scaled-dot-product-attention-with-pytorch-implementation-from-scratch-66ed898bf817">Tutorial on Scaled Dot-Product Attention with PyTorch Implementation from Scratch</a></li>
+<li><a href="https://ai.stackexchange.com/questions/41861/why-use-a-square-root-in-the-scaled-dot-product">Why use a &ldquo;square root&rdquo; in the scaled dot product</a></li>
+</ul>
+]]></content:encoded>
+      
+    </item>
+    <item>
+      <title>Multi-Head Attention</title>
+      <link>http://localhost:1313/Hlunlun/posts/attention/multi_head/</link>
+      <pubDate>Sat, 21 Dec 2024 23:49:08 +0800</pubDate>
+      <guid>http://localhost:1313/Hlunlun/posts/attention/multi_head/</guid>
+      <description>實作參考&lt;a href=&#34;https://nlp.seas.harvard.edu/2018/04/03/attention.html&#34;&gt;Annotated Transformer&lt;/a&gt; : Implementation and concept of Multi-Head Attention</description>
+      
+        <content:encoded><![CDATA[<p>實作參考<a href="https://nlp.seas.harvard.edu/2018/04/03/attention.html">Annotated Transformer</a></p>
+<img src="https://hackmd.io/_uploads/B1IzQb3Eye.png" style="display:block;margin:auto;" width=300>
+<h2 id="數學">數學</h2>
+<p>
+$$
+MultiHead(Q,K,V)=Concat({head}_1, {head}_2, ..., {head}_h)
+$$ 
+</p>
+<p>
+$${head}_i = Attention(Q{W_i}^Q, K{W_i}^K, V{W_i}^V)$$
+</p>
+<ul>
+<li>
+<p>可學習的參數就是其中Query的權重 \(W_i^Q\) 、Key的權重 \(W_i^K\) 、Value的權重 \(W_i^V\) </p>
+</li>
+<li>忘記Attention是怎麼算的可以看<a href="https://hackmd.io/@clh/transformer-attention-0">這裡</a></li>
+<li>結合算Attention的過程，整個Multi-Head Attention大概是以下這樣算</li>
+</ul>
+<h2 id="從程式碼看">從程式碼看</h2>
+<h3 id="全連接層-nnlineard_model-d_model">全連接層 <code>nn.Linear(d_model, d_model)</code></h3>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-python" data-lang="python"><span class="line"><span class="cl"><span class="bp">self</span><span class="o">.</span><span class="n">linears</span> <span class="o">=</span> <span class="n">clones</span><span class="p">(</span><span class="n">nn</span><span class="o">.</span><span class="n">Linear</span><span class="p">(</span><span class="n">d_model</span><span class="p">,</span> <span class="n">d_model</span><span class="p">),</span> <span class="mi">4</span><span class="p">)</span>
+</span></span></code></pre></div><ol>
+<li>輸入輸出維度: 整個模型的的維度
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-python" data-lang="python"><span class="line"><span class="cl"><span class="n">output</span><span class="p">:</span> <span class="p">(</span><span class="n">batch_size</span><span class="p">,</span> <span class="n">seq_length</span><span class="p">,</span> <span class="n">d_model</span><span class="p">)</span>
+</span></span></code></pre></div></li>
+<li>總共需要四個全連接層
+<ul>
+<li>K、Q、V各一個
+<img src="https://hackmd.io/_uploads/rken74T4ye.png" style="display:block;"></li>
+<li>最後輸出再一個
+<img src="https://hackmd.io/_uploads/H14J4ET4yx.png" style="display:block;"></li>
+</ul>
+</li>
+<li>經過 全連接層 的V, K, Q 就會長這樣
+<img src="https://hackmd.io/_uploads/SJJwrNpVyg.png" style="display:block;">
+<ul>
+<li>
+<p> \(W_i\) 一開始就是隨機初始化的的權重，在訓練過程中模型會自己用loss function來back propagate來學習並更新這些參數，就可以學習到最好的權重</p>
+</li>
+<li>關於全連接層詳細參考<a href="https://speech.ee.ntu.edu.tw/~hylee/ml/ml2021-course-data/regression%20(v16).pdf">李弘毅講義</a></li>
+</ul>
+</li>
+</ol>
+<h3> Q, K, V 透過 Linear 映射到 \(Q{W_i}^Q\), \(K{W_i}^K\), \(V{W_i}^V\) </h3>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-python" data-lang="python"><span class="line"><span class="cl"><span class="c1"># Do all the linear projections in batch from d_model =&gt; h x d_k</span>
+</span></span><span class="line"><span class="cl"><span class="n">query</span><span class="p">,</span> <span class="n">key</span><span class="p">,</span> <span class="n">value</span> <span class="o">=</span> <span class="p">[</span><span class="n">l</span><span class="p">(</span><span class="n">x</span><span class="p">)</span><span class="o">.</span><span class="n">view</span><span class="p">(</span><span class="n">nbatches</span><span class="p">,</span> <span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">h</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">d_k</span><span class="p">)</span><span class="o">.</span><span class="n">transpose</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span><span class="mi">2</span><span class="p">)</span> <span class="k">for</span> <span class="n">l</span><span class="p">,</span> <span class="n">x</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">linears</span><span class="p">,</span> <span class="p">(</span><span class="n">query</span><span class="p">,</span> <span class="n">key</span><span class="p">,</span><span class="n">value</span><span class="p">))]</span>
+</span></span></code></pre></div><ol>
+<li>先講 <code>view()</code>
+<ul>
+<li>
+<p><code>view(nbatches, -1, self.h, self.d_k)</code>: 對 輸出的張量 \(W_i x_i\) 進行reshape</p>
+  <!-- ```
+  view(nbatches, -1, self.h, self.d_k) 是对输出张量进行重塑（reshape）的操作。
+  参数解释：
+  nbatches: 保持批次的大小不变。
+  -1: 表示自动推断这一维度的大小，以保持总元素数量不变。在这里，它将根据输入的总元素数量自动计算出序列长度（seq_length）。
+  self.h: 表示头的数量。
+  self.d_k: 每个头的维度（即每个头处理的特征维度）。
+  功能：这个操作将张量重塑为四维形式，便于后续多头注意力计算。重塑后的形状为 [nbatches, seq_length, h, d_k]。
+  ``` -->
+</li>
+</ul>
+</li>
+<li>關於各種維度，用query Q 舉例，shape = (head, seq_length, d_k) = (2, 3, 2)
+ <p>
+ $$q_0=\begin{bmatrix}
+    1.45 & -0.79 \\
+    0.62 & -0.64 \\
+    0.97 & -0.21 \\ 
+ \end{bmatrix}$$    
+ $$q_1=\begin{bmatrix}
+    0.40 & 0.53 \\
+    0.40 & 0.29 \\
+    0.48 & 0.80 \\ 
+ \end{bmatrix}$$
+ </p>
+ <p>
+     <ul>
+         <li>\(d_k\) = 2，也就是 \(q_i\) 的行數</li>
+         <li> <code>seq_lenghth</code> = 3，<span>\(q_i\)</spn> 的列數</li>
+         <li><code>head</code> = 2，也就是 \(Q\) 的長度 2，因為有兩個 子陣列</li>
+     </ul>
+ </p>  
+</li>
+<li>整個過程的維度可以參考<a href="https://www.kaggle.com/code/aisuko/coding-cross-attention">這張圖</a>
+<img src="https://files.mastodon.social/media_attachments/files/111/819/100/204/990/207/original/09d504e16eb77ccc.png" width=600 style="display:block"></li>
+</ol>
+<h2 id="real-world-example">Real World Example</h2>
+<p>可以到 <a href="https://github.com/Hlunlun/Transformer/blob/master/example/multi_head_attention.ipynb">GitHub</a> 看實際數據模擬</p>
+<h2 id="完整實作">完整實作</h2>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-python" data-lang="python"><span class="line"><span class="cl"><span class="k">class</span> <span class="nc">MultiHeadedAttention</span><span class="p">(</span><span class="n">nn</span><span class="o">.</span><span class="n">Module</span><span class="p">):</span>
+</span></span><span class="line"><span class="cl">    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">h</span><span class="p">,</span> <span class="n">d_model</span><span class="p">,</span> <span class="n">dropout</span><span class="o">=</span><span class="mf">0.1</span><span class="p">):</span>
+</span></span><span class="line"><span class="cl">        <span class="s2">&#34;Take in model size and number of heads&#34;</span>
+</span></span><span class="line"><span class="cl">        <span class="nb">super</span><span class="p">(</span><span class="n">MultiHeadedAttention</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="fm">__init__</span><span class="p">()</span>
+</span></span><span class="line"><span class="cl">        <span class="k">assert</span> <span class="n">d_model</span><span class="o">%</span><span class="n">h</span> <span class="o">==</span> <span class="mi">0</span>
+</span></span><span class="line"><span class="cl">        <span class="c1"># Assume d_v always d_k</span>
+</span></span><span class="line"><span class="cl">        <span class="bp">self</span><span class="o">.</span><span class="n">d_k</span> <span class="o">=</span> <span class="n">d_model</span> <span class="o">//</span> <span class="n">h</span>
+</span></span><span class="line"><span class="cl">        <span class="bp">self</span><span class="o">.</span><span class="n">h</span> <span class="o">=</span> <span class="n">h</span>
+</span></span><span class="line"><span class="cl">        <span class="bp">self</span><span class="o">.</span><span class="n">linears</span> <span class="o">=</span> <span class="n">clones</span><span class="p">(</span><span class="n">nn</span><span class="o">.</span><span class="n">Linear</span><span class="p">(</span><span class="n">d_model</span><span class="p">,</span> <span class="n">d_model</span><span class="p">),</span> <span class="mi">4</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">        <span class="bp">self</span><span class="o">.</span><span class="n">attn</span> <span class="o">=</span> <span class="kc">None</span>
+</span></span><span class="line"><span class="cl">        <span class="bp">self</span><span class="o">.</span><span class="n">dropout</span> <span class="o">=</span> <span class="n">nn</span><span class="o">.</span><span class="n">Dropout</span><span class="p">(</span><span class="n">p</span><span class="o">=</span><span class="n">dropout</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">    <span class="k">def</span> <span class="nf">forward</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">query</span><span class="p">,</span> <span class="n">key</span><span class="p">,</span> <span class="n">value</span><span class="p">,</span> <span class="n">mask</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+</span></span><span class="line"><span class="cl">        <span class="s2">&#34;Implement multi-head attention&#34;</span>
+</span></span><span class="line"><span class="cl">        <span class="k">if</span> <span class="n">mask</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+</span></span><span class="line"><span class="cl">            <span class="c1"># Same mask applied to all h heads.</span>
+</span></span><span class="line"><span class="cl">            <span class="n">mask</span> <span class="o">=</span> <span class="n">mask</span><span class="o">.</span><span class="n">unsqueeze</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">        <span class="n">nbatches</span> <span class="o">=</span> <span class="n">query</span><span class="o">.</span><span class="n">size</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">        <span class="c1"># 1) Do all the linear projections in batch from d_model =&gt; h x d_k</span>
+</span></span><span class="line"><span class="cl">        <span class="n">query</span><span class="p">,</span> <span class="n">key</span><span class="p">,</span> <span class="n">value</span> <span class="o">=</span> <span class="p">[</span><span class="n">l</span><span class="p">(</span><span class="n">x</span><span class="p">)</span><span class="o">.</span><span class="n">view</span><span class="p">(</span><span class="n">nbatches</span><span class="p">,</span> <span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">h</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">d_k</span><span class="p">)</span><span class="o">.</span><span class="n">transpose</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span><span class="mi">2</span><span class="p">)</span> <span class="k">for</span> <span class="n">l</span><span class="p">,</span> <span class="n">x</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">linears</span><span class="p">,</span> <span class="p">(</span><span class="n">query</span><span class="p">,</span> <span class="n">key</span><span class="p">,</span><span class="n">value</span><span class="p">))]</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">        <span class="c1"># 2) Apply attention on all the projected vectors in batch</span>
+</span></span><span class="line"><span class="cl">        <span class="n">x</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">attn</span> <span class="o">=</span> <span class="n">attention</span><span class="p">(</span><span class="n">query</span><span class="p">,</span> <span class="n">key</span><span class="p">,</span> <span class="n">value</span><span class="p">,</span> <span class="n">mask</span><span class="o">=</span><span class="n">mask</span><span class="p">,</span> <span class="n">dropout</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">dropout</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">        <span class="c1"># 3) &#34;Concat&#34; using a view and apply a final linear</span>
+</span></span><span class="line"><span class="cl">        <span class="n">x</span> <span class="o">=</span> <span class="n">x</span><span class="o">.</span><span class="n">transpose</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">)</span><span class="o">.</span><span class="n">contiguous</span><span class="p">()</span><span class="o">.</span><span class="n">view</span><span class="p">(</span><span class="n">nbatches</span><span class="p">,</span> <span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">h</span> <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">d_k</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">linear</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">](</span><span class="n">x</span><span class="p">)</span>
+</span></span></code></pre></div><h2 id="reference">Reference</h2>
+<ul>
+<li><a href="https://blog.csdn.net/philosophyatmath/article/details/128013258">Self -Attention、Multi-Head Attention、Cross-Attention</a></li>
+<li><a href="https://blog.csdn.net/qq_37541097/article/details/117691873">详解Transformer中Self-Attention以及Multi-Head Attention</a></li>
+</ul>
+]]></content:encoded>
+      
+    </item>
+    <item>
+      <title>Image Enhancement in Frequency Domain</title>
+      <link>http://localhost:1313/Hlunlun/posts/image_process/img_freq-domain/</link>
+      <pubDate>Thu, 19 Dec 2024 11:22:05 +0800</pubDate>
+      <guid>http://localhost:1313/Hlunlun/posts/image_process/img_freq-domain/</guid>
+      <description>Implementation of Low-pass and High-pass Filter with Fourier Transform</description>
+      
+        <content:encoded><![CDATA[<h2 id="q1-remove-noise-from-figure-1">Q1. Remove noise from Figure 1.</h2>
+<h3 id="用average-filter和-median-filter-分別對左圖去除雜訊並分析和比較兩者的差別">用average filter和 median filter 分別對左圖去除雜訊，並分析和比較兩者的差別</h3>
+<p><img src="https://prod-files-secure.s3.us-west-2.amazonaws.com/5c0abaf5-b9fa-4a9b-97e3-5ae6c274eec7/351b25a8-2b46-4fcf-a66c-c6529ca6403c/image.png" alt="Figure 1."></p>
+<p>Figure 1.</p>
+<ol>
+<li>
+<p>Average filter</p>
+<p>average filter也可以叫Smoothing Method，是用mask去對原圖做捲積，將捲積的運算的值再放到mask中心的像素，mask的size越大，整張圖會變得越平滑，如果 <code>k_size</code> =1，就跟原圖相同</p>
+<ul>
+<li><code>k_size</code>=1</li>
+</ul>
+<p><img src="https://prod-files-secure.s3.us-west-2.amazonaws.com/5c0abaf5-b9fa-4a9b-97e3-5ae6c274eec7/2a933251-bdf8-4396-b33d-c95bbd9893ef/image.png" alt="image.png"></p>
+<ul>
+<li><code>k_size</code> =5</li>
+</ul>
+<p><img src="https://prod-files-secure.s3.us-west-2.amazonaws.com/5c0abaf5-b9fa-4a9b-97e3-5ae6c274eec7/93829ca6-2ec4-41d2-8f77-2a8310c3aee7/image.png" alt="image.png"></p>
+<ul>
+<li><code>k_size</code> =9</li>
+</ul>
+<p><img src="https://prod-files-secure.s3.us-west-2.amazonaws.com/5c0abaf5-b9fa-4a9b-97e3-5ae6c274eec7/d7d32223-8856-4c11-a15f-74d704424256/image.png" alt="image.png"></p>
+</li>
+<li>
+<p>Median filter</p>
+<p>找出mask到的所有數值的中間值，用這個中間值取代整個mask區塊的中間像素，也是mask的size越大，整張圖會變得越平滑</p>
+<ul>
+<li><code>k_size</code>=1</li>
+</ul>
+<p><img src="https://prod-files-secure.s3.us-west-2.amazonaws.com/5c0abaf5-b9fa-4a9b-97e3-5ae6c274eec7/d1421737-d5c7-4568-8dd5-52a6ef55431d/image.png" alt="image.png"></p>
+<ul>
+<li><code>k_size</code> =5</li>
+</ul>
+<p><img src="https://prod-files-secure.s3.us-west-2.amazonaws.com/5c0abaf5-b9fa-4a9b-97e3-5ae6c274eec7/8450a1b7-bf4b-4d6a-bdc7-780913989c76/image.png" alt="image.png"></p>
+<ul>
+<li><code>k_size</code> = 9</li>
+</ul>
+<p><img src="https://prod-files-secure.s3.us-west-2.amazonaws.com/5c0abaf5-b9fa-4a9b-97e3-5ae6c274eec7/97be47a7-c10e-4d12-ad47-79de465e75c4/image.png" alt="image.png"></p>
+</li>
+<li>
+<p>Comparison</p>
+<p>以上改變kernel大小其實看不太出來average filter和median filter的差異，所以以下隨意添加30000黑色像素(如右圖)後再分別用這兩種方式來去除雜訊，差別就很明顯。</p>
+<ol>
+<li>
+<p>Average Filter</p>
+<p>讓整張圖都變得很暗，因為它會平均像素和雜訊，造成整張圖跟添加的黑色像素融合再一起。</p>
+</li>
+<li>
+<p>Median Filter</p>
+<p>取中間值較有效的去除雜訊，因為整張圖是偏白色的，所以選取的中間值都會比較大(較接近白色)，讓整張圖沒有暗掉。</p>
+</li>
+</ol>
+<p><img src="https://prod-files-secure.s3.us-west-2.amazonaws.com/5c0abaf5-b9fa-4a9b-97e3-5ae6c274eec7/64936077-0835-4aca-a785-1587b66bac14/image.png" alt="image1_noise"></p>
+<p>image1_noise</p>
+<h3 id="average-filter">Average Filter</h3>
+<ul>
+<li><code>k_size</code> = 3</li>
+</ul>
+<p><img src="https://prod-files-secure.s3.us-west-2.amazonaws.com/5c0abaf5-b9fa-4a9b-97e3-5ae6c274eec7/b721a7ad-903b-4933-a3ac-8a02dc2cf87d/image.png" alt="image.png"></p>
+<ul>
+<li><code>k_size</code> = 5</li>
+</ul>
+<p><img src="https://prod-files-secure.s3.us-west-2.amazonaws.com/5c0abaf5-b9fa-4a9b-97e3-5ae6c274eec7/9424fc4b-495a-4e15-b547-f22ba78a76ea/hw1_1_1_k-5.jpg" alt="hw1_1_1_k-5.jpg"></p>
+<ul>
+<li><code>k_size</code> = 9</li>
+</ul>
+<p><img src="https://prod-files-secure.s3.us-west-2.amazonaws.com/5c0abaf5-b9fa-4a9b-97e3-5ae6c274eec7/c7f395a9-87ca-42f8-9d11-f3e014e8cef0/hw1_1_1_k-9.jpg" alt="hw1_1_1_k-9.jpg"></p>
+<h3 id="median-filter">Median Filter</h3>
+<ul>
+<li><code>k_size</code> = 3</li>
+</ul>
+<p><img src="https://prod-files-secure.s3.us-west-2.amazonaws.com/5c0abaf5-b9fa-4a9b-97e3-5ae6c274eec7/01089548-1ef0-4ade-8146-fe4c67b99227/hw1_1_2_k-3.jpg" alt="hw1_1_2_k-3.jpg"></p>
+<ul>
+<li><code>k_size</code> = 5</li>
+</ul>
+<p><img src="https://prod-files-secure.s3.us-west-2.amazonaws.com/5c0abaf5-b9fa-4a9b-97e3-5ae6c274eec7/76a5b5fd-26a7-4ef1-9fc4-d0a71f1a4032/hw1_1_2_k-5.jpg" alt="hw1_1_2_k-5.jpg"></p>
+<ul>
+<li><code>k_size</code> = 9</li>
+</ul>
+<p><img src="https://prod-files-secure.s3.us-west-2.amazonaws.com/5c0abaf5-b9fa-4a9b-97e3-5ae6c274eec7/8ffe7c38-9b33-4cf6-a08b-27c5f33f4b7a/hw1_1_2_k-9.jpg" alt="hw1_1_2_k-9.jpg"></p>
+</li>
+</ol>
+<h2 id="q2-sharp-the-figure-2">Q2. Sharp the Figure 2.</h2>
+<h3 id="分別用-sobel-mask-和-fourier-transform-對左圖銳利化並分析和比較兩者的差別">分別用 Sobel mask 和 Fourier transform 對左圖銳利化，並分析和比較兩者的差別</h3>
+<p><img src="https://prod-files-secure.s3.us-west-2.amazonaws.com/5c0abaf5-b9fa-4a9b-97e3-5ae6c274eec7/b3cfce63-5b40-4aa5-a40b-05c94999d394/image.png" alt="Figure 2."></p>
+<p>Figure 2.</p>
+<ol>
+<li>
+<p>Sobel mask</p>
+<ol>
+<li>
+<p>Sobel vs. Gaussian+Sobel: 如果有先用Gaussian去除雜訊，並且取得的邊緣pixel的值只要大於70全部調成255，會取得的乾淨俐落的邊緣，在原圖與邊緣比例皆為0.5 ( <code>alpha</code> = 0.5, <code>beta</code> = 0.5)的條件下結合兩張圖可以更明顯看出邊緣</p>
+<ul>
+<li>Only Sobel</li>
+</ul>
+<p><img src="https://prod-files-secure.s3.us-west-2.amazonaws.com/5c0abaf5-b9fa-4a9b-97e3-5ae6c274eec7/1abad72c-2bfd-47ec-acb9-a379824e5b31/image.png" alt="image.png"></p>
+<ul>
+<li>加上原本的圖片</li>
+</ul>
+<p><img src="https://prod-files-secure.s3.us-west-2.amazonaws.com/5c0abaf5-b9fa-4a9b-97e3-5ae6c274eec7/e2b29eeb-54bf-413b-ba99-d2de373db12d/image.png" alt="image.png"></p>
+<ul>
+<li>Gaussian+Sobel</li>
+</ul>
+<p><img src="https://prod-files-secure.s3.us-west-2.amazonaws.com/5c0abaf5-b9fa-4a9b-97e3-5ae6c274eec7/55c15998-cedd-4406-acb9-f7c0c8abfa0d/image.png" alt="image.png"></p>
+<ul>
+<li>加上原本的圖片</li>
+</ul>
+<p><img src="https://prod-files-secure.s3.us-west-2.amazonaws.com/5c0abaf5-b9fa-4a9b-97e3-5ae6c274eec7/baf612e1-f31e-49d3-aa82-2a65ff5a44e4/image.png" alt="image.png"></p>
+</li>
+<li>
+<p>改變 <code>k_size</code> 肉眼來看沒甚麼差別</p>
+<ul>
+<li><code>k_size</code>=3</li>
+</ul>
+<p><img src="https://prod-files-secure.s3.us-west-2.amazonaws.com/5c0abaf5-b9fa-4a9b-97e3-5ae6c274eec7/a2a67eec-69f0-48b2-81e9-e97788b5aaf8/image.png" alt="image.png"></p>
+<ul>
+<li><code>k_size</code> =9</li>
+</ul>
+<p><img src="https://prod-files-secure.s3.us-west-2.amazonaws.com/5c0abaf5-b9fa-4a9b-97e3-5ae6c274eec7/54d9d830-540c-4819-a72f-60273a7e2f2a/image.png" alt="image.png"></p>
+</li>
+<li>
+<p>改變sobel後只剩的邊緣的圖和原圖的各占比例 <code>alpha</code> 、 <code>beta</code> ，並將 <code>k_size</code> 固定為 3</p>
+<h3 id="alpha--1"><code>alpha</code> = 1</h3>
+<ul>
+<li><code>beta</code> = -0.5</li>
+</ul>
+<p><img src="https://prod-files-secure.s3.us-west-2.amazonaws.com/5c0abaf5-b9fa-4a9b-97e3-5ae6c274eec7/e48d0b05-ed5d-45d4-8ed3-d65c90da9379/image.png" alt="image.png"></p>
+<ul>
+<li><code>beta</code> = -1</li>
+</ul>
+<p><img src="https://prod-files-secure.s3.us-west-2.amazonaws.com/5c0abaf5-b9fa-4a9b-97e3-5ae6c274eec7/fe960365-4631-417d-81eb-7e7cb2cb1f29/image.png" alt="image.png"></p>
+<ul>
+<li><code>beta</code> = -1.5</li>
+</ul>
+<p><img src="https://prod-files-secure.s3.us-west-2.amazonaws.com/5c0abaf5-b9fa-4a9b-97e3-5ae6c274eec7/8a1548b5-e946-45b9-af11-57c9779d817b/image.png" alt="image.png"></p>
+<h3 id="beta----1"><code>beta</code>  =- 1</h3>
+<ul>
+<li><code>alpha</code> = 0.5</li>
+</ul>
+<p><img src="https://prod-files-secure.s3.us-west-2.amazonaws.com/5c0abaf5-b9fa-4a9b-97e3-5ae6c274eec7/f4ecbd93-e312-4322-aa0c-e2e47f4eecef/image.png" alt="image.png"></p>
+<ul>
+<li><code>alpha</code> = 1</li>
+</ul>
+<p><img src="https://prod-files-secure.s3.us-west-2.amazonaws.com/5c0abaf5-b9fa-4a9b-97e3-5ae6c274eec7/1ce0e2f2-4b61-44f4-83c9-db67f9a82161/image.png" alt="image.png"></p>
+<ul>
+<li><code>alpha</code> = 1.5</li>
+</ul>
+<p><img src="https://prod-files-secure.s3.us-west-2.amazonaws.com/5c0abaf5-b9fa-4a9b-97e3-5ae6c274eec7/c40070a4-39be-4dd8-bc6b-f4c5a75bbb65/image.png" alt="image.png"></p>
+</li>
+</ol>
+</li>
+<li>
+<p>Fourier transform</p>
+<p>我用了兩種方法來盡量將邊緣強化:</p>
+<ol>
+<li>
+<p>第一種是從phase angle去做inverse Fourier transform然後會找出邊緣，再加回原圖，效果沒有很好。基本跟原圖看不出有啥差別</p>
+<p><img src="https://prod-files-secure.s3.us-west-2.amazonaws.com/5c0abaf5-b9fa-4a9b-97e3-5ae6c274eec7/6b0fe172-667e-4426-90f4-be7089bd77a5/image.png" alt="image.png"></p>
+</li>
+<li>
+<p>第二種用上課教的先算出圖片的傅立葉轉換 $F(u,v)$，然後找一個高通濾波器 $H(u,v)$ ，對 $F(u,v)$ 做捲積，最後再做 inverse Fourier transform 回去就會得到銳化的圖片。</p>
+<p>高通濾波器會呈現中間延伸某個半徑 <code>radius</code> 的範圍皆為0，其他都是1，以下分別用不同 <code>radius</code> 來比較銳化的效果</p>
+<ul>
+<li>
+<p>改變 <code>radius</code> : 半徑越大，會過濾掉越多低頻資訊，所以當 <code>radius</code> = 30 就只剩邊緣這種細節的高頻資訊了，但如果太大，到最後邊緣的資訊也比較不完整了</p>
+<p><code>radius</code> =0</p>
+<p><img src="https://prod-files-secure.s3.us-west-2.amazonaws.com/5c0abaf5-b9fa-4a9b-97e3-5ae6c274eec7/698e69aa-1d3a-4d70-a080-51b0f0807c3c/fd769350-3fec-42dc-b75a-e3629fc8e12d.png" alt="image.png"></p>
+<p><code>radius</code> = 30</p>
+<p><img src="https://prod-files-secure.s3.us-west-2.amazonaws.com/5c0abaf5-b9fa-4a9b-97e3-5ae6c274eec7/cfbe37fa-a781-4ad8-981c-d6834fa106d0/73ea8710-28a8-4fb1-a00a-25a42164d013.png" alt="image.png"></p>
+<p><code>radius</code> = 80</p>
+<p><img src="https://prod-files-secure.s3.us-west-2.amazonaws.com/5c0abaf5-b9fa-4a9b-97e3-5ae6c274eec7/aff61795-66ae-492f-9a69-0cd3742e188b/138361a3-118e-4776-b11a-f92bb91b0f15.png" alt="image.png"></p>
+<p><code>radius</code> = 10</p>
+<p><img src="https://prod-files-secure.s3.us-west-2.amazonaws.com/5c0abaf5-b9fa-4a9b-97e3-5ae6c274eec7/2ff61b6c-fa6d-49fe-b5c6-ad6a460d6559/4f20f349-6efc-40e9-8659-70b862749df0.png" alt="image.png"></p>
+<p><code>radius</code> = 60</p>
+<p><img src="https://prod-files-secure.s3.us-west-2.amazonaws.com/5c0abaf5-b9fa-4a9b-97e3-5ae6c274eec7/bbcc9dd8-4b86-4af2-9f9d-62fabff35724/0ef918d5-e937-48ab-b4e7-c54f697eb7fd.png" alt="image.png"></p>
+<p><code>radius</code> = 100</p>
+<p><img src="https://prod-files-secure.s3.us-west-2.amazonaws.com/5c0abaf5-b9fa-4a9b-97e3-5ae6c274eec7/a05b9d13-fe63-493b-8d06-a76e1e1393d6/abcfdfdd-bcb4-41f1-b498-096a1f2d9634.png" alt="image.png"></p>
+</li>
+<li>
+<p>在 filter function 中隨便加上一個常數( 一半的 filter 高度)，並改變 <code>radius</code> ，也就是</p>
+<p>$G(u,v) = F(u,v) [H(u,v) + 0.5]$，半徑等於0時就看起來非常清晰了，並且隨著半徑增大，並沒有像上一種方法一樣篩出邊緣，會越接近原圖</p>
+<p><code>radius</code> =0</p>
+<p><img src="https://prod-files-secure.s3.us-west-2.amazonaws.com/5c0abaf5-b9fa-4a9b-97e3-5ae6c274eec7/62c2c7b5-8f4f-4c2e-8380-d9b632d73a33/034ac19f-17a9-4440-9182-83166602cee5.png" alt="image.png"></p>
+<p><code>radius</code> = 30</p>
+<p><img src="https://prod-files-secure.s3.us-west-2.amazonaws.com/5c0abaf5-b9fa-4a9b-97e3-5ae6c274eec7/781e9bea-40f3-463e-8c2a-95128a034539/e7dd7b64-a107-4f3e-83e5-053bc18ea371.png" alt="image.png"></p>
+<p><code>radius</code> =80</p>
+<p><img src="https://prod-files-secure.s3.us-west-2.amazonaws.com/5c0abaf5-b9fa-4a9b-97e3-5ae6c274eec7/d76d3b90-543c-4100-a0c4-38c3a62e969c/56a3790a-e974-4654-954c-0416f48b47ad.png" alt="image.png"></p>
+<p><code>radius</code> = 10</p>
+<p><img src="https://prod-files-secure.s3.us-west-2.amazonaws.com/5c0abaf5-b9fa-4a9b-97e3-5ae6c274eec7/e4227da3-a705-461c-a4e2-5b07b2204265/082b9b4e-b3c3-42bb-9d74-dae3d19ef816.png" alt="image.png"></p>
+<p><code>radius</code> = 60</p>
+<p><img src="https://prod-files-secure.s3.us-west-2.amazonaws.com/5c0abaf5-b9fa-4a9b-97e3-5ae6c274eec7/a8b18758-ec49-4ec1-82a4-a6a616ed8469/dcfe17b6-51d4-4356-a814-e07f278d1d8c.png" alt="image.png"></p>
+<p><code>radius</code> = 100</p>
+<p><img src="https://prod-files-secure.s3.us-west-2.amazonaws.com/5c0abaf5-b9fa-4a9b-97e3-5ae6c274eec7/42aa6bf5-0794-4f5a-a35d-fe00e5ce291b/d2a6cd7c-be01-4342-84cf-55a2b2ba1996.png" alt="image.png"></p>
+</li>
+</ul>
+</li>
+</ol>
+</li>
+<li>
+<p>Comparison</p>
+<ul>
+<li>
+<p>如果單純從這張青椒圖的邊緣偵測來看，Sobel 取得的邊緣是比Fourier Transform完整的</p>
+<p>Sobel</p>
+<p><img src="https://prod-files-secure.s3.us-west-2.amazonaws.com/5c0abaf5-b9fa-4a9b-97e3-5ae6c274eec7/1abad72c-2bfd-47ec-acb9-a379824e5b31/image.png" alt="image.png"></p>
+<p>Fourier Transform</p>
+<p><img src="https://prod-files-secure.s3.us-west-2.amazonaws.com/5c0abaf5-b9fa-4a9b-97e3-5ae6c274eec7/cfbe37fa-a781-4ad8-981c-d6834fa106d0/73ea8710-28a8-4fb1-a00a-25a42164d013.png" alt="image.png"></p>
+</li>
+<li>
+<p>Sobel 銳化圖片的方式是將偵測到的邊緣在加回原圖，Fourier Transform 可以直接由高通濾波器得到邊緣相對清晰的圖</p>
+<p>Sobel</p>
+<p><img src="https://prod-files-secure.s3.us-west-2.amazonaws.com/5c0abaf5-b9fa-4a9b-97e3-5ae6c274eec7/fe960365-4631-417d-81eb-7e7cb2cb1f29/image.png" alt="image.png"></p>
+<p>Fourier Transform</p>
+<p><img src="https://prod-files-secure.s3.us-west-2.amazonaws.com/5c0abaf5-b9fa-4a9b-97e3-5ae6c274eec7/62c2c7b5-8f4f-4c2e-8380-d9b632d73a33/034ac19f-17a9-4440-9182-83166602cee5.png" alt="image.png"></p>
+</li>
+</ul>
+</li>
+</ol>
+<h2 id="q3-design-low-pass-gaussian-filter">Q3. Design Low-pass Gaussian Filter</h2>
+<p>Design Gaussian filter of 3*3 mask and use this mask to low-pass filter of Figure 1.</p>
+<ol>
+<li>Low-pass Gaussian filter
+<ul>
+<li>中心權重高、邊緣權重低 → 保留主要像素，平滑掉高頻雜訊</li>
+<li>中心值最大為4，最接近中心的是2，其他較遠的的是1</li>
+</ul>
+</li>
+</ol>
+<p>$\begin{bmatrix}1 &amp; 2 &amp; 1 \ 2 &amp; 4 &amp;  2\ 1 &amp; 2 &amp; 1 \end{bmatrix}$</p>
+<ol>
+<li>
+<p>用高斯低頻濾波器會將較小的像素(較暗的顏色)濾掉，使圖片少了原圖的顆粒感變得較平滑，可以去除雜訊，但是也變得比較模糊。</p>
+<ul>
+<li>original</li>
+</ul>
+<p><img src="https://prod-files-secure.s3.us-west-2.amazonaws.com/5c0abaf5-b9fa-4a9b-97e3-5ae6c274eec7/351b25a8-2b46-4fcf-a66c-c6529ca6403c/image.png" alt="Figure 1."></p>
+<p>Figure 1.</p>
+<ul>
+<li>after low-pass filter</li>
+</ul>
+<p><img src="https://prod-files-secure.s3.us-west-2.amazonaws.com/5c0abaf5-b9fa-4a9b-97e3-5ae6c274eec7/d993f0ba-f509-46c9-9654-2dc7be347a98/image.png" alt="low-pass gaussian filter"></p>
+<p>low-pass gaussian filter</p>
+</li>
+</ol>
+<h2 id="q4-design-low-pass-fourier-filter">Q4. Design Low-pass Fourier Filter</h2>
+<p>Design Fourier filter using q3. mask to smooth Figure 1.</p>
+<ol>
+<li>
+<p>如果直接把第三題的filter放到 $H(u,v)$ 中間，其他地方都是0，跟直接用第三題的 filter 去對圖像做處理肉眼其實看不出差別</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-python" data-lang="python"><span class="line"><span class="cl"><span class="n">H</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="n">rows</span><span class="p">,</span> <span class="n">cols</span><span class="p">),</span> <span class="n">dtype</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">float32</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl"><span class="n">gh</span><span class="p">,</span> <span class="n">gw</span> <span class="o">=</span> <span class="n">gaussian_filter</span><span class="o">.</span><span class="n">shape</span>
+</span></span><span class="line"><span class="cl"><span class="n">crow</span><span class="p">,</span> <span class="n">ccol</span> <span class="o">=</span> <span class="p">(</span><span class="n">rows</span> <span class="o">-</span> <span class="n">gh</span><span class="p">)</span> <span class="o">//</span> <span class="mi">2</span><span class="p">,</span> <span class="p">(</span><span class="n">cols</span> <span class="o">-</span> <span class="n">gw</span><span class="p">)</span> <span class="o">//</span> <span class="mi">2</span>
+</span></span><span class="line"><span class="cl"><span class="n">H</span><span class="p">[</span><span class="n">crow</span><span class="p">:</span><span class="n">crow</span><span class="o">+</span><span class="n">gh</span><span class="p">,</span> <span class="n">ccol</span><span class="p">:</span><span class="n">ccol</span><span class="o">+</span><span class="n">gw</span><span class="p">]</span> <span class="o">=</span> <span class="n">gaussian_filter</span>
+</span></span></code></pre></div><ul>
+<li>original</li>
+</ul>
+<p><img src="https://prod-files-secure.s3.us-west-2.amazonaws.com/5c0abaf5-b9fa-4a9b-97e3-5ae6c274eec7/351b25a8-2b46-4fcf-a66c-c6529ca6403c/image.png" alt="Figure 1."></p>
+<p>Figure 1.</p>
+<ul>
+<li>After Low-pass Fourier Filter</li>
+</ul>
+<p><img src="https://prod-files-secure.s3.us-west-2.amazonaws.com/5c0abaf5-b9fa-4a9b-97e3-5ae6c274eec7/131ca123-fcff-4ec1-b715-5d86f57d6893/image.png" alt="image.png"></p>
+</li>
+<li>
+<p>用這個公式來創建low-pass filter，在丟到傅立葉轉換</p>
+</li>
+</ol>
+<h2 id="q5-please-compute-the-corresponding-phase-angle-and-fourier-spectrum-of-figure-3">Q5. Please compute the corresponding phase angle and Fourier spectrum of Figure 3.</h2>
+<table>
+<thead>
+<tr>
+<th>1</th>
+<th>0</th>
+<th>7</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>5</td>
+<td>1</td>
+<td>8</td>
+</tr>
+<tr>
+<td>4</td>
+<td>0</td>
+<td>9</td>
+</tr>
+</tbody>
+</table>
+<ol>
+<li>Fourier spectrum and phase angle
+<ul>
+<li>
+<p>Fourier transform</p>
+<table>
+<thead>
+<tr>
+<th>$35$</th>
+<th>$-5/2+\cfrac{23\sqrt{3}}{2}j$</th>
+<th>$-5/2-\cfrac{23\sqrt{3}}{2}j$</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>$\cfrac{-11}{2}-\cfrac{\sqrt{3}}{2}j$</td>
+<td>$-4-\sqrt{3}j$</td>
+<td>$-1$</td>
+</tr>
+<tr>
+<td>$\cfrac{-11}{2}+\cfrac{\sqrt{3}}{2}j$</td>
+<td>$-1$</td>
+<td>$-4+\sqrt{3}j$</td>
+</tr>
+</tbody>
+</table>
+</li>
+<li>
+<p>運算結果</p>
+<p>Spectrum</p>
+<table>
+<thead>
+<tr>
+<th>$35$</th>
+<th>$20.07$</th>
+<th>$20.07$</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>$5.57$</td>
+<td>$4.36$</td>
+<td>$1$</td>
+</tr>
+<tr>
+<td>$5.57$</td>
+<td>$1$</td>
+<td>$4.36$</td>
+</tr>
+</tbody>
+</table>
+<p>Phase Angle(rad)</p>
+<table>
+<thead>
+<tr>
+<th>0</th>
+<th>$-1.446$</th>
+<th>$1.446$</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>$0.156$</td>
+<td>$0.409$</td>
+<td>$0$</td>
+</tr>
+<tr>
+<td>$-0.156$</td>
+<td>$0$</td>
+<td>0.409</td>
+</tr>
+</tbody>
+</table>
+</li>
+<li>
+<p>運算過程</p>
+<ul>
+<li>
+<p>$F(0,0)$</p>
+<p><img src="https://prod-files-secure.s3.us-west-2.amazonaws.com/5c0abaf5-b9fa-4a9b-97e3-5ae6c274eec7/cadc134b-a004-4728-8add-0777416ff649/image.png" alt="image.png"></p>
+</li>
+<li>
+<p>$F(0,1)$</p>
+<p><img src="https://prod-files-secure.s3.us-west-2.amazonaws.com/5c0abaf5-b9fa-4a9b-97e3-5ae6c274eec7/9543855f-9dc6-4654-ba92-9c859fa80000/image.png" alt="image.png"></p>
+</li>
+<li>
+<p>$F(0,2)$</p>
+<p><img src="https://prod-files-secure.s3.us-west-2.amazonaws.com/5c0abaf5-b9fa-4a9b-97e3-5ae6c274eec7/3aa0ba70-87d2-45ed-8e2a-0cfaf7702129/image.png" alt="image.png"></p>
+</li>
+<li>
+<p>$F(1,0)$</p>
+<p><img src="https://prod-files-secure.s3.us-west-2.amazonaws.com/5c0abaf5-b9fa-4a9b-97e3-5ae6c274eec7/ed61d556-fadc-4147-9842-77153f41b157/image.png" alt="image.png"></p>
+</li>
+<li>
+<p>$F(1,1)$</p>
+<p><img src="https://prod-files-secure.s3.us-west-2.amazonaws.com/5c0abaf5-b9fa-4a9b-97e3-5ae6c274eec7/84ba55d6-42dc-40af-b036-6009f97eca38/image.png" alt="image.png"></p>
+</li>
+<li>
+<p>$F(1,2)$</p>
+<p><img src="https://prod-files-secure.s3.us-west-2.amazonaws.com/5c0abaf5-b9fa-4a9b-97e3-5ae6c274eec7/c4474801-1eeb-4400-8a14-b1252f6c1a2d/image.png" alt="image.png"></p>
+</li>
+<li>
+<p>$F(2,0)$</p>
+<p><img src="https://prod-files-secure.s3.us-west-2.amazonaws.com/5c0abaf5-b9fa-4a9b-97e3-5ae6c274eec7/e88f2adb-0053-486e-9889-ee83f83d1300/image.png" alt="image.png"></p>
+</li>
+<li>
+<p>$F(2,1)$</p>
+<p><img src="https://prod-files-secure.s3.us-west-2.amazonaws.com/5c0abaf5-b9fa-4a9b-97e3-5ae6c274eec7/95d6f36a-eecf-4204-bdd5-7f921e6959f1/image.png" alt="image.png"></p>
+</li>
+<li>
+<p>$F(2,2)$</p>
+<p><img src="https://prod-files-secure.s3.us-west-2.amazonaws.com/5c0abaf5-b9fa-4a9b-97e3-5ae6c274eec7/33074ebd-a2e0-4e73-b3cf-8d71f91dcaca/image.png" alt="image.png"></p>
+</li>
+</ul>
+</li>
+<li>
+<p>程式碼實現</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-python" data-lang="python"><span class="line"><span class="cl"><span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="c1"># Define the given matrix f(x, y)</span>
+</span></span><span class="line"><span class="cl"><span class="n">f</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span>
+</span></span><span class="line"><span class="cl">    <span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">7</span><span class="p">],</span>
+</span></span><span class="line"><span class="cl">    <span class="p">[</span><span class="mi">5</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">8</span><span class="p">],</span>
+</span></span><span class="line"><span class="cl">    <span class="p">[</span><span class="mi">4</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">9</span><span class="p">]</span>
+</span></span><span class="line"><span class="cl"><span class="p">])</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="c1"># Define parameters</span>
+</span></span><span class="line"><span class="cl"><span class="n">N</span> <span class="o">=</span> <span class="mi">3</span>  <span class="c1"># Size of the matrix</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="c1"># Initialize F(u, v) as a zero matrix</span>
+</span></span><span class="line"><span class="cl"><span class="n">F</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="n">N</span><span class="p">,</span> <span class="n">N</span><span class="p">),</span> <span class="n">dtype</span><span class="o">=</span><span class="nb">complex</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="c1"># Compute the 2D DFT</span>
+</span></span><span class="line"><span class="cl"><span class="k">for</span> <span class="n">u</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">N</span><span class="p">):</span>
+</span></span><span class="line"><span class="cl">    <span class="k">for</span> <span class="n">v</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">N</span><span class="p">):</span>
+</span></span><span class="line"><span class="cl">        <span class="n">sum_val</span> <span class="o">=</span> <span class="mi">0</span>
+</span></span><span class="line"><span class="cl">        <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">N</span><span class="p">):</span>
+</span></span><span class="line"><span class="cl">            <span class="k">for</span> <span class="n">y</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">N</span><span class="p">):</span>
+</span></span><span class="line"><span class="cl">                <span class="n">exp_factor</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">exp</span><span class="p">(</span><span class="o">-</span><span class="mi">2</span><span class="n">j</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">pi</span> <span class="o">*</span> <span class="p">((</span><span class="n">u</span> <span class="o">*</span> <span class="n">x</span> <span class="o">+</span> <span class="n">v</span> <span class="o">*</span> <span class="n">y</span><span class="p">)</span> <span class="o">/</span> <span class="n">N</span><span class="p">))</span>
+</span></span><span class="line"><span class="cl">                <span class="n">sum_val</span> <span class="o">+=</span> <span class="n">f</span><span class="p">[</span><span class="n">x</span><span class="p">][</span><span class="n">y</span><span class="p">]</span> <span class="o">*</span> <span class="n">exp_factor</span>
+</span></span><span class="line"><span class="cl">        <span class="n">F</span><span class="p">[</span><span class="n">u</span><span class="p">,</span> <span class="n">v</span><span class="p">]</span> <span class="o">=</span> <span class="n">sum_val</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="c1"># Print matrix</span>
+</span></span><span class="line"><span class="cl"><span class="nb">print</span><span class="p">(</span><span class="n">F</span><span class="p">)</span>
+</span></span></code></pre></div></li>
+</ul>
+</li>
+</ol>
+<h2 id="reference">Reference</h2>
+<ul>
+<li><a href="https://medium.com/%E9%9B%BB%E8%85%A6%E8%A6%96%E8%A6%BA/%E5%BD%B1%E5%83%8F%E9%9B%9C%E8%A8%8A%E5%8E%BB%E9%99%A4-%E4%B8%AD%E5%80%BC%E6%BF%BE%E6%B3%A2%E5%99%A8-median-filter-e00e1ec4c86d">雜訊去除 — 中值濾波器 (Median filter)</a></li>
+<li><a href="https://www.ee.nthu.edu.tw/clhuang/09420EE368000DIP/chapter04.pdf">Image Enhancement in the Frequency Domain</a></li>
+</ul>
+]]></content:encoded>
+      
+    </item>
     <item>
       <title>Layer Normalization VS. Batch Normalization</title>
       <link>http://localhost:1313/Hlunlun/posts/layer_norm/</link>
@@ -22,7 +1094,8 @@
       <guid>http://localhost:1313/Hlunlun/posts/layer_norm/</guid>
       <description>為什麼Transformer要用Layer Normalization</description>
       
-        <content:encoded><![CDATA[<p>通過<img src="https://hackmd.io/_uploads/SJEEkEBEJe.png" alt="圖">可以很明顯看出，BN就是把多個layer後正規化，而LN是把單一個layer的正規化</p>
+        <content:encoded><![CDATA[<img src="ln_bn_0.png" width =500 style=" margin: auto; display: block;">
+<p>通過上圖可以很明顯看出，BN就是把多個layer後正規化，而LN是把單一個layer的正規化</p>
 <table>
 <thead>
 <tr>
@@ -68,14 +1141,15 @@
 <h3 id="論文">論文</h3>
 <p>出自2016的這篇論文: <a href="https://arxiv.org/pdf/1607.06450">Layer Normalization</a></p>
 <h3 id="數學意義">數學意義</h3>
-<p>先從數學上來說LN，其實也是正規化會遇到的數學算式，我們要先找到平均值，這個平均值是用整個layer $l$ 的所有 $H$ 個 hidden unit $a^l_i$ 算出來的，標準差就是用剛剛算的平均值再倒入算式即可得出</p>
+<p>先從數學上來說LN，其實也是正規化會遇到的數學算式，我們要先找到平均值，這個平均值是用整個layer \(l\) 的所有 \(H\) 個 hidden unit \(a^l_i\) 算出來的，標準差就是用剛剛算的平均值再倒入算式即可得出</p>
 <img src="layer_norm.png" style=" margin: auto; display: block;">
 <h3 id="適合序列模型">適合序列模型</h3>
-
-<p>所以這裡的最小單位是hidden unit $a^l_i$，所有值都是在一個layer中，跟BN看的角度相比就比較微觀，畢竟BN是多個layer後在正規化，但是LN正好對RNN、LSTM、Transformer等這種序列模型非常加分，為何?</p>
+<p>所以這裡的最小單位是hidden unit \(a^l_i\)，所有值都是在一個layer中，跟BN看的角度相比就比較微觀，畢竟BN是多個layer後在正規化，但是LN正好對RNN、LSTM、Transformer等這種序列模型非常加分，為何?</p>
 <ul>
 <li>可以先參考<a href="https://blog.csdn.net/jq_98/article/details/123300010">這張圖</a></li>
-<li>因為對於RNN來說，用BN來學習平均值和標準差是很難的，所以用LN的方式讓序列模型可以在自己所處的context(上下文)中學習 $\mu$ 和 $std$ 是比較容易的，所以LN是對序列模型來說最佳的正規化方法</li>
+<li>
+<p>因為對於RNN來說，用BN來學習平均值和標準差是很難的，所以用LN的方式讓序列模型可以在自己所處的context(上下文)中學習 \(\mu\) 和 \(std\) 是比較容易的，所以LN是對序列模型來說最佳的正規化方法</p>
+</li>
 </ul>
 <h3 id="程式碼的呈現">程式碼的呈現</h3>
 <div class="highlight"><pre tabindex="0" class="chroma"><code class="language-python" data-lang="python"><span class="line"><span class="cl"><span class="k">class</span> <span class="nc">LayerNorm</span><span class="p">(</span><span class="n">nn</span><span class="o">.</span><span class="n">Module</span><span class="p">):</span>
@@ -219,7 +1293,7 @@ print(x.mean(-1, keepdim=True))  # 結果: tensor([[1.5], [3.5]]), shape 為 (2,
       <description>論文引用: Touvron, H., Lavril, T., Izacard, G., Martinet, X., Lachaux, M., Lacroix, T., Rozière, B., Goyal, N., Hambro, E., Azhar, F., Rodriguez, A., Joulin, A., Grave, E., &amp;amp; Lample, G. (2023). LLaMA: Open and Efficient Foundation Language Models. ArXiv, abs/2302.13971.</description>
       
         <content:encoded><![CDATA[<p>論文引用: Touvron, H., Lavril, T., Izacard, G., Martinet, X., Lachaux, M., Lacroix, T., Rozière, B., Goyal, N., Hambro, E., Azhar, F., Rodriguez, A., Joulin, A., Grave, E., &amp; Lample, G. (2023). LLaMA: Open and Efficient Foundation Language Models. ArXiv, abs/2302.13971.
-<img src="llama_milestone.png" height=100 width =1000 style=" margin: auto; display: block;">
+<img src="llama_milestone.png" width =1000 style=" margin: auto; display: block;">
 <br></p>
 <h1 id="challenge-scaling-law">Challenge Scaling Law</h1>
 <h2 id="scaling-law">Scaling Law</h2>

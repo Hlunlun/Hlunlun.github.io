@@ -1,0 +1,324 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss
+  version="2.0"
+  xmlns:atom="http://www.w3.org/2005/Atom"
+  xmlns:wfw="http://wellformedweb.org/CommentAPI/"
+  
+    xmlns:content="http://purl.org/rss/1.0/modules/content/"
+  
+>
+  <channel>
+    <title>Faster R-CNN on Lun&#39;s</title>
+    <link>http://localhost:1313/Hlunlun/tags/faster-r-cnn/</link>
+    <description>Recent content in Faster R-CNN on Lun&#39;s</description>
+    <generator>Hugo</generator>
+    <language>en-us</language>
+    <lastBuildDate>Tue, 07 Jan 2025 01:00:59 +0800</lastBuildDate>
+    <atom:link href="http://localhost:1313/Hlunlun/tags/faster-r-cnn/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>Scaphoid_fracture_detection</title>
+      <link>http://localhost:1313/Hlunlun/posts/image_process/scaphoid_fracture_detection/</link>
+      <pubDate>Tue, 07 Jan 2025 01:00:59 +0800</pubDate>
+      <guid>http://localhost:1313/Hlunlun/posts/image_process/scaphoid_fracture_detection/</guid>
+      <description>資訊所 碩一 黃佳倫 P76134862</description>
+      
+        <content:encoded><![CDATA[<p><strong>資訊所 碩一 黃佳倫 P76134862</strong></p>
+<hr>
+<p>Use Faster <a href="https://arxiv.org/abs/1506.01497">R-CNN</a> and YOLOv11-<a href="https://docs.ultralytics.com/datasets/obb/">OBB</a> to detect the scaphoid fracture location.</p>
+<h2 id="get-started">Get started</h2>
+<ol>
+<li>Training</li>
+</ol>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-python" data-lang="python"><span class="line"><span class="cl"><span class="n">python</span> <span class="n">main</span><span class="o">.</span><span class="n">py</span> <span class="o">--</span><span class="n">train</span> <span class="mi">1</span>
+</span></span></code></pre></div><ol>
+<li>
+<p>Run System</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-python" data-lang="python"><span class="line"><span class="cl"><span class="n">python</span> <span class="n">main</span><span class="o">.</span><span class="n">py</span>
+</span></span></code></pre></div></li>
+</ol>
+<h2 id="model">Model</h2>
+<table>
+<thead>
+<tr>
+<th>Name</th>
+<th>Description</th>
+<th>path</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>ScaphoidDetector</strong></td>
+<td>Detects scaphoid bone in X-ray hand images using <a href="https://arxiv.org/abs/1506.01497">Faster R-CNN</a></td>
+<td><code>scaphoid_detector.py</code></td>
+</tr>
+<tr>
+<td><strong>FractureClassifier</strong></td>
+<td>Classify scaphoid fractures using <a href="https://pytorch.org/vision/main/models/generated/torchvision.models.vgg16.html">VGG16</a> pre-trained model after detection by ScaphoidDetector</td>
+<td><code>fracture_classifier.py</code></td>
+</tr>
+<tr>
+<td><strong>HandDetector</strong></td>
+<td>Detects scaphoid bones and fractures region in X-ray hand image using YOLOv11-<a href="https://docs.ultralytics.com/datasets/obb/">OBB</a></td>
+<td><code>hand_detector.py</code></td>
+</tr>
+</tbody>
+</table>
+<h2 id="methods">Methods</h2>
+<ol>
+<li>
+<p>ScaphoidDetector + FractureClassifier + HandDetector</p>
+<p>First, use Faster R-CNN to detect the scaphoid bone in the full X-ray hand image. Then, use VGG16 to classify whether there is a fracture. Finally, use YOLOv11-obb to detect the fracture location.</p>
+</li>
+<li>
+<p>HandDetector</p>
+<p>Directly use YOLOv11-obb to detect the scaphoid bone and fracture locations.</p>
+</li>
+</ol>
+<h2 id="scaphoiddetector--fractureclassifier--handdetector"><strong>ScaphoidDetector + FractureClassifier + HandDetector</strong></h2>
+<p><img src="https://prod-files-secure.s3.us-west-2.amazonaws.com/5c0abaf5-b9fa-4a9b-97e3-5ae6c274eec7/527516ba-ec1d-4333-b649-e193cba1a90d/image.png" alt="image.png"></p>
+<h3 id="datasets">Datasets</h3>
+<ol>
+<li>File Structure:</li>
+</ol>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-python" data-lang="python"><span class="line"><span class="cl"><span class="n">ip_data</span>  
+</span></span><span class="line"><span class="cl"><span class="err">├──</span> <span class="n">fracture_detection</span>  
+</span></span><span class="line"><span class="cl"><span class="err">│</span>   <span class="err">└──</span> <span class="n">annotations</span> <span class="o">//</span> <span class="n">Fracture</span> <span class="n">locations</span><span class="p">:</span> <span class="p">[[</span><span class="n">x1</span><span class="p">,</span> <span class="n">y1</span><span class="p">],</span> <span class="p">[</span><span class="n">x2</span><span class="p">,</span> <span class="n">y2</span><span class="p">],</span> <span class="p">[</span><span class="n">x3</span><span class="p">,</span> <span class="n">y3</span><span class="p">],</span> <span class="p">[</span><span class="n">x4</span><span class="p">,</span> <span class="n">y4</span><span class="p">]]</span>  
+</span></span><span class="line"><span class="cl"><span class="err">└──</span> <span class="n">scaphoid_detection</span>  
+</span></span><span class="line"><span class="cl">    <span class="err">├──</span> <span class="n">annotations</span> <span class="o">//</span> <span class="n">Scaphoid</span> <span class="n">locations</span><span class="p">:</span> <span class="p">[</span><span class="n">x1</span><span class="p">,</span> <span class="n">y1</span><span class="p">,</span> <span class="n">x2</span><span class="p">,</span> <span class="n">y2</span><span class="p">]</span>  
+</span></span><span class="line"><span class="cl">    <span class="err">└──</span> <span class="n">images</span>      <span class="o">//</span> <span class="n">Hand</span> <span class="n">X</span><span class="o">-</span><span class="n">ray</span> <span class="n">images</span>  
+</span></span></code></pre></div><ol>
+<li>
+<p>After data preprocessing in <code>dataset.py</code> :</p>
+<p><code>all_datas.json</code> and new folders will be created under fracture_detection and scaphoid_detection</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-python" data-lang="python"><span class="line"><span class="cl"><span class="err">├──</span> <span class="n">ip_data</span>
+</span></span><span class="line"><span class="cl">	  <span class="err">├──</span> <span class="n">fracture_detection</span>
+</span></span><span class="line"><span class="cl">	  <span class="err">│</span>   <span class="err">├──</span> <span class="n">annotations</span>
+</span></span><span class="line"><span class="cl">	  <span class="err">│</span>   <span class="err">├──</span> <span class="n">images</span>
+</span></span><span class="line"><span class="cl">	  <span class="err">│</span>   <span class="err">└──</span> <span class="n">images_rec</span>
+</span></span><span class="line"><span class="cl">	  <span class="err">└──</span> <span class="n">scaphoid_detection</span>
+</span></span><span class="line"><span class="cl">	      <span class="err">├──</span> <span class="n">annotations</span>
+</span></span><span class="line"><span class="cl">	      <span class="err">├──</span> <span class="n">images</span>
+</span></span><span class="line"><span class="cl">	      <span class="err">└──</span> <span class="n">images_rec</span>
+</span></span><span class="line"><span class="cl"><span class="err">├──</span> <span class="n">all_datas</span><span class="o">.</span><span class="n">json</span>
+</span></span></code></pre></div><ul>
+<li>
+<p><code>fracture_detection/</code> :</p>
+<ul>
+<li><code>images/</code> : Contains the full scaphoid images cropped based on scaphoid locations.</li>
+<li><code>images_rec/</code> : Contains the scaphoid images with highlighted fracture locations.</li>
+</ul>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-python" data-lang="python"><span class="line"><span class="cl"><span class="n">fracture_detection</span>
+</span></span><span class="line"><span class="cl"><span class="err">├──</span> <span class="n">annotations</span>
+</span></span><span class="line"><span class="cl"><span class="err">├──</span> <span class="n">images</span>
+</span></span><span class="line"><span class="cl"><span class="err">└──</span> <span class="n">images_rec</span>
+</span></span></code></pre></div></li>
+<li>
+<p><code>scaphoid_detection/images_rec</code> : Stores hand images with the scaphoid region framed.</p>
+</li>
+</ul>
+</li>
+</ol>
+<h3 id="training">Training</h3>
+<ol>
+<li>
+<p>Train ScaogiudDetector</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-python" data-lang="python"><span class="line"><span class="cl"><span class="kn">from</span> <span class="nn">scahpoid_detector</span> <span class="kn">import</span> <span class="n">ScaphoidDetector</span>
+</span></span><span class="line"><span class="cl"><span class="n">scaphoid_detector</span> <span class="o">=</span> <span class="n">ScaphoidDetector</span><span class="p">(</span><span class="n">args</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl"><span class="n">scaphoid_detector</span><span class="o">.</span><span class="n">train</span><span class="p">()</span>
+</span></span></code></pre></div></li>
+<li>
+<p>Train FractureClassifier</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-python" data-lang="python"><span class="line"><span class="cl"><span class="kn">from</span> <span class="nn">fracture_classifier</span> <span class="kn">import</span> <span class="n">FractureClassifier</span>
+</span></span><span class="line"><span class="cl"><span class="n">fracture_classifier</span> <span class="o">=</span> <span class="n">FractureClassifier</span><span class="p">(</span><span class="n">args</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl"><span class="n">fracture_classifier</span><span class="o">.</span><span class="n">train</span><span class="p">()</span>
+</span></span></code></pre></div></li>
+<li>
+<p>Train HandDetector</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-python" data-lang="python"><span class="line"><span class="cl"><span class="kn">from</span> <span class="nn">hand_detector</span> <span class="kn">import</span> <span class="n">HandDetector</span>
+</span></span><span class="line"><span class="cl"><span class="n">hand_detector</span> <span class="o">=</span> <span class="n">HandDetector</span><span class="p">(</span><span class="n">args</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl"><span class="n">hand_detector</span><span class="o">.</span><span class="n">train</span><span class="p">()</span>
+</span></span></code></pre></div></li>
+<li>
+<p>Analysis</p>
+<ul>
+<li>
+<p>ScaphoidDetector</p>
+<p><img src="https://prod-files-secure.s3.us-west-2.amazonaws.com/5c0abaf5-b9fa-4a9b-97e3-5ae6c274eec7/ce8bf7df-5077-4532-a170-47769001caa1/image.png" alt="image.png"></p>
+</li>
+<li>
+<p>FractureClassifier</p>
+<p>accuracy, recalls, precision, f1, loss</p>
+<p><img src="https://prod-files-secure.s3.us-west-2.amazonaws.com/5c0abaf5-b9fa-4a9b-97e3-5ae6c274eec7/a306967d-9e07-4485-9ad4-75645480b863/image.png" alt="image.png"></p>
+</li>
+<li>
+<p>HandDetector: Curves will be saved in <code>performance</code> and  <code>runs/</code>  respectively</p>
+<p><img src="https://prod-files-secure.s3.us-west-2.amazonaws.com/5c0abaf5-b9fa-4a9b-97e3-5ae6c274eec7/94f401d1-061e-4e91-997a-f3bb1a421ffe/image.png" alt="image.png"></p>
+</li>
+</ul>
+</li>
+</ol>
+<h3 id="detecting">Detecting</h3>
+<p>Steps 1. Detect Scaphoid</p>
+<ul>
+<li>
+<p>Use <code>detect()</code> function</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-python" data-lang="python"><span class="line"><span class="cl"><span class="n">scaphoid_detector</span><span class="o">.</span><span class="n">detect</span><span class="p">(</span><span class="n">dir_path</span><span class="p">)</span>
+</span></span></code></pre></div></li>
+<li>
+<p>Detected scaphoid location will be cropped and saved in <code>prediction/scaphoid/</code></p>
+<p><img src="https://prod-files-secure.s3.us-west-2.amazonaws.com/5c0abaf5-b9fa-4a9b-97e3-5ae6c274eec7/0d7062e3-c432-488b-bbae-c2fd86ea73b1/image.png" alt="image.png"></p>
+</li>
+</ul>
+<p>Steps 2. Classify fracture</p>
+<ul>
+<li>
+<p>Use <code>classify()</code> function</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-python" data-lang="python"><span class="line"><span class="cl"><span class="n">fracture_classifier</span><span class="o">.</span><span class="n">classify</span><span class="p">(</span><span class="n">dir_path</span><span class="p">)</span>
+</span></span></code></pre></div></li>
+<li>
+<p>Fracture scaphoid will be saved in <code>prediction/classifier/</code></p>
+</li>
+</ul>
+<p>Steps 3. Detect fracture location</p>
+<ul>
+<li>
+<p>Use <code>detect_fracture()</code> function</p>
+</li>
+<li>
+<p>The images with marked fracture locations will be saved in <code>prediction/fracture/</code></p>
+<p><img src="https://prod-files-secure.s3.us-west-2.amazonaws.com/5c0abaf5-b9fa-4a9b-97e3-5ae6c274eec7/d4cb9cf1-1573-4c54-9f86-638706d189d8/image.png" alt="image.png"></p>
+</li>
+</ul>
+<h2 id="handdetector">HandDetector</h2>
+<p><img src="https://prod-files-secure.s3.us-west-2.amazonaws.com/5c0abaf5-b9fa-4a9b-97e3-5ae6c274eec7/2f2a1611-db52-4026-b225-7ac49cd84c2d/image.png" alt="image.png"></p>
+<h3 id="training-datasets">Training Datasets</h3>
+<p>Use functions from <code>yolo_anno.py</code> to construct data for YOLOv11-OBB</p>
+<ol>
+<li>File Structure</li>
+</ol>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-python" data-lang="python"><span class="line"><span class="cl"><span class="n">yolo_config</span>
+</span></span><span class="line"><span class="cl"><span class="err">├──</span> <span class="n">data</span>
+</span></span><span class="line"><span class="cl"><span class="err">├──</span> <span class="n">datasets</span>
+</span></span><span class="line"><span class="cl"><span class="err">│</span>   <span class="err">├──</span> <span class="n">fracture</span>
+</span></span><span class="line"><span class="cl"><span class="err">│</span>   <span class="err">│</span>   <span class="err">├──</span> <span class="n">images</span>
+</span></span><span class="line"><span class="cl"><span class="err">│</span>   <span class="err">│</span>   <span class="err">│</span>   <span class="err">├──</span> <span class="n">train</span>
+</span></span><span class="line"><span class="cl"><span class="err">│</span>   <span class="err">│</span>   <span class="err">│</span>   <span class="err">└──</span> <span class="n">val</span>
+</span></span><span class="line"><span class="cl"><span class="err">│</span>   <span class="err">│</span>   <span class="err">└──</span> <span class="n">labels</span>
+</span></span><span class="line"><span class="cl"><span class="err">│</span>   <span class="err">│</span>       <span class="err">├──</span> <span class="n">train</span>
+</span></span><span class="line"><span class="cl"><span class="err">│</span>   <span class="err">│</span>       <span class="err">└──</span> <span class="n">val</span>
+</span></span><span class="line"><span class="cl"><span class="err">│</span>   <span class="err">└──</span> <span class="n">hand</span>
+</span></span><span class="line"><span class="cl"><span class="err">│</span>       <span class="err">├──</span> <span class="n">images</span>
+</span></span><span class="line"><span class="cl"><span class="err">│</span>       <span class="err">│</span>   <span class="err">├──</span> <span class="n">train</span>
+</span></span><span class="line"><span class="cl"><span class="err">│</span>       <span class="err">│</span>   <span class="err">└──</span> <span class="n">val</span>
+</span></span><span class="line"><span class="cl"><span class="err">│</span>       <span class="err">└──</span> <span class="n">labels</span>
+</span></span><span class="line"><span class="cl"><span class="err">│</span>           <span class="err">├──</span> <span class="n">train</span>
+</span></span><span class="line"><span class="cl"><span class="err">│</span>           <span class="err">└──</span> <span class="n">val</span>
+</span></span><span class="line"><span class="cl"><span class="err">└──</span> <span class="n">weights</span>
+</span></span></code></pre></div><ol>
+<li>
+<p>During Training: YOLO 會自動將所有圖片拼在一起，最後再裁成設定得大小 (以下範例為1024)，圖片就會前處理成以下，一個batch的圖片數量會根據 <code>batch_size</code> (以下範例為 8)</p>
+<p><img src="https://prod-files-secure.s3.us-west-2.amazonaws.com/5c0abaf5-b9fa-4a9b-97e3-5ae6c274eec7/24c73464-a8e2-4fe5-93b6-72811075c6c6/image.png" alt="image.png"></p>
+</li>
+</ol>
+<h3 id="training-1">Training</h3>
+<ol>
+<li>Train HandDetector</li>
+</ol>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-python" data-lang="python"><span class="line"><span class="cl"><span class="kn">from</span> <span class="nn">hand_detector</span> <span class="kn">import</span> <span class="n">HandDetector</span>
+</span></span><span class="line"><span class="cl"><span class="n">hand_detector</span> <span class="o">=</span> <span class="n">HandDetector</span><span class="p">(</span><span class="n">args</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl"><span class="n">hand_detector</span><span class="o">.</span><span class="n">train</span><span class="p">()</span>
+</span></span></code></pre></div><ol>
+<li>
+<p>Results will be saved in <code>runs/</code></p>
+<p><img src="https://prod-files-secure.s3.us-west-2.amazonaws.com/5c0abaf5-b9fa-4a9b-97e3-5ae6c274eec7/aa14525d-8d76-4d12-b39a-501fcb275de6/image.png" alt="image.png"></p>
+</li>
+</ol>
+<h3 id="results">Results</h3>
+<ol>
+<li>
+<p>Confusion Matrix:</p>
+<ul>
+<li><strong>Scaphoid:</strong> Using YOLOv11-OBB to detect the position of the scaphoid performed exceptionally well, with an accuracy of up to 98% in predictions.</li>
+<li><strong>Fracture:</strong> YOLOv11-OBB correctly predicted 41% of fracture locations in full-hand X-ray images, slightly outperforming the two-stage detection method.</li>
+</ul>
+<p><img src="https://prod-files-secure.s3.us-west-2.amazonaws.com/5c0abaf5-b9fa-4a9b-97e3-5ae6c274eec7/6977b654-bf48-4842-8962-e0710b1fc121/image.png" alt="image.png"></p>
+</li>
+<li>
+<p>Precision, Recall, F1</p>
+<p><img src="https://prod-files-secure.s3.us-west-2.amazonaws.com/5c0abaf5-b9fa-4a9b-97e3-5ae6c274eec7/e0885c3a-c85d-45a6-8aa8-002dcd4a99e5/image.png" alt="image.png"></p>
+</li>
+<li>
+<p>During Testing</p>
+<p><img src="https://prod-files-secure.s3.us-west-2.amazonaws.com/5c0abaf5-b9fa-4a9b-97e3-5ae6c274eec7/0198ca53-98df-4f3f-9013-e0822b20fecd/image.png" alt="image.png"></p>
+<p><img src="https://prod-files-secure.s3.us-west-2.amazonaws.com/5c0abaf5-b9fa-4a9b-97e3-5ae6c274eec7/b8847e82-05a5-4d3e-9ed2-617656c16d50/image.png" alt="image.png"></p>
+<p><img src="https://prod-files-secure.s3.us-west-2.amazonaws.com/5c0abaf5-b9fa-4a9b-97e3-5ae6c274eec7/8e42960a-62b0-48b0-83f7-818cc3391d61/image.png" alt="image.png"></p>
+</li>
+</ol>
+<h3 id="detecting-1">Detecting</h3>
+<ol>
+<li>
+<p>Detect scaphoid</p>
+<ul>
+<li>
+<p>Detect images in folder</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-python" data-lang="python"><span class="line"><span class="cl"><span class="n">hand_detector</span><span class="o">.</span><span class="n">detect_scaphoid</span><span class="p">(</span><span class="n">dir_name</span><span class="p">)</span>
+</span></span></code></pre></div></li>
+<li>
+<p>Detect one image</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-python" data-lang="python"><span class="line"><span class="cl"><span class="n">hand_detector</span><span class="o">.</span><span class="n">_detect_scaphoid</span><span class="p">(</span><span class="n">img_name</span><span class="p">,</span> <span class="n">img_path</span><span class="p">)</span>
+</span></span></code></pre></div></li>
+</ul>
+</li>
+<li>
+<p>Detect fracture</p>
+<ul>
+<li>
+<p>Detect images in folder</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-python" data-lang="python"><span class="line"><span class="cl"><span class="n">hand_detector</span><span class="o">.</span><span class="n">detect_fracture</span><span class="p">(</span><span class="n">dir_name</span><span class="p">)</span>
+</span></span></code></pre></div></li>
+<li>
+<p>Detect one image</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-python" data-lang="python"><span class="line"><span class="cl"><span class="n">hand_detector</span><span class="o">.</span><span class="n">_detect_fracture</span><span class="p">(</span><span class="n">img_name</span><span class="p">,</span> <span class="n">img_path</span><span class="p">)</span>
+</span></span></code></pre></div></li>
+</ul>
+</li>
+<li>
+<p>Plot the rectangle</p>
+<p>The <code>detect_*()</code> function performs two key operations:</p>
+<ul>
+<li>Predicts the location of the scaphoid or fracture</li>
+<li>Uses <code>plot_xyxyxyxy()</code> to visualize the results with
+<ul>
+<li>Red rectangles showing the target (ground truth) locations</li>
+<li>Green rectangles showing the predicted locations</li>
+<li>Pictures will be saved in <code>prediction/hand/</code></li>
+</ul>
+</li>
+</ul>
+<p><img src="https://prod-files-secure.s3.us-west-2.amazonaws.com/5c0abaf5-b9fa-4a9b-97e3-5ae6c274eec7/66b9bca3-49ed-433d-97b7-6e010625718c/image.png" alt="image.png"></p>
+</li>
+</ol>
+<h2 id="system">System</h2>
+<p>Load a folder containing the dataset file structure. The system will then begin predicting and save the images with the scaphoid and fracture locations highlighted.</p>
+<p><img src="https://prod-files-secure.s3.us-west-2.amazonaws.com/5c0abaf5-b9fa-4a9b-97e3-5ae6c274eec7/4b659a84-7683-4662-bbbf-bf74900d1d81/image.png" alt="image.png"></p>
+<p><img src="https://prod-files-secure.s3.us-west-2.amazonaws.com/5c0abaf5-b9fa-4a9b-97e3-5ae6c274eec7/41af7a37-a41e-4a88-a40b-0332b21f98e5/image.png" alt="image.png"></p>
+<h2 id="code-availability">Code Availability</h2>
+<p><a href="https://github.com/Hlunlun/Fractured-Scaphoid-Detection">https://github.com/Hlunlun/Fractured-Scaphoid-Detection</a></p>
+<h2 id="datasets-availability">Datasets Availability</h2>
+<p>From <a href="https://sites.google.com/view/ncku-csie-vslab/home">NCKU CSIE Visual System Lab</a></p>
+<h2 id="reference">Reference</h2>
+<ul>
+<li><a href="https://github.com/pytorch/vision/issues/1952"><strong>FastRCNNPredictor doesn&rsquo;t return prediction in evaluation</strong></a></li>
+<li><a href="https://docs.ultralytics.com/datasets/obb/"><strong>Oriented Bounding Box (OBB) Datasets Overview</strong></a></li>
+<li><a href="https://blog.csdn.net/qq_41204464/article/details/143217068"><strong>一篇文章快速认识YOLO11 | 旋转目标检测 | 原理分析 | 模型训练 | 模型推理</strong></a></li>
+<li><a href="https://medium.com/@RobuRishabh/understanding-and-implementing-faster-r-cnn-248f7b25ff96"><strong>Understanding and Implementing Faster R-CNN</strong></a></li>
+<li><a href="https://www.mdpi.com/2075-4418/14/21/2425"><strong>The Detection and Classification of Scaphoid Fractures in Radiograph by Using a Convolutional Neural Network</strong></a></li>
+<li><a href="https://medium.com/@CVHub520/yolov5-obb-a-comprehensive-tutorial-from-data-preparation-to-model-deployment-8d7c6a98388f"><strong>yolov5_obb: A comprehensive tutorial from data preparation to model deployment</strong></a></li>
+<li><a href="https://github.com/XinzeLee/PolygonObjectDetection">PolygonObjectDetection</a></li>
+<li><a href="https://medium.com/@Mert.A/how-to-use-yolov11-for-object-detection-924aa18ac86f"><strong>How to use YOLOv11 for Object Detection</strong></a></li>
+</ul>
+]]></content:encoded>
+      
+    </item>
+  </channel>
+</rss>

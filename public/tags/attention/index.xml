@@ -1,0 +1,339 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss
+  version="2.0"
+  xmlns:atom="http://www.w3.org/2005/Atom"
+  xmlns:wfw="http://wellformedweb.org/CommentAPI/"
+  
+    xmlns:content="http://purl.org/rss/1.0/modules/content/"
+  
+>
+  <channel>
+    <title>Attention on Lun&#39;s</title>
+    <link>http://localhost:1313/Hlunlun/tags/attention/</link>
+    <description>Recent content in Attention on Lun&#39;s</description>
+    <generator>Hugo</generator>
+    <language>en-us</language>
+    <lastBuildDate>Sun, 22 Dec 2024 00:31:04 +0800</lastBuildDate>
+    <atom:link href="http://localhost:1313/Hlunlun/tags/attention/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>Calculate Attention</title>
+      <link>http://localhost:1313/Hlunlun/posts/attention/attention/</link>
+      <pubDate>Sun, 22 Dec 2024 00:31:04 +0800</pubDate>
+      <guid>http://localhost:1313/Hlunlun/posts/attention/attention/</guid>
+      <description>實作參考&lt;a href=&#34;https://nlp.seas.harvard.edu/2018/04/03/attention.html&#34;&gt;Annotated Transformer&lt;/a&gt;: Implementation and Concept of Attention</description>
+      
+        <content:encoded><![CDATA[<p>實作參考<a href="https://nlp.seas.harvard.edu/2018/04/03/attention.html">Annotated Transformer</a></p>
+<h2 id="scaled-dot-product-attention">Scaled Dot-Product Attention</h2>
+<p>$$Attention(Q,K,V)=softmax(\frac{QK^T}{\sqrt{d_k}})V$$</p>
+<img src="https://hackmd.io/_uploads/rJuXRe24ye.png" style="margin:auto;display:block;">
+<h3> 關於 \(\sqrt{d_k}\) </h3>
+<ol>
+<li>
+<p>為何需要縮放因子 \(\sqrt{d_k}\) ? 這邊用例子簡單說明</p>
+<ul>
+<li>如果有一個值 <code>x[3]</code> 大其他值很多，經過softmax會將 <code>x</code> 範圍變到從0到1之間的 <code>y</code>，除了 <code>y[3]</code> 的其他值就會都趨近0(變得很不重要)，造成
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-python" data-lang="python"><span class="line"><span class="cl"><span class="n">x</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">FloatTensor</span><span class="p">([</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">5</span><span class="p">])</span>
+</span></span><span class="line"><span class="cl"><span class="n">y</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">softmax</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">dim</span><span class="o">=-</span><span class="mi">1</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl"><span class="c1"># y: [0.0174, 0.0174, 0.0174, 0.9479]</span>
+</span></span></code></pre></div></li>
+<li>畫成圖可能就會長這樣
+<img src="https://hackmd.io/_uploads/H1x1SlnN1g.png" width=300 style="display:block;"></li>
+</ul>
+</li>
+<li>
+<p>所以我們需要一個縮放因子縮小這個差異，這邊可以回憶一下<a href="https://zh.wikipedia.org/zh-tw/%E6%A0%87%E5%87%86%E5%8C%96_(%E7%BB%9F%E8%AE%A1%E5%AD%A6)">標準化</a>的原理，就是把資料分布改得較符合常態分佈，並縮小離群值對模型的影響，平均值為0，且標準差為1
+$$Z = \frac{X-\mu}{\sigma} \sim N(0,1)$$</p>
+<blockquote>
+<p>&#x1f4a1; <a href="https://ithelp.ithome.com.tw/articles/10293893">標準化VS.正規化</a></p>
+</blockquote>
+</li>
+<li>
+<p>那這個重責大任為啥落到 \(\sqrt{d_k}\) 身上呢?</p>
+<ul>
+<li>
+<p>先來看paper怎麼解釋: 假設 \(q\) 和 \(k\) 是常態分佈( \(\mu=0\)、\(\sigma=1\) )，那麼 \(q \cdot k\) 的 \(\mu=0\) 且 \(\sigma=d_k\) → 在說啥</p>
+<blockquote>
+<p>To illustrate why the dot products get large, assume that the components of q and k are independent random variables with mean 0 and variance 1. Then their dot product, \(q \cdot k = \textstyle\sum_{i=0}^{d_k} q_i k_i\) , has mean 0 and variance \(d_k\).</p>
+</blockquote>
+</li>
+<li>
+<p>先解決第一句:  <b>假設 \(q\) 和 \(k\) 是常態分佈( \(\mu=0\)、\(\sigma=1\) )</b></p>
+  期望值 <span>\(E[q_i \cdot k_i] = 0\)</span>
+<p>標準差</p>
+  <p>\(Var(q_i k_i) = 1\)</p>
+  <p>\(\implies E[q_i^2 k_i^2] - E^2[q_i k_i] = 1\)</p>
+  <p>\(\implies E[q_i^2] E[k_i^2] - E^2[q_i] E^2[k_i] = 1\)</p>
+  <p>\(\implies ( E[q_i^2] - E^2[q_i]) ( E[k_i^2] - E^2[k_i]) - E^2[q_i] E^2[k_i] = 1\)</p>
+  <p>\(\implies Var(q_i) \ Var(k_i) - 0 = 1\)</p>
+  <p>\(\implies Var(q_i) \ Var(k_i) = 1\)</p>
+</li>
+<li>
+<p>再解決第一句: \(q \cdot k\) 的 \(\mu=0\) 且 \(\sigma=d_k\)</p>
+  <p>$$
+      \begin{aligned}
+      E[q \cdot k] &= \textstyle\sum_{i=0}^{d_k} E[q_i k_i] \\
+      &= d_k \times0 \\ 
+      &=0
+      \end{aligned}
+  $$</p>
+  <p>$$\begin{aligned}
+  Var(q \cdot k)&=\textstyle\sum_{i=0}^{d_k} Var(q_i k_i)\\
+  &= d_k \times1 \\
+  &= d_k \\
+  \end{aligned}$$</p>
+</li>
+<li>
+<p>&#x1f389; 太棒了!破案了!
+最後套上標準化的公式</p>
+  <p>$$\begin{aligned}
+  Z&=\cfrac{QK^T - E[QK^T]}{\sqrt{Var(QK^T)}} \\
+  &=\cfrac{QK^T - 0}{\sqrt{d_k}}\\
+  &= \cfrac{QK^T}{\sqrt{d_k}}
+  \end{aligned}$$</p>
+</li>
+</ul>
+<p>&#x1f4a1; 最後 <span>(\cfrac{QK^T}{\sqrt{d_k}})</span> 就可以使attention map經過 Softmax 梯度就不會被削弱了!</p>
+</li>
+</ol>
+<ul>
+<li>更詳細數學可以看
+<ul>
+<li>比較不同角度解釋: <a href="https://blog.csdn.net/ytusdc/article/details/121622205">为什么在进行softmax之前需要对attention进行scaled（为什么除以 $d_k$的平方根）</a></li>
+<li>有推導數學(推推): <a href="https://allenwind.github.io/blog/16228/">分析與拓展：Transformer中的MultiHeadAttention為什麼要用scaled？</a></li>
+</ul>
+</li>
+</ul>
+<h3 id="如何知道-sqrtd_k-多大">如何知道 $\sqrt{d_k}$ 多大</h3>
+<ul>
+<li>
+<p>三個要關注的attention來源: query、value、key的維度可以當成都是一樣的，參考以下<a href="https://miro.medium.com/v2/resize:fit:828/format:webp/1*m58HPvaWXAt1bYNEHSwycA.png">這張圖</a>
+<img src="https://hackmd.io/_uploads/r1I7hAoEkg.png" alt="image"></p>
+</li>
+<li>
+<p>關於數學式視覺化後可以參考<a href="https://miro.medium.com/v2/resize:fit:828/format:webp/1*amnlT6Hjm5nV6NjFI0tRyg.png">這張圖</a>
+<img src="https://hackmd.io/_uploads/S1E5nAj4ye.png" alt="image"></p>
+</li>
+<li>
+<p>加上batch的維度，query、key、value變成tensor後的維度會長這樣</p>
+<pre tabindex="0"><code>query: (batch_size, num_heads, seq_length, d_q)
+key: (batch_size, num_heads, seq_length, d_k)
+query: (batch_size, num_heads, seq_length, d_v)
+</code></pre><blockquote>
+<p>&#x1f4a1; <code>num_heads</code> 因為有多個Multi-Head Attention
+<img src="https://nlp.seas.harvard.edu/images/the-annotated-transformer_38_0.png" width=300></p>
+</blockquote>
+</li>
+<li>
+<p>所以獲取 \(d_k\) 的方式就是取得 <code>query</code> 的最後一個維度(反正 <code>d_q</code> = <code>d_k</code> = <code>d_v</code> )</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-python" data-lang="python"><span class="line"><span class="cl"><span class="n">d_k</span> <span class="o">=</span> <span class="n">query</span><span class="o">.</span><span class="n">size</span><span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="p">)</span>
+</span></span></code></pre></div></li>
+</ul>
+<h3 id="計算attention分數">計算Attention分數</h3>
+<ul>
+<li>Key的Transpose(可以去複習線代就大概知道這是一個怎麼回事)就是將最後一個維度和倒數第二個維度翻轉
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-python" data-lang="python"><span class="line"><span class="cl"><span class="n">key</span> <span class="o">=</span> <span class="n">key</span><span class="o">.</span><span class="n">transpose</span><span class="p">(</span><span class="o">-</span><span class="mi">2</span><span class="p">,</span><span class="o">-</span><span class="mi">1</span><span class="p">)</span> 
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="o">-&gt;</span> <span class="n">key</span><span class="p">:</span> <span class="p">(</span><span class="n">batch_size</span><span class="p">,</span> <span class="n">num_heads</span><span class="p">,</span> <span class="n">d_k</span><span class="p">,</span> <span class="n">seq_length</span><span class="p">)</span>
+</span></span></code></pre></div></li>
+<li>dot product
+<ul>
+<li>為何要用dot product來看相關性呢?參考<a href="https://zilliz.com/blog/similarity-metrics-for-vector-search">這張圖</a>
+<img src="https://hackmd.io/_uploads/rkhfFWTEkl.png" alt="image"></li>
+<li>
+<p>\(\theta\) 越大 → dot product 越小 → 代表越不相關</p>
+</li>
+<li>
+<p>\(\theta\) 越小 → dot product 越大 → 代表越相關</p>
+</li>
+</ul>
+</li>
+<li>接下來就是query和key、以及value做矩陣相乘算出attention分數，
+<ul>
+<li>
+<p>我個人覺得可以這樣理解<br>
+▶ query: 搜尋詞</p>
+<p>▶ 搜出來的的資料，每個資料會長這樣</p>
+<pre tabindex="0"><code>{key1: value1, key2: value2, ..., keyN:valueN}
+key: 資料的標題
+value: 資料內容
+</code></pre><p>▶ 注意力機制就是要看哪個資料跟我的搜尋詞最相關，於是用dot product來看他們相關性的分數</p>
+<pre tabindex="0"><code>attention = query * key
+</code></pre><p>     ➜ attention 算出來就是每筆資料的標題和我搜尋的相關分數
+<img src="https://hackmd.io/_uploads/S1_K613VJx.png" alt="image"><br>
+     ➜ 分數越高，代表越接近我在搜尋的東西</p>
+<p>▶ 最後在將這個分數乘上value，啥意思?<br>
+     ➜ 給每筆資料打完相關性的分數後，在乘上資料內容就可以取得那些是重要資料內容了<br>
+     ➜ 像這樣，把每筆資料的分數乘上資料內容，就可以知道如果分數較大，資料內容乘上分數就會比較大<br>
+     ➜ 也代表著此內容較重要的意義，相反則同樣意義<br>
+     ➜ 量化後就是一堆數字相乘，以下大概就是分數和資料內容矩陣相乘的樣子<br>
+         <img src="https://hackmd.io/_uploads/H1He912Vkg.png" width=600>\</p>
+</li>
+<li>
+<p>所以程式碼實現就是以下</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-python" data-lang="python"><span class="line"><span class="cl"><span class="n">scores</span> <span class="o">=</span>  <span class="n">torch</span><span class="o">.</span><span class="n">matmul</span><span class="p">(</span><span class="n">query</span><span class="p">,</span> <span class="n">key</span><span class="o">.</span><span class="n">transpose</span><span class="p">(</span><span class="o">-</span><span class="mi">2</span><span class="p">,</span> <span class="o">-</span><span class="mi">1</span><span class="p">))</span> <span class="o">/</span> <span class="n">math</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="n">d_k</span><span class="p">)</span>
+</span></span></code></pre></div></li>
+</ul>
+<blockquote>
+<p>&#x1f4a1; 為何是query與key相乘的細節可以參考<a href="https://www.youtube.com/watch?v=hYdO9CscNes">李宏毅的教材</a></p>
+</blockquote>
+</li>
+</ul>
+<h2 id="real-world-example">Real World Example</h2>
+<p>到 <a href="https://github.com/Hlunlun/Transformer/blob/master/example/scaled_dot_product.ipynb">GitHub</a> 看實際數據模擬</p>
+<h2 id="implementation">Implementation</h2>
+<p>完整的 Scaled Dot-Product Attention 實作</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-python" data-lang="python"><span class="line"><span class="cl"><span class="k">def</span> <span class="nf">attention</span><span class="p">(</span><span class="n">query</span><span class="p">,</span> <span class="n">key</span><span class="p">,</span> <span class="n">value</span><span class="p">,</span> <span class="n">mask</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">dropout</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+</span></span><span class="line"><span class="cl">    <span class="s2">&#34;&#34;&#34;
+</span></span></span><span class="line"><span class="cl"><span class="s2">    Compute &#39;Scaled Dot Product Attention&#39;
+</span></span></span><span class="line"><span class="cl"><span class="s2">    &#34;&#34;&#34;</span>
+</span></span><span class="line"><span class="cl">    <span class="n">d_k</span> <span class="o">=</span> <span class="n">query</span><span class="o">.</span><span class="n">size</span><span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">    <span class="n">scores</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">matmul</span><span class="p">(</span><span class="n">query</span><span class="p">,</span> <span class="n">key</span><span class="o">.</span><span class="n">transpose</span><span class="p">(</span><span class="o">-</span><span class="mi">2</span><span class="p">,</span> <span class="o">-</span><span class="mi">1</span><span class="p">))</span> <span class="o">/</span> <span class="n">math</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="n">d_k</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">    <span class="k">if</span> <span class="n">mask</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+</span></span><span class="line"><span class="cl">        <span class="n">scores</span> <span class="o">=</span> <span class="n">scores</span><span class="o">.</span><span class="n">masked_fill</span><span class="p">(</span><span class="n">mask</span> <span class="o">==</span> <span class="mi">0</span><span class="p">,</span> <span class="o">-</span><span class="mf">1e9</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">    <span class="n">p_attn</span> <span class="o">=</span> <span class="n">F</span><span class="o">.</span><span class="n">softmax</span><span class="p">(</span><span class="n">scores</span><span class="p">,</span> <span class="n">dim</span><span class="o">=-</span><span class="mi">1</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">    <span class="k">if</span> <span class="n">dropout</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+</span></span><span class="line"><span class="cl">        <span class="n">p_attn</span> <span class="o">=</span> <span class="n">dropout</span><span class="p">(</span><span class="n">p_attn</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">    <span class="k">return</span> <span class="n">torch</span><span class="o">.</span><span class="n">matmul</span><span class="p">(</span><span class="n">p_attn</span><span class="p">,</span> <span class="n">value</span><span class="p">),</span> <span class="n">p_attn</span>
+</span></span></code></pre></div><h2 id="reference">Reference</h2>
+<ul>
+<li><a href="https://medium.com/@vmirly/tutorial-on-scaled-dot-product-attention-with-pytorch-implementation-from-scratch-66ed898bf817">Tutorial on Scaled Dot-Product Attention with PyTorch Implementation from Scratch</a></li>
+<li><a href="https://ai.stackexchange.com/questions/41861/why-use-a-square-root-in-the-scaled-dot-product">Why use a &ldquo;square root&rdquo; in the scaled dot product</a></li>
+</ul>
+]]></content:encoded>
+      
+    </item>
+    <item>
+      <title>Multi-Head Attention</title>
+      <link>http://localhost:1313/Hlunlun/posts/attention/multi_head/</link>
+      <pubDate>Sat, 21 Dec 2024 23:49:08 +0800</pubDate>
+      <guid>http://localhost:1313/Hlunlun/posts/attention/multi_head/</guid>
+      <description>實作參考&lt;a href=&#34;https://nlp.seas.harvard.edu/2018/04/03/attention.html&#34;&gt;Annotated Transformer&lt;/a&gt; : Implementation and concept of Multi-Head Attention</description>
+      
+        <content:encoded><![CDATA[<p>實作參考<a href="https://nlp.seas.harvard.edu/2018/04/03/attention.html">Annotated Transformer</a></p>
+<img src="https://hackmd.io/_uploads/B1IzQb3Eye.png" style="display:block;margin:auto;" width=300>
+<h2 id="數學">數學</h2>
+<p>
+$$
+MultiHead(Q,K,V)=Concat({head}_1, {head}_2, ..., {head}_h)
+$$ 
+</p>
+<p>
+$${head}_i = Attention(Q{W_i}^Q, K{W_i}^K, V{W_i}^V)$$
+</p>
+<ul>
+<li>
+<p>可學習的參數就是其中Query的權重 \(W_i^Q\) 、Key的權重 \(W_i^K\) 、Value的權重 \(W_i^V\) </p>
+</li>
+<li>忘記Attention是怎麼算的可以看<a href="https://hackmd.io/@clh/transformer-attention-0">這裡</a></li>
+<li>結合算Attention的過程，整個Multi-Head Attention大概是以下這樣算</li>
+</ul>
+<h2 id="從程式碼看">從程式碼看</h2>
+<h3 id="全連接層-nnlineard_model-d_model">全連接層 <code>nn.Linear(d_model, d_model)</code></h3>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-python" data-lang="python"><span class="line"><span class="cl"><span class="bp">self</span><span class="o">.</span><span class="n">linears</span> <span class="o">=</span> <span class="n">clones</span><span class="p">(</span><span class="n">nn</span><span class="o">.</span><span class="n">Linear</span><span class="p">(</span><span class="n">d_model</span><span class="p">,</span> <span class="n">d_model</span><span class="p">),</span> <span class="mi">4</span><span class="p">)</span>
+</span></span></code></pre></div><ol>
+<li>輸入輸出維度: 整個模型的的維度
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-python" data-lang="python"><span class="line"><span class="cl"><span class="n">output</span><span class="p">:</span> <span class="p">(</span><span class="n">batch_size</span><span class="p">,</span> <span class="n">seq_length</span><span class="p">,</span> <span class="n">d_model</span><span class="p">)</span>
+</span></span></code></pre></div></li>
+<li>總共需要四個全連接層
+<ul>
+<li>K、Q、V各一個
+<img src="https://hackmd.io/_uploads/rken74T4ye.png" style="display:block;"></li>
+<li>最後輸出再一個
+<img src="https://hackmd.io/_uploads/H14J4ET4yx.png" style="display:block;"></li>
+</ul>
+</li>
+<li>經過 全連接層 的V, K, Q 就會長這樣
+<img src="https://hackmd.io/_uploads/SJJwrNpVyg.png" style="display:block;">
+<ul>
+<li>
+<p> \(W_i\) 一開始就是隨機初始化的的權重，在訓練過程中模型會自己用loss function來back propagate來學習並更新這些參數，就可以學習到最好的權重</p>
+</li>
+<li>關於全連接層詳細參考<a href="https://speech.ee.ntu.edu.tw/~hylee/ml/ml2021-course-data/regression%20(v16).pdf">李弘毅講義</a></li>
+</ul>
+</li>
+</ol>
+<h3> Q, K, V 透過 Linear 映射到 \(Q{W_i}^Q\), \(K{W_i}^K\), \(V{W_i}^V\) </h3>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-python" data-lang="python"><span class="line"><span class="cl"><span class="c1"># Do all the linear projections in batch from d_model =&gt; h x d_k</span>
+</span></span><span class="line"><span class="cl"><span class="n">query</span><span class="p">,</span> <span class="n">key</span><span class="p">,</span> <span class="n">value</span> <span class="o">=</span> <span class="p">[</span><span class="n">l</span><span class="p">(</span><span class="n">x</span><span class="p">)</span><span class="o">.</span><span class="n">view</span><span class="p">(</span><span class="n">nbatches</span><span class="p">,</span> <span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">h</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">d_k</span><span class="p">)</span><span class="o">.</span><span class="n">transpose</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span><span class="mi">2</span><span class="p">)</span> <span class="k">for</span> <span class="n">l</span><span class="p">,</span> <span class="n">x</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">linears</span><span class="p">,</span> <span class="p">(</span><span class="n">query</span><span class="p">,</span> <span class="n">key</span><span class="p">,</span><span class="n">value</span><span class="p">))]</span>
+</span></span></code></pre></div><ol>
+<li>先講 <code>view()</code>
+<ul>
+<li>
+<p><code>view(nbatches, -1, self.h, self.d_k)</code>: 對 輸出的張量 \(W_i x_i\) 進行reshape</p>
+  <!-- ```
+  view(nbatches, -1, self.h, self.d_k) 是对输出张量进行重塑（reshape）的操作。
+  参数解释：
+  nbatches: 保持批次的大小不变。
+  -1: 表示自动推断这一维度的大小，以保持总元素数量不变。在这里，它将根据输入的总元素数量自动计算出序列长度（seq_length）。
+  self.h: 表示头的数量。
+  self.d_k: 每个头的维度（即每个头处理的特征维度）。
+  功能：这个操作将张量重塑为四维形式，便于后续多头注意力计算。重塑后的形状为 [nbatches, seq_length, h, d_k]。
+  ``` -->
+</li>
+</ul>
+</li>
+<li>關於各種維度，用query Q 舉例，shape = (head, seq_length, d_k) = (2, 3, 2)
+ <p>
+ $$q_0=\begin{bmatrix}
+    1.45 & -0.79 \\
+    0.62 & -0.64 \\
+    0.97 & -0.21 \\ 
+ \end{bmatrix}$$    
+ $$q_1=\begin{bmatrix}
+    0.40 & 0.53 \\
+    0.40 & 0.29 \\
+    0.48 & 0.80 \\ 
+ \end{bmatrix}$$
+ </p>
+ <p>
+     <ul>
+         <li>\(d_k\) = 2，也就是 \(q_i\) 的行數</li>
+         <li> <code>seq_lenghth</code> = 3，<span>\(q_i\)</spn> 的列數</li>
+         <li><code>head</code> = 2，也就是 \(Q\) 的長度 2，因為有兩個 子陣列</li>
+     </ul>
+ </p>  
+</li>
+<li>整個過程的維度可以參考<a href="https://www.kaggle.com/code/aisuko/coding-cross-attention">這張圖</a>
+<img src="https://files.mastodon.social/media_attachments/files/111/819/100/204/990/207/original/09d504e16eb77ccc.png" width=600 style="display:block"></li>
+</ol>
+<h2 id="real-world-example">Real World Example</h2>
+<p>可以到 <a href="https://github.com/Hlunlun/Transformer/blob/master/example/multi_head_attention.ipynb">GitHub</a> 看實際數據模擬</p>
+<h2 id="完整實作">完整實作</h2>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-python" data-lang="python"><span class="line"><span class="cl"><span class="k">class</span> <span class="nc">MultiHeadedAttention</span><span class="p">(</span><span class="n">nn</span><span class="o">.</span><span class="n">Module</span><span class="p">):</span>
+</span></span><span class="line"><span class="cl">    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">h</span><span class="p">,</span> <span class="n">d_model</span><span class="p">,</span> <span class="n">dropout</span><span class="o">=</span><span class="mf">0.1</span><span class="p">):</span>
+</span></span><span class="line"><span class="cl">        <span class="s2">&#34;Take in model size and number of heads&#34;</span>
+</span></span><span class="line"><span class="cl">        <span class="nb">super</span><span class="p">(</span><span class="n">MultiHeadedAttention</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="fm">__init__</span><span class="p">()</span>
+</span></span><span class="line"><span class="cl">        <span class="k">assert</span> <span class="n">d_model</span><span class="o">%</span><span class="n">h</span> <span class="o">==</span> <span class="mi">0</span>
+</span></span><span class="line"><span class="cl">        <span class="c1"># Assume d_v always d_k</span>
+</span></span><span class="line"><span class="cl">        <span class="bp">self</span><span class="o">.</span><span class="n">d_k</span> <span class="o">=</span> <span class="n">d_model</span> <span class="o">//</span> <span class="n">h</span>
+</span></span><span class="line"><span class="cl">        <span class="bp">self</span><span class="o">.</span><span class="n">h</span> <span class="o">=</span> <span class="n">h</span>
+</span></span><span class="line"><span class="cl">        <span class="bp">self</span><span class="o">.</span><span class="n">linears</span> <span class="o">=</span> <span class="n">clones</span><span class="p">(</span><span class="n">nn</span><span class="o">.</span><span class="n">Linear</span><span class="p">(</span><span class="n">d_model</span><span class="p">,</span> <span class="n">d_model</span><span class="p">),</span> <span class="mi">4</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">        <span class="bp">self</span><span class="o">.</span><span class="n">attn</span> <span class="o">=</span> <span class="kc">None</span>
+</span></span><span class="line"><span class="cl">        <span class="bp">self</span><span class="o">.</span><span class="n">dropout</span> <span class="o">=</span> <span class="n">nn</span><span class="o">.</span><span class="n">Dropout</span><span class="p">(</span><span class="n">p</span><span class="o">=</span><span class="n">dropout</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">    <span class="k">def</span> <span class="nf">forward</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">query</span><span class="p">,</span> <span class="n">key</span><span class="p">,</span> <span class="n">value</span><span class="p">,</span> <span class="n">mask</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+</span></span><span class="line"><span class="cl">        <span class="s2">&#34;Implement multi-head attention&#34;</span>
+</span></span><span class="line"><span class="cl">        <span class="k">if</span> <span class="n">mask</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+</span></span><span class="line"><span class="cl">            <span class="c1"># Same mask applied to all h heads.</span>
+</span></span><span class="line"><span class="cl">            <span class="n">mask</span> <span class="o">=</span> <span class="n">mask</span><span class="o">.</span><span class="n">unsqueeze</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">        <span class="n">nbatches</span> <span class="o">=</span> <span class="n">query</span><span class="o">.</span><span class="n">size</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">        <span class="c1"># 1) Do all the linear projections in batch from d_model =&gt; h x d_k</span>
+</span></span><span class="line"><span class="cl">        <span class="n">query</span><span class="p">,</span> <span class="n">key</span><span class="p">,</span> <span class="n">value</span> <span class="o">=</span> <span class="p">[</span><span class="n">l</span><span class="p">(</span><span class="n">x</span><span class="p">)</span><span class="o">.</span><span class="n">view</span><span class="p">(</span><span class="n">nbatches</span><span class="p">,</span> <span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">h</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">d_k</span><span class="p">)</span><span class="o">.</span><span class="n">transpose</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span><span class="mi">2</span><span class="p">)</span> <span class="k">for</span> <span class="n">l</span><span class="p">,</span> <span class="n">x</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">linears</span><span class="p">,</span> <span class="p">(</span><span class="n">query</span><span class="p">,</span> <span class="n">key</span><span class="p">,</span><span class="n">value</span><span class="p">))]</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">        <span class="c1"># 2) Apply attention on all the projected vectors in batch</span>
+</span></span><span class="line"><span class="cl">        <span class="n">x</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">attn</span> <span class="o">=</span> <span class="n">attention</span><span class="p">(</span><span class="n">query</span><span class="p">,</span> <span class="n">key</span><span class="p">,</span> <span class="n">value</span><span class="p">,</span> <span class="n">mask</span><span class="o">=</span><span class="n">mask</span><span class="p">,</span> <span class="n">dropout</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">dropout</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">        <span class="c1"># 3) &#34;Concat&#34; using a view and apply a final linear</span>
+</span></span><span class="line"><span class="cl">        <span class="n">x</span> <span class="o">=</span> <span class="n">x</span><span class="o">.</span><span class="n">transpose</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">)</span><span class="o">.</span><span class="n">contiguous</span><span class="p">()</span><span class="o">.</span><span class="n">view</span><span class="p">(</span><span class="n">nbatches</span><span class="p">,</span> <span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">h</span> <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">d_k</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">linear</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">](</span><span class="n">x</span><span class="p">)</span>
+</span></span></code></pre></div><h2 id="reference">Reference</h2>
+<ul>
+<li><a href="https://blog.csdn.net/philosophyatmath/article/details/128013258">Self -Attention、Multi-Head Attention、Cross-Attention</a></li>
+<li><a href="https://blog.csdn.net/qq_37541097/article/details/117691873">详解Transformer中Self-Attention以及Multi-Head Attention</a></li>
+</ul>
+]]></content:encoded>
+      
+    </item>
+  </channel>
+</rss>

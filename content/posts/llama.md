@@ -6,7 +6,7 @@ tags: ["llama"]
 ---
 
 論文引用: Touvron, H., Lavril, T., Izacard, G., Martinet, X., Lachaux, M., Lacroix, T., Rozière, B., Goyal, N., Hambro, E., Azhar, F., Rodriguez, A., Joulin, A., Grave, E., & Lample, G. (2023). LLaMA: Open and Efficient Foundation Language Models. ArXiv, abs/2302.13971.
-<img src="llama_milestone.png" height=100 width =1000 style=" margin: auto; display: block;">
+<img src="llama_milestone.png" width =1000 style=" margin: auto; display: block;">
 <br>
 
 # Challenge Scaling Law
