@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss
+  version="2.0"
+  xmlns:atom="http://www.w3.org/2005/Atom"
+  xmlns:wfw="http://wellformedweb.org/CommentAPI/"
+  
+    xmlns:content="http://purl.org/rss/1.0/modules/content/"
+  
+>
+  <channel>
+    <title>DeepSeek on Lun&#39;s</title>
+    <link>http://localhost:1313/Hlunlun/tags/deepseek/</link>
+    <description>Recent content in DeepSeek on Lun&#39;s</description>
+    <generator>Hugo</generator>
+    <language>en-us</language>
+    <lastBuildDate>Thu, 20 Feb 2025 00:11:51 +0800</lastBuildDate>
+    <atom:link href="http://localhost:1313/Hlunlun/tags/deepseek/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>Deepseek V3</title>
+      <link>http://localhost:1313/Hlunlun/posts/deepseek-v3/</link>
+      <pubDate>Thu, 20 Feb 2025 00:11:51 +0800</pubDate>
+      <guid>http://localhost:1313/Hlunlun/posts/deepseek-v3/</guid>
+      <description>論文引用: DeepSeek-AI et al. “DeepSeek-V3 Technical Report.” ArXiv abs/2412.19437 (2024): n. pag.</description>
+      
+        <content:encoded><![CDATA[<p>本篇解讀會搭配程式碼一起看，這樣更直觀也更好理解</p>
+<h2 id="mixture-of-experts-moe-architecture">Mixture-of-Experts (MoE) Architecture</h2>
+<p>DeepSeek改良了混合專家架構，每個input都只會觸發最懂這個領域知識的專家，所以每次輸入所有參數不需要都算過一次(不會全部專家都被活化)，這樣可以大幅降低運算成本和記憶體使用量。
+<img src="MOE_0.png" style="margin: auto; display: block;" width=600></p>
+<h3 id="expert">Expert</h3>
+<p>每個 Feed Forward Netword 就是一個 Expert
+<img src="MOE_1.png"  style="margin: auto; display: block;" width=600></p>
+<h2 id="heading"></h2>
+]]></content:encoded>
+      
+    </item>
+    <item>
+      <title>Deepseek R1</title>
+      <link>http://localhost:1313/Hlunlun/posts/deepseek-r1/</link>
+      <pubDate>Thu, 20 Feb 2025 00:10:21 +0800</pubDate>
+      <guid>http://localhost:1313/Hlunlun/posts/deepseek-r1/</guid>
+      <description>論文引用: DeepSeek-AI et al. “DeepSeek-R1: Incentivizing Reasoning Capability in LLMs via Reinforcement Learning.” (2025).</description>
+      
+        <content:encoded><![CDATA[<p>過年期間整個被DeepSeek轟炸，所以來讀個paper</p>
+<p>report.pdf</p>
+<h2 id="deepseek">DeepSeek</h2>
+<ul>
+<li>Open-weights LLMs</li>
+<li>Models
+<ul>
+<li>DeepSeek R1/R1-Zero(271B)</li>
+<li>DeepSeek V3(271B Mixture of Models)</li>
+<li>DeepsSeekMath</li>
+<li>DeepSeek-Coder</li>
+<li>DeepSeek-MOE</li>
+</ul>
+</li>
+<li>DeepSeek App 就是 V3
+<img src="deepseek_app.png" style="margin: auto; display: block;" width=600></li>
+</ul>
+]]></content:encoded>
+      
+    </item>
+  </channel>
+</rss>

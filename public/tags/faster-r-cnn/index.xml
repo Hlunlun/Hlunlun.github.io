@@ -16,21 +16,18 @@
     <lastBuildDate>Tue, 07 Jan 2025 01:00:59 +0800</lastBuildDate>
     <atom:link href="http://localhost:1313/Hlunlun/tags/faster-r-cnn/index.xml" rel="self" type="application/rss+xml" />
     <item>
-      <title>Scaphoid_fracture_detection</title>
+      <title>Fractured Scaphoid Detection</title>
       <link>http://localhost:1313/Hlunlun/posts/image_process/scaphoid_fracture_detection/</link>
       <pubDate>Tue, 07 Jan 2025 01:00:59 +0800</pubDate>
       <guid>http://localhost:1313/Hlunlun/posts/image_process/scaphoid_fracture_detection/</guid>
-      <description>資訊所 碩一 黃佳倫 P76134862</description>
+      <description>Use Faster &lt;a href=&#34;https://arxiv.org/abs/1506.01497&#34;&gt;R-CNN&lt;/a&gt; and YOLOv11-&lt;a href=&#34;https://docs.ultralytics.com/datasets/obb/&#34;&gt;OBB&lt;/a&gt; to detect the scaphoid fracture location.</description>
       
-        <content:encoded><![CDATA[<p><strong>資訊所 碩一 黃佳倫 P76134862</strong></p>
-<hr>
-<p>Use Faster <a href="https://arxiv.org/abs/1506.01497">R-CNN</a> and YOLOv11-<a href="https://docs.ultralytics.com/datasets/obb/">OBB</a> to detect the scaphoid fracture location.</p>
-<h2 id="get-started">Get started</h2>
+        <content:encoded><![CDATA[<h2 id="get-started">Get started</h2>
 <ol>
-<li>Training</li>
-</ol>
+<li>
+<p>Training</p>
 <div class="highlight"><pre tabindex="0" class="chroma"><code class="language-python" data-lang="python"><span class="line"><span class="cl"><span class="n">python</span> <span class="n">main</span><span class="o">.</span><span class="n">py</span> <span class="o">--</span><span class="n">train</span> <span class="mi">1</span>
-</span></span></code></pre></div><ol>
+</span></span></code></pre></div></li>
 <li>
 <p>Run System</p>
 <div class="highlight"><pre tabindex="0" class="chroma"><code class="language-python" data-lang="python"><span class="line"><span class="cl"><span class="n">python</span> <span class="n">main</span><span class="o">.</span><span class="n">py</span>
@@ -78,15 +75,15 @@
 <p><img src="https://prod-files-secure.s3.us-west-2.amazonaws.com/5c0abaf5-b9fa-4a9b-97e3-5ae6c274eec7/527516ba-ec1d-4333-b649-e193cba1a90d/image.png" alt="image.png"></p>
 <h3 id="datasets">Datasets</h3>
 <ol>
-<li>File Structure:</li>
-</ol>
+<li>
+<p>File Structure:</p>
 <div class="highlight"><pre tabindex="0" class="chroma"><code class="language-python" data-lang="python"><span class="line"><span class="cl"><span class="n">ip_data</span>  
 </span></span><span class="line"><span class="cl"><span class="err">├──</span> <span class="n">fracture_detection</span>  
 </span></span><span class="line"><span class="cl"><span class="err">│</span>   <span class="err">└──</span> <span class="n">annotations</span> <span class="o">//</span> <span class="n">Fracture</span> <span class="n">locations</span><span class="p">:</span> <span class="p">[[</span><span class="n">x1</span><span class="p">,</span> <span class="n">y1</span><span class="p">],</span> <span class="p">[</span><span class="n">x2</span><span class="p">,</span> <span class="n">y2</span><span class="p">],</span> <span class="p">[</span><span class="n">x3</span><span class="p">,</span> <span class="n">y3</span><span class="p">],</span> <span class="p">[</span><span class="n">x4</span><span class="p">,</span> <span class="n">y4</span><span class="p">]]</span>  
 </span></span><span class="line"><span class="cl"><span class="err">└──</span> <span class="n">scaphoid_detection</span>  
 </span></span><span class="line"><span class="cl">    <span class="err">├──</span> <span class="n">annotations</span> <span class="o">//</span> <span class="n">Scaphoid</span> <span class="n">locations</span><span class="p">:</span> <span class="p">[</span><span class="n">x1</span><span class="p">,</span> <span class="n">y1</span><span class="p">,</span> <span class="n">x2</span><span class="p">,</span> <span class="n">y2</span><span class="p">]</span>  
 </span></span><span class="line"><span class="cl">    <span class="err">└──</span> <span class="n">images</span>      <span class="o">//</span> <span class="n">Hand</span> <span class="n">X</span><span class="o">-</span><span class="n">ray</span> <span class="n">images</span>  
-</span></span></code></pre></div><ol>
+</span></span></code></pre></div></li>
 <li>
 <p>After data preprocessing in <code>dataset.py</code> :</p>
 <p><code>all_datas.json</code> and new folders will be created under fracture_detection and scaphoid_detection</p>
@@ -194,8 +191,8 @@
 <h3 id="training-datasets">Training Datasets</h3>
 <p>Use functions from <code>yolo_anno.py</code> to construct data for YOLOv11-OBB</p>
 <ol>
-<li>File Structure</li>
-</ol>
+<li>
+<p>File Structure</p>
 <div class="highlight"><pre tabindex="0" class="chroma"><code class="language-python" data-lang="python"><span class="line"><span class="cl"><span class="n">yolo_config</span>
 </span></span><span class="line"><span class="cl"><span class="err">├──</span> <span class="n">data</span>
 </span></span><span class="line"><span class="cl"><span class="err">├──</span> <span class="n">datasets</span>
@@ -214,7 +211,7 @@
 </span></span><span class="line"><span class="cl"><span class="err">│</span>           <span class="err">├──</span> <span class="n">train</span>
 </span></span><span class="line"><span class="cl"><span class="err">│</span>           <span class="err">└──</span> <span class="n">val</span>
 </span></span><span class="line"><span class="cl"><span class="err">└──</span> <span class="n">weights</span>
-</span></span></code></pre></div><ol>
+</span></span></code></pre></div></li>
 <li>
 <p>During Training: YOLO 會自動將所有圖片拼在一起，最後再裁成設定得大小 (以下範例為1024)，圖片就會前處理成以下，一個batch的圖片數量會根據 <code>batch_size</code> (以下範例為 8)</p>
 <p><img src="https://prod-files-secure.s3.us-west-2.amazonaws.com/5c0abaf5-b9fa-4a9b-97e3-5ae6c274eec7/24c73464-a8e2-4fe5-93b6-72811075c6c6/image.png" alt="image.png"></p>
@@ -222,12 +219,12 @@
 </ol>
 <h3 id="training-1">Training</h3>
 <ol>
-<li>Train HandDetector</li>
-</ol>
+<li>
+<p>Train HandDetector</p>
 <div class="highlight"><pre tabindex="0" class="chroma"><code class="language-python" data-lang="python"><span class="line"><span class="cl"><span class="kn">from</span> <span class="nn">hand_detector</span> <span class="kn">import</span> <span class="n">HandDetector</span>
 </span></span><span class="line"><span class="cl"><span class="n">hand_detector</span> <span class="o">=</span> <span class="n">HandDetector</span><span class="p">(</span><span class="n">args</span><span class="p">)</span>
 </span></span><span class="line"><span class="cl"><span class="n">hand_detector</span><span class="o">.</span><span class="n">train</span><span class="p">()</span>
-</span></span></code></pre></div><ol>
+</span></span></code></pre></div></li>
 <li>
 <p>Results will be saved in <code>runs/</code></p>
 <p><img src="https://prod-files-secure.s3.us-west-2.amazonaws.com/5c0abaf5-b9fa-4a9b-97e3-5ae6c274eec7/aa14525d-8d76-4d12-b39a-501fcb275de6/image.png" alt="image.png"></p>

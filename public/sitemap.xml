@@ -2,22 +2,37 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"
   xmlns:xhtml="http://www.w3.org/1999/xhtml">
   <url>
+    <loc>http://localhost:1313/Hlunlun/posts/label_smoothing/</loc>
+    <lastmod>2025-02-24T22:08:20+08:00</lastmod>
+  </url><url>
+    <loc>http://localhost:1313/Hlunlun/</loc>
+    <lastmod>2025-02-24T22:08:20+08:00</lastmod>
+  </url><url>
+    <loc>http://localhost:1313/Hlunlun/posts/</loc>
+    <lastmod>2025-02-24T22:08:20+08:00</lastmod>
+  </url><url>
+    <loc>http://localhost:1313/Hlunlun/tags/</loc>
+    <lastmod>2025-02-24T22:08:20+08:00</lastmod>
+  </url><url>
+    <loc>http://localhost:1313/Hlunlun/tags/transformer/</loc>
+    <lastmod>2025-02-24T22:08:20+08:00</lastmod>
+  </url><url>
+    <loc>http://localhost:1313/Hlunlun/tags/deepseek/</loc>
+    <lastmod>2025-02-20T00:11:51+08:00</lastmod>
+  </url><url>
+    <loc>http://localhost:1313/Hlunlun/posts/deepseek-v3/</loc>
+    <lastmod>2025-02-20T00:11:51+08:00</lastmod>
+  </url><url>
+    <loc>http://localhost:1313/Hlunlun/posts/deepseek-r1/</loc>
+    <lastmod>2025-02-20T00:10:21+08:00</lastmod>
+  </url><url>
     <loc>http://localhost:1313/Hlunlun/tags/detection/</loc>
     <lastmod>2025-01-07T01:00:59+08:00</lastmod>
   </url><url>
     <loc>http://localhost:1313/Hlunlun/tags/faster-r-cnn/</loc>
     <lastmod>2025-01-07T01:00:59+08:00</lastmod>
   </url><url>
-    <loc>http://localhost:1313/Hlunlun/</loc>
-    <lastmod>2025-01-07T01:00:59+08:00</lastmod>
-  </url><url>
-    <loc>http://localhost:1313/Hlunlun/posts/</loc>
-    <lastmod>2025-01-07T01:00:59+08:00</lastmod>
-  </url><url>
     <loc>http://localhost:1313/Hlunlun/posts/image_process/scaphoid_fracture_detection/</loc>
-    <lastmod>2025-01-07T01:00:59+08:00</lastmod>
-  </url><url>
-    <loc>http://localhost:1313/Hlunlun/tags/</loc>
     <lastmod>2025-01-07T01:00:59+08:00</lastmod>
   </url><url>
     <loc>http://localhost:1313/Hlunlun/tags/yolov11-obb/</loc>
